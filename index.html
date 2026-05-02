@@ -620,16 +620,14 @@
       state.npcFreeze = true;
       state.openingShelf = true;
       const sendOpen = () => {
-        try {
-          dialogueFrame.contentWindow.postMessage("__openShelf__", "*");
-        } catch (e) {}
+        try { dialogueFrame.contentWindow.postMessage("__openShelf__", "*"); } catch (e) {}
       };
       dialogueFrame.onload = () => {
         setTimeout(sendOpen, 600);
         setTimeout(sendOpen, 1500);
         setTimeout(sendOpen, 3000);
       };
-      dialogueFrame.src = DIALOGUE_BASE;
+      dialogueFrame.src = DIALOGUE_BASE + "?openShelf=1";
     }
 
     function updateBookshelfHint() {
