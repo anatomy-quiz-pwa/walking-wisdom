@@ -350,6 +350,7 @@
       touchDir: null,
       pointer: { x: 0, y: 0 },
       tooltip: null,
+      debugCollision: false,
       player: {
         x: 500,
         y: 675,
@@ -419,6 +420,7 @@
         completeMaster(completed);
         history.replaceState(null, "", location.pathname);
       }
+      if (params.get("debug") === "collision") state.debugCollision = true;
 
       const [worldZones, cafeEntities, collision, props] = await Promise.all([
         json("data/world-zones.json"),
@@ -911,6 +913,39 @@
         else drawPlayer();
       }
       drawBookTooltip();
+      if (state.debugCollision) drawDebugCollision();
+    }
+
+    function drawDebugCollision() {
+      const c = state.collision;
+      if (!c) return;
+      ctx.save();
+      ctx.fillStyle = "rgba(255, 50, 50, 0.32)";
+      ctx.strokeStyle = "rgba(255, 80, 80, 0.95)";
+      ctx.lineWidth = 2;
+      c.blocked_rects.forEach((r, i) => {
+        ctx.fillRect(r.x, r.y, r.w, r.h);
+        ctx.strokeRect(r.x, r.y, r.w, r.h);
+        ctx.fillStyle = "#fff";
+        ctx.font = "600 14px ui-sans-serif, system-ui, sans-serif";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText(`#${i}`, r.x + 4, r.y + 4);
+        ctx.fillStyle = "rgba(255, 50, 50, 0.32)";
+      });
+      ctx.strokeStyle = "rgba(60, 220, 100, 0.95)";
+      ctx.lineWidth = 3;
+      const wb = c.walk_bounds;
+      ctx.strokeRect(wb.x, wb.y, wb.w, wb.h);
+      ctx.fillStyle = "#0f0";
+      ctx.beginPath();
+      ctx.arc(state.player.x, state.player.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.font = "600 14px ui-sans-serif, system-ui, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(`player ${Math.round(state.player.x)}, ${Math.round(state.player.y)}`, 56, 224);
+      ctx.restore();
     }
 
     function drawBookshelf() {
@@ -1051,6 +1086,11 @@
       const key = event.key.toLowerCase();
       if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d", " ", "enter"].includes(key)) {
         event.preventDefault();
+      }
+      if (key === "g") {
+        state.debugCollision = !state.debugCollision;
+        hint.textContent = `碰撞 debug: ${state.debugCollision ? "ON" : "OFF"}`;
+        return;
       }
       if (key === " " || key === "enter") {
         if (state.scene === "cafe") {
