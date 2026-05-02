@@ -615,6 +615,20 @@
       }
     }
 
+    function updateBookshelfHint() {
+      const near = nearbyBookshelf();
+      if (near === state.bookshelfNear) return;
+      state.bookshelfNear = near;
+      if (!near) return;
+      const m = state.activeMaster;
+      if (m && !state.progress.masters_completed.includes(m.id)) {
+        hint.textContent = `按 Space 把 ${m.name} 的書放上旅程書架。`;
+      } else {
+        const n = state.progress.masters_completed.length;
+        hint.textContent = `旅程書架（${n} / 6）：先去找一位智者對話，再回來解鎖新書。`;
+      }
+    }
+
     function masterPoint(master) {
       return master.ai ? { x: master.ai.x, y: master.ai.y } : master.position;
     }
@@ -653,6 +667,7 @@
     function update(dt) {
       if (!state.assetsReady || state.scene !== "cafe") return;
       updateNpcs(dt);
+      updateBookshelfHint();
       const speed = 150;
       let dx = 0;
       let dy = 0;
@@ -954,7 +969,19 @@
       if (!img) return;
       const box = state.cafeEntities.bookshelf;
       ctx.drawImage(img, box.x, box.y, box.w, box.h);
-      drawLabel("旅程書架", box.x + box.w / 2, box.label_y, "#fff4dd", "#4f321f");
+      const near = state.scene === "cafe" && nearbyBookshelf();
+      if (near) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(245, 209, 141, 0.95)";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "rgba(245, 209, 141, 0.7)";
+        ctx.shadowBlur = 18;
+        ctx.strokeRect(box.x - 2, box.y - 2, box.w + 4, box.h + 4);
+        ctx.restore();
+      }
+      drawLabel("旅程書架", box.x + box.w / 2, box.label_y,
+        near ? "#f5d18d" : "#fff4dd",
+        near ? "#5c3922" : "#4f321f");
       for (let i = 0; i < state.progress.masters_completed.length; i++) {
         const id = state.progress.masters_completed[i];
         const x = box.x + 14 + i * 20;
@@ -1094,13 +1121,13 @@
       }
       if (key === " " || key === "enter") {
         if (state.scene === "cafe") {
+          if (nearbyBookshelf()) {
+            interactBookshelf();
+            return;
+          }
           const master = nearbyMaster();
           if (master) {
             startTalk(master);
-            return;
-          }
-          if (nearbyBookshelf()) {
-            interactBookshelf();
             return;
           }
         }
@@ -1125,9 +1152,9 @@
 
     interactTouch.addEventListener("click", () => {
       if (state.scene !== "cafe") return;
+      if (nearbyBookshelf()) { interactBookshelf(); return; }
       const master = nearbyMaster();
-      if (master) { startTalk(master); return; }
-      if (nearbyBookshelf()) interactBookshelf();
+      if (master) startTalk(master);
     });
 
     startJourneyBtn.addEventListener("click", () => {
