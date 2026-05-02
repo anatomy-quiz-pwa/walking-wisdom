@@ -294,10 +294,6 @@
         <button id="closeIframe" type="button">關閉</button>
       </div>
       <iframe id="dialogueFrame" title="dialogue experience"></iframe>
-      <div class="iframe-foot">
-        <span id="iframeStatus">完成對話後，回到咖啡館走到旅程書架前按 Space 解鎖書本。</span>
-        <button id="openTab" type="button">用新分頁開啟</button>
-      </div>
     </div>
   </div>
 
@@ -332,9 +328,7 @@
     const iframeModal = document.getElementById("iframeModal");
     const dialogueFrame = document.getElementById("dialogueFrame");
     const iframeTitle = document.getElementById("iframeTitle");
-    const iframeStatus = document.getElementById("iframeStatus");
     const closeIframe = document.getElementById("closeIframe");
-    const openTab = document.getElementById("openTab");
     const interactTouch = document.getElementById("interactTouch");
 
     const state = {
@@ -649,17 +643,8 @@
       const url = dialogueUrl(master);
       state.currentDialogueUrl = url;
       iframeTitle.textContent = master.name;
-      iframeStatus.textContent = "正在嘗試嵌入對話體驗...";
       iframeModal.classList.add("show");
       state.npcFreeze = true;
-      dialogueFrame.src = "about:blank";
-      window.clearTimeout(state.iframeTimer);
-      state.iframeTimer = window.setTimeout(() => {
-        iframeStatus.textContent = "如果畫面沒有載入，請用新分頁完成對話。";
-      }, 2600);
-      dialogueFrame.onload = () => {
-        iframeStatus.textContent = "對話完成後會回到 RPG；也可以使用備用解鎖按鈕。";
-      };
       dialogueFrame.src = url;
     }
 
@@ -1132,10 +1117,6 @@
       if (m && !state.progress.masters_completed.includes(m.id)) {
         hint.textContent = `走到旅程書架前按 Space，把 ${m.name} 的書放上去。`;
       }
-    });
-
-    openTab.addEventListener("click", () => {
-      if (state.currentDialogueUrl) window.open(state.currentDialogueUrl, "_blank", "noopener,noreferrer");
     });
 
     backWorldBtn.addEventListener("click", enterWorld);
