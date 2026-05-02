@@ -157,52 +157,6 @@
       margin-top: 18px;
     }
 
-    .shelf-card { max-width: 520px; }
-    .shelf-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin: 0 0 14px;
-    }
-    .shelf-title {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 700;
-      color: #4f321f;
-      letter-spacing: 0.08em;
-    }
-    .shelf-progress {
-      margin: 0;
-      font-size: 14px;
-      color: #8a6a45;
-    }
-    .shelf-list {
-      list-style: none;
-      margin: 0 0 4px;
-      padding: 0;
-      display: grid;
-      gap: 8px;
-    }
-    .shelf-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      background: rgba(74, 50, 32, 0.06);
-      border: 1px solid rgba(74, 50, 32, 0.14);
-      font-size: 15px;
-      color: #4f321f;
-    }
-    .shelf-row.unlocked { background: rgba(214, 170, 95, 0.18); border-color: rgba(174, 124, 53, 0.55); color: #2a1b12; }
-    .shelf-row.locked { color: #8a7960; }
-    .shelf-row .dot { width: 14px; height: 14px; border-radius: 50%; background: #c5b5a0; flex-shrink: 0; }
-    .shelf-row.unlocked .dot { background: #b97d2a; box-shadow: 0 0 0 2px rgba(245, 209, 141, 0.55); }
-    .shelf-row .label { flex: 1; }
-    .shelf-row .status { font-size: 12px; letter-spacing: 0.08em; color: #8a7960; }
-    .shelf-row.unlocked .status { color: #6f4416; }
-    .shelf-row.pending { background: rgba(255, 224, 138, 0.32); border-color: rgba(180, 120, 40, 0.7); }
-    .shelf-row.pending .status { color: #6f4416; font-weight: 700; }
 
     .modal-actions button {
       background: #5d3922;
@@ -344,21 +298,6 @@
     </div>
   </div>
 
-  <div id="shelfModal" class="modal-backdrop">
-    <div class="modal shelf-card">
-      <div class="modal-content">
-        <div class="shelf-head">
-          <p class="shelf-title">旅程書架</p>
-          <p id="shelfProgress" class="shelf-progress">0 / 6 本書</p>
-        </div>
-        <ul id="shelfList" class="shelf-list"></ul>
-        <div class="modal-actions">
-          <button id="closeShelf" type="button">關上書架</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
     const STORAGE_KEY = "walking_wisdom_progress";
     const DIALOGUE_BASE = "https://script.google.com/macros/s/AKfycbxvH2V0k19oxwUqN4JIbQQQwlFHhP9BfhLqPSofoyW_ycASMm6SVK7hpSI_74LvPW5PNg/exec";
@@ -392,10 +331,6 @@
     const iframeTitle = document.getElementById("iframeTitle");
     const closeIframe = document.getElementById("closeIframe");
     const interactTouch = document.getElementById("interactTouch");
-    const shelfModal = document.getElementById("shelfModal");
-    const shelfList = document.getElementById("shelfList");
-    const shelfProgress = document.getElementById("shelfProgress");
-    const closeShelfBtn = document.getElementById("closeShelf");
 
     const state = {
       scene: "world",
@@ -676,32 +611,25 @@
         completeMaster(pending.id);
         state.activeMaster = null;
       }
-      openShelfModal(pending);
+      openSharedShelf();
     }
 
-    function openShelfModal(justUnlocked) {
-      const completed = new Set(state.progress.masters_completed);
-      shelfProgress.textContent = `${completed.size} / 6 本書`;
-      shelfList.innerHTML = "";
-      const masters = state.cafeEntities.masters;
-      MASTER_ORDER.forEach((id) => {
-        const master = masters.find((m) => m.id === id);
-        const li = document.createElement("li");
-        const isUnlocked = completed.has(id);
-        const isJustUnlocked = justUnlocked && justUnlocked.id === id;
-        li.className = "shelf-row " + (isJustUnlocked ? "unlocked pending" : (isUnlocked ? "unlocked" : "locked"));
-        li.innerHTML = `
-          <span class="dot"></span>
-          <span class="label">${master ? master.name : id}</span>
-          <span class="status">${isJustUnlocked ? "✦ 剛剛上架" : (isUnlocked ? "已收藏" : "尚未對話")}</span>
-        `;
-        shelfList.appendChild(li);
-      });
-      shelfModal.classList.add("show");
-    }
-
-    function closeShelfModal() {
-      shelfModal.classList.remove("show");
+    function openSharedShelf() {
+      iframeTitle.textContent = "旅程書架";
+      iframeModal.classList.add("show");
+      state.npcFreeze = true;
+      state.openingShelf = true;
+      const sendOpen = () => {
+        try {
+          dialogueFrame.contentWindow.postMessage("__openShelf__", "*");
+        } catch (e) {}
+      };
+      dialogueFrame.onload = () => {
+        setTimeout(sendOpen, 600);
+        setTimeout(sendOpen, 1500);
+        setTimeout(sendOpen, 3000);
+      };
+      dialogueFrame.src = DIALOGUE_BASE;
     }
 
     function updateBookshelfHint() {
@@ -1258,16 +1186,15 @@
     closeIframe.addEventListener("click", () => {
       iframeModal.classList.remove("show");
       dialogueFrame.src = "about:blank";
+      dialogueFrame.onload = null;
       state.npcFreeze = false;
+      const wasShelf = state.openingShelf;
+      state.openingShelf = false;
+      if (wasShelf) return;
       const m = state.activeMaster;
       if (m && !state.progress.masters_completed.includes(m.id)) {
-        hint.textContent = `走到旅程書架前按 Space，把 ${m.name} 的書放上去。`;
+        hint.textContent = `走到旅程書架前按 Space，翻閱 ${m.name} 的書。`;
       }
-    });
-
-    closeShelfBtn.addEventListener("click", closeShelfModal);
-    shelfModal.addEventListener("click", (event) => {
-      if (event.target === shelfModal) closeShelfModal();
     });
 
     backWorldBtn.addEventListener("click", enterWorld);
