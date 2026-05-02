@@ -295,9 +295,8 @@
       </div>
       <iframe id="dialogueFrame" title="dialogue experience"></iframe>
       <div class="iframe-foot">
-        <span id="iframeStatus">如果 iframe 被瀏覽器阻擋，請用新分頁完成對話。</span>
+        <span id="iframeStatus">完成對話後，回到咖啡館走到旅程書架前按 Space 解鎖書本。</span>
         <button id="openTab" type="button">用新分頁開啟</button>
-        <button id="manualUnlock" type="button">我完成了，解鎖書本</button>
       </div>
     </div>
   </div>
@@ -336,7 +335,6 @@
     const iframeStatus = document.getElementById("iframeStatus");
     const closeIframe = document.getElementById("closeIframe");
     const openTab = document.getElementById("openTab");
-    const manualUnlock = document.getElementById("manualUnlock");
     const interactTouch = document.getElementById("interactTouch");
 
     const state = {
@@ -595,6 +593,30 @@
 
     function nearbyMaster() {
       return state.cafeEntities.masters.find((m) => dist(state.player, masterPoint(m)) < 92);
+    }
+
+    function nearbyBookshelf() {
+      const box = state.cafeEntities.bookshelf;
+      if (!box) return false;
+      const px = state.player.x;
+      const py = state.player.y;
+      const cx = Math.max(box.x, Math.min(px, box.x + box.w));
+      const cy = Math.max(box.y, Math.min(py, box.y + box.h));
+      return Math.hypot(px - cx, py - cy) < 70;
+    }
+
+    function interactBookshelf() {
+      const pending = state.activeMaster &&
+        !state.progress.masters_completed.includes(state.activeMaster.id)
+        ? state.activeMaster
+        : null;
+      if (pending) {
+        completeMaster(pending.id);
+        state.activeMaster = null;
+      } else {
+        const n = state.progress.masters_completed.length;
+        hint.textContent = `旅程書架：已收藏 ${n} / 6 本書。`;
+      }
     }
 
     function masterPoint(master) {
@@ -1046,8 +1068,17 @@
         event.preventDefault();
       }
       if (key === " " || key === "enter") {
-        const master = nearbyMaster();
-        if (master) startTalk(master);
+        if (state.scene === "cafe") {
+          const master = nearbyMaster();
+          if (master) {
+            startTalk(master);
+            return;
+          }
+          if (nearbyBookshelf()) {
+            interactBookshelf();
+            return;
+          }
+        }
         return;
       }
       state.keys.add(key);
@@ -1068,8 +1099,10 @@
     });
 
     interactTouch.addEventListener("click", () => {
+      if (state.scene !== "cafe") return;
       const master = nearbyMaster();
-      if (master) startTalk(master);
+      if (master) { startTalk(master); return; }
+      if (nearbyBookshelf()) interactBookshelf();
     });
 
     startJourneyBtn.addEventListener("click", () => {
@@ -1095,17 +1128,14 @@
       iframeModal.classList.remove("show");
       dialogueFrame.src = "about:blank";
       state.npcFreeze = false;
+      const m = state.activeMaster;
+      if (m && !state.progress.masters_completed.includes(m.id)) {
+        hint.textContent = `走到旅程書架前按 Space，把 ${m.name} 的書放上去。`;
+      }
     });
 
     openTab.addEventListener("click", () => {
       if (state.currentDialogueUrl) window.open(state.currentDialogueUrl, "_blank", "noopener,noreferrer");
-    });
-
-    manualUnlock.addEventListener("click", () => {
-      if (state.activeMaster) completeMaster(state.activeMaster.id);
-      iframeModal.classList.remove("show");
-      dialogueFrame.src = "about:blank";
-      state.npcFreeze = false;
     });
 
     backWorldBtn.addEventListener("click", enterWorld);

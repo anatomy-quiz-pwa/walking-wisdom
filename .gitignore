@@ -4,3 +4,4 @@ node_modules/
 .codex-cache/
 /tmp
 tmp/
+.vercel
