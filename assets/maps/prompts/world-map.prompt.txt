@@ -1,0 +1,1 @@
+Top-down pixel art RPG world map for "慢慢走 Walking Wisdom"; cozy warm course-world layout; one unlocked cafe; other themed areas greyed and locked; soft cream, wood, muted greens; no UI text baked into image.

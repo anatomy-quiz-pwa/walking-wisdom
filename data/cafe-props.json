@@ -1,0 +1,11 @@
+{
+  "bookshelf_states": [
+    "assets/sprites/props/bookshelf-empty.png",
+    "assets/sprites/props/bookshelf-books-1.png",
+    "assets/sprites/props/bookshelf-books-2.png",
+    "assets/sprites/props/bookshelf-books-3.png",
+    "assets/sprites/props/bookshelf-books-4.png",
+    "assets/sprites/props/bookshelf-books-5.png",
+    "assets/sprites/props/bookshelf-books-6.png"
+  ]
+}

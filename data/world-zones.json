@@ -1,0 +1,12 @@
+{
+  "locations": [
+    {
+      "id": "cafe",
+      "name": "慢慢走咖啡館",
+      "unlocked": true,
+      "x": 176,
+      "y": 456,
+      "radius": 92
+    }
+  ]
+}

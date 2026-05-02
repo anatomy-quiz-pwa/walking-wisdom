@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>慢慢走 Walking Wisdom</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --paper: #fff4dd;
+      --ink: #2a1b12;
+      --wood: #7a4a27;
+      --leaf: #4d7455;
+      --gold: #f2c46d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      background: #1d1713;
+      color: var(--paper);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #app {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(180deg, rgba(255, 244, 221, 0.05), rgba(0, 0, 0, 0.2)),
+        #211813;
+    }
+
+    canvas {
+      width: min(100vw, calc(100vh * 4 / 3));
+      height: min(100vh, calc(100vw * 3 / 4));
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      border: 1px solid rgba(255, 244, 221, 0.18);
+      box-shadow: 0 22px 80px rgba(0, 0, 0, 0.5);
+      background: #211813;
+      touch-action: none;
+    }
+
+    .hud {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      top: max(12px, env(safe-area-inset-top));
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .pill,
+    button {
+      border: 1px solid rgba(255, 244, 221, 0.3);
+      border-radius: 8px;
+      background: rgba(42, 27, 18, 0.78);
+      color: var(--paper);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(8px);
+    }
+
+    .pill {
+      max-width: min(680px, 72vw);
+      padding: 9px 12px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    button {
+      min-height: 40px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+      pointer-events: auto;
+    }
+
+    button:hover { border-color: rgba(242, 196, 109, 0.75); }
+
+    .settings {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+      pointer-events: auto;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(19, 13, 10, 0.58);
+      z-index: 20;
+    }
+
+    .modal-backdrop.show { display: grid; }
+
+    .modal {
+      width: min(760px, 100%);
+      border: 1px solid rgba(255, 244, 221, 0.22);
+      border-radius: 8px;
+      background: rgba(255, 244, 221, 0.96);
+      color: var(--ink);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    .modal-content {
+      padding: 22px;
+    }
+
+    .modal-content p {
+      margin: 0 0 16px;
+      line-height: 1.75;
+      font-size: 17px;
+    }
+
+    .dialogue-card {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .avatar-frame {
+      width: 112px;
+      height: 112px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #ead3aa;
+      border: 1px solid rgba(42, 27, 18, 0.18);
+      overflow: hidden;
+    }
+
+    .avatar-frame img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .modal-actions button {
+      background: #5d3922;
+      color: #fff4dd;
+    }
+
+    .iframe-modal {
+      width: min(1100px, 96vw);
+      height: min(760px, 92vh);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .iframe-head,
+    .iframe-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #4f321f;
+      color: #fff4dd;
+    }
+
+    .iframe-foot {
+      font-size: 13px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    .touch-controls {
+      position: fixed;
+      left: max(16px, env(safe-area-inset-left));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      display: none;
+      grid-template-columns: 52px 52px 52px;
+      grid-template-rows: 52px 52px 52px;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .touch-controls button {
+      min-width: 52px;
+      min-height: 52px;
+      padding: 0;
+      font-size: 20px;
+      touch-action: none;
+    }
+
+    .touch-controls .up { grid-column: 2; grid-row: 1; }
+    .touch-controls .left { grid-column: 1; grid-row: 2; }
+    .touch-controls .right { grid-column: 3; grid-row: 2; }
+    .touch-controls .down { grid-column: 2; grid-row: 3; }
+
+    #interactTouch {
+      position: fixed;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(28px, env(safe-area-inset-bottom));
+      display: none;
+      min-width: 74px;
+      min-height: 74px;
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    @media (max-width: 760px), (pointer: coarse) {
+      .touch-controls,
+      #interactTouch { display: grid; }
+      .pill { max-width: 62vw; font-size: 12px; }
+      .settings button { min-height: 34px; font-size: 12px; }
+      .dialogue-card { grid-template-columns: 74px 1fr; gap: 12px; }
+      .avatar-frame { width: 74px; height: 74px; }
+      .modal-content p { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <canvas id="game" width="1024" height="768" aria-label="慢慢走 Walking Wisdom game canvas"></canvas>
+  </div>
+
+  <div class="hud">
+    <div id="hint" class="pill">點擊慢慢走咖啡館進入。</div>
+    <div class="settings">
+      <button id="backWorld" type="button" hidden>返回世界地圖</button>
+      <button id="resetProgress" type="button">重置進度</button>
+    </div>
+  </div>
+
+  <div class="touch-controls" aria-label="方向控制">
+    <button class="up" data-dir="up" type="button">↑</button>
+    <button class="left" data-dir="left" type="button">←</button>
+    <button class="right" data-dir="right" type="button">→</button>
+    <button class="down" data-dir="down" type="button">↓</button>
+  </div>
+  <button id="interactTouch" type="button">對話</button>
+
+  <div id="introModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-content">
+        <p>歡迎來到慢慢走咖啡館。這裡有六位智者在不同角落等著與你對話。走近他們，按 Space 或點擊開始對話。每完成一場對話，書架上會多一本書。</p>
+        <div class="modal-actions">
+          <button id="startJourney" type="button">開始旅程</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="talkModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-content dialogue-card">
+        <div class="avatar-frame"><img id="talkAvatar" alt=""></div>
+        <div>
+          <p id="talkName"></p>
+          <p id="talkLine"></p>
+          <div class="modal-actions">
+            <button id="cancelTalk" type="button">先等等</button>
+            <button id="openDialogue" type="button">開始對話</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="iframeModal" class="modal-backdrop">
+    <div class="modal iframe-modal">
+      <div class="iframe-head">
+        <span id="iframeTitle">對話體驗</span>
+        <button id="closeIframe" type="button">關閉</button>
+      </div>
+      <iframe id="dialogueFrame" title="dialogue experience"></iframe>
+      <div class="iframe-foot">
+        <span id="iframeStatus">如果 iframe 被瀏覽器阻擋，請用新分頁完成對話。</span>
+        <button id="openTab" type="button">用新分頁開啟</button>
+        <button id="manualUnlock" type="button">我完成了，解鎖書本</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "walking_wisdom_progress";
+    const DIALOGUE_BASE = "https://script.google.com/macros/s/AKfycbxvH2V0k19oxwUqN4JIbQQQwlFHhP9BfhLqPSofoyW_ycASMm6SVK7hpSI_74LvPW5PNg/exec";
+    const MASTER_ORDER = ["lieberman", "cavagna", "roberts", "perry", "bernstein", "studenski"];
+    const BOOK_LABELS = {
+      lieberman: "Lieberman 的書",
+      cavagna: "Cavagna 的書",
+      roberts: "Roberts 的書",
+      perry: "Perry 的書",
+      bernstein: "Bernstein 的書",
+      studenski: "Studenski 的書"
+    };
+
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+
+    const hint = document.getElementById("hint");
+    const backWorldBtn = document.getElementById("backWorld");
+    const resetBtn = document.getElementById("resetProgress");
+    const introModal = document.getElementById("introModal");
+    const startJourneyBtn = document.getElementById("startJourney");
+    const talkModal = document.getElementById("talkModal");
+    const talkAvatar = document.getElementById("talkAvatar");
+    const talkName = document.getElementById("talkName");
+    const talkLine = document.getElementById("talkLine");
+    const cancelTalk = document.getElementById("cancelTalk");
+    const openDialogue = document.getElementById("openDialogue");
+    const iframeModal = document.getElementById("iframeModal");
+    const dialogueFrame = document.getElementById("dialogueFrame");
+    const iframeTitle = document.getElementById("iframeTitle");
+    const iframeStatus = document.getElementById("iframeStatus");
+    const closeIframe = document.getElementById("closeIframe");
+    const openTab = document.getElementById("openTab");
+    const manualUnlock = document.getElementById("manualUnlock");
+    const interactTouch = document.getElementById("interactTouch");
+
+    const state = {
+      scene: "world",
+      assetsReady: false,
+      images: {},
+      worldZones: null,
+      cafeEntities: null,
+      collision: null,
+      props: null,
+      npcFreeze: false,
+      nextNpcChatAt: 18,
+      activeNpcChat: null,
+      progress: loadProgress(),
+      activeMaster: null,
+      currentDialogueUrl: "",
+      iframeTimer: 0,
+      keys: new Set(),
+      touchDir: null,
+      pointer: { x: 0, y: 0 },
+      tooltip: null,
+      player: {
+        x: 500,
+        y: 675,
+        dir: "down",
+        moving: false,
+        frame: 0,
+        frameTime: 0,
+        path: [],
+        autoInteract: null
+      }
+    };
+
+    const DIRS = {
+      down: { x: 0, y: 1, row: 0 },
+      left: { x: -1, y: 0, row: 1 },
+      right: { x: 1, y: 0, row: 2 },
+      up: { x: 0, y: -1, row: 3 }
+    };
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { version: 1, masters_completed: [], intro_seen: false };
+        const parsed = JSON.parse(raw);
+        return {
+          version: 1,
+          masters_completed: Array.isArray(parsed.masters_completed) ? parsed.masters_completed : [],
+          intro_seen: Boolean(parsed.intro_seen)
+        };
+      } catch {
+        return { version: 1, masters_completed: [], intro_seen: false };
+      }
+    }
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+    }
+
+    function completeMaster(id) {
+      if (!MASTER_ORDER.includes(id)) return;
+      if (!state.progress.masters_completed.includes(id)) {
+        state.progress.masters_completed.push(id);
+        state.progress.masters_completed.sort((a, b) => MASTER_ORDER.indexOf(a) - MASTER_ORDER.indexOf(b));
+      }
+      saveProgress();
+      hint.textContent = `${BOOK_LABELS[id]} 已放上旅程書架。`;
+    }
+
+    function image(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = src;
+      });
+    }
+
+    async function json(src) {
+      const res = await fetch(src);
+      return res.json();
+    }
+
+    async function boot() {
+      const params = new URLSearchParams(location.search);
+      const completed = params.get("completed");
+      if (completed) {
+        completeMaster(completed);
+        history.replaceState(null, "", location.pathname);
+      }
+
+      const [worldZones, cafeEntities, collision, props] = await Promise.all([
+        json("data/world-zones.json"),
+        json("data/cafe-entities.json"),
+        json("data/cafe-collision.json"),
+        json("data/cafe-props.json")
+      ]);
+      state.worldZones = worldZones;
+      state.cafeEntities = cafeEntities;
+      state.collision = collision;
+      state.props = props;
+
+      const imageEntries = [
+        ["world", "assets/maps/world-map.png"],
+        ["cafe", "assets/maps/cafe-base.png"],
+        ["player", "assets/sprites/player/traveler-walk-4x4.png"],
+        ...props.bookshelf_states.map((src, i) => [`bookshelf${i}`, src]),
+        ...cafeEntities.masters.map((m) => [m.id, m.sprite]),
+        ...cafeEntities.masters.map((m) => [`walk_${m.id}`, m.walk_sprite]),
+        ...cafeEntities.masters.map((m) => [`avatar_${m.id}`, m.avatar])
+      ];
+      const loaded = await Promise.all(imageEntries.map(async ([key, src]) => [key, await image(src)]));
+      state.images = Object.fromEntries(loaded);
+      state.assetsReady = true;
+
+      const spawn = cafeEntities.player_spawn;
+      state.player.x = spawn.x;
+      state.player.y = spawn.y;
+      initNpcAi();
+
+      if (!state.progress.intro_seen) introModal.classList.add("show");
+      requestAnimationFrame(loop);
+    }
+
+    function toWorldPoint(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: ((event.clientX - rect.left) / rect.width) * canvas.width,
+        y: ((event.clientY - rect.top) / rect.height) * canvas.height
+      };
+    }
+
+    function dist(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function rectContains(rect, x, y, pad = 0) {
+      return x >= rect.x - pad && x <= rect.x + rect.w + pad && y >= rect.y - pad && y <= rect.y + rect.h + pad;
+    }
+
+    function isBlocked(x, y) {
+      const bounds = state.collision.walk_bounds;
+      if (!rectContains(bounds, x, y)) return true;
+      return state.collision.blocked_rects.some((rect) => rectContains(rect, x, y));
+    }
+
+    function canMoveTo(x, y) {
+      const footPad = 13;
+      return !isBlocked(x, y) && !isBlocked(x - footPad, y) && !isBlocked(x + footPad, y) && !isBlocked(x, y - 8);
+    }
+
+    function initNpcAi() {
+      state.cafeEntities.masters.forEach((master, index) => {
+        master.position = nearestWalkable(master.position);
+        master.ai = {
+          x: master.position.x,
+          y: master.position.y,
+          dir: "down",
+          frame: 0,
+          frameTime: 0,
+          path: [],
+          moving: false,
+          idleTime: 1 + Math.random() * 2 + index * 0.15,
+          highlighted: false,
+          chatting: false,
+          bubble: "",
+          bubbleTime: 0
+        };
+      });
+    }
+
+    function nearestWalkable(point) {
+      if (canMoveTo(point.x, point.y)) return point;
+      for (let r = 16; r <= 160; r += 16) {
+        for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
+          const p = { x: point.x + Math.cos(a) * r, y: point.y + Math.sin(a) * r };
+          if (canMoveTo(p.x, p.y)) return p;
+        }
+      }
+      return { x: state.player.x, y: state.player.y };
+    }
+
+    function findPath(start, target) {
+      const tile = state.collision.tile_size || 32;
+      const cols = Math.ceil(canvas.width / tile);
+      const rows = Math.ceil(canvas.height / tile);
+      const toCell = (p) => ({
+        x: Math.max(0, Math.min(cols - 1, Math.floor(p.x / tile))),
+        y: Math.max(0, Math.min(rows - 1, Math.floor(p.y / tile)))
+      });
+      const toPoint = (c) => ({ x: c.x * tile + tile / 2, y: c.y * tile + tile / 2 });
+      const startCell = toCell(start);
+      const targetCell = toCell(nearestWalkable(target));
+      const key = (c) => `${c.x},${c.y}`;
+      const walkable = (c) => c.x >= 0 && c.y >= 0 && c.x < cols && c.y < rows && canMoveTo(...Object.values(toPoint(c)));
+      const open = [startCell];
+      const came = new Map();
+      const g = new Map([[key(startCell), 0]]);
+      const f = new Map([[key(startCell), Math.abs(startCell.x - targetCell.x) + Math.abs(startCell.y - targetCell.y)]]);
+      const closed = new Set();
+
+      while (open.length) {
+        open.sort((a, b) => (f.get(key(a)) || Infinity) - (f.get(key(b)) || Infinity));
+        const current = open.shift();
+        const currentKey = key(current);
+        if (current.x === targetCell.x && current.y === targetCell.y) {
+          const cells = [current];
+          let cursor = currentKey;
+          while (came.has(cursor)) {
+            const prev = came.get(cursor);
+            cells.unshift(prev);
+            cursor = key(prev);
+          }
+          return cells.slice(1).map(toPoint);
+        }
+        closed.add(currentKey);
+        for (const n of [
+          { x: current.x + 1, y: current.y },
+          { x: current.x - 1, y: current.y },
+          { x: current.x, y: current.y + 1 },
+          { x: current.x, y: current.y - 1 }
+        ]) {
+          const nKey = key(n);
+          if (closed.has(nKey) || !walkable(n)) continue;
+          const tentative = (g.get(currentKey) || 0) + 1;
+          if (!open.some((c) => key(c) === nKey)) open.push(n);
+          if (tentative >= (g.get(nKey) || Infinity)) continue;
+          came.set(nKey, current);
+          g.set(nKey, tentative);
+          f.set(nKey, tentative + Math.abs(n.x - targetCell.x) + Math.abs(n.y - targetCell.y));
+        }
+      }
+      return [nearestWalkable(target)];
+    }
+
+    function enterCafe() {
+      state.scene = "cafe";
+      backWorldBtn.hidden = false;
+      const spawn = state.cafeEntities.player_spawn;
+      state.player.x = spawn.x;
+      state.player.y = spawn.y;
+      state.player.path = [];
+      state.player.autoInteract = null;
+      hint.textContent = "走近智者，按 Space / Enter 或點擊 NPC 開始對話。";
+    }
+
+    function enterWorld() {
+      state.scene = "world";
+      backWorldBtn.hidden = true;
+      hint.textContent = "點擊慢慢走咖啡館進入。";
+    }
+
+    function masterAt(point) {
+      return state.cafeEntities.masters.find((m) => dist(point, masterPoint(m)) < 62);
+    }
+
+    function nearbyMaster() {
+      return state.cafeEntities.masters.find((m) => dist(state.player, masterPoint(m)) < 92);
+    }
+
+    function masterPoint(master) {
+      return master.ai ? { x: master.ai.x, y: master.ai.y } : master.position;
+    }
+
+    function startTalk(master) {
+      endNpcChat();
+      state.activeMaster = master;
+      state.npcFreeze = true;
+      talkName.textContent = master.name;
+      talkLine.textContent = master.intro;
+      const avatar = state.images[`avatar_${master.id}`];
+      talkAvatar.src = avatar ? master.avatar : master.sprite;
+      talkAvatar.alt = master.name;
+      talkModal.classList.add("show");
+    }
+
+    function dialogueUrl(master) {
+      const returnUrl = new URL(location.href);
+      returnUrl.search = "";
+      returnUrl.hash = "";
+      const url = new URL(DIALOGUE_BASE);
+      url.searchParams.set("master", master.id);
+      url.searchParams.set("return", returnUrl.toString());
+      return url.toString();
+    }
+
+    function openDialogueExperience(master) {
+      const url = dialogueUrl(master);
+      state.currentDialogueUrl = url;
+      iframeTitle.textContent = master.name;
+      iframeStatus.textContent = "正在嘗試嵌入對話體驗...";
+      iframeModal.classList.add("show");
+      state.npcFreeze = true;
+      dialogueFrame.src = "about:blank";
+      window.clearTimeout(state.iframeTimer);
+      state.iframeTimer = window.setTimeout(() => {
+        iframeStatus.textContent = "如果畫面沒有載入，請用新分頁完成對話。";
+      }, 2600);
+      dialogueFrame.onload = () => {
+        iframeStatus.textContent = "對話完成後會回到 RPG；也可以使用備用解鎖按鈕。";
+      };
+      dialogueFrame.src = url;
+    }
+
+    function update(dt) {
+      if (!state.assetsReady || state.scene !== "cafe") return;
+      updateNpcs(dt);
+      const speed = 150;
+      let dx = 0;
+      let dy = 0;
+      if (state.keys.has("arrowup") || state.keys.has("w") || state.touchDir === "up") dy -= 1;
+      if (state.keys.has("arrowdown") || state.keys.has("s") || state.touchDir === "down") dy += 1;
+      if (state.keys.has("arrowleft") || state.keys.has("a") || state.touchDir === "left") dx -= 1;
+      if (state.keys.has("arrowright") || state.keys.has("d") || state.touchDir === "right") dx += 1;
+
+      if (dx || dy) {
+        state.player.path = [];
+        state.player.autoInteract = null;
+        const len = Math.hypot(dx, dy);
+        dx /= len;
+        dy /= len;
+        movePlayer(dx * speed * dt, dy * speed * dt);
+      } else if (state.player.path.length) {
+        const target = state.player.path[0];
+        const vx = target.x - state.player.x;
+        const vy = target.y - state.player.y;
+        const len = Math.hypot(vx, vy);
+        if (len < 4) {
+          state.player.path.shift();
+          if (!state.player.path.length && state.player.autoInteract) {
+            const master = state.player.autoInteract;
+            state.player.autoInteract = null;
+            startTalk(master);
+          }
+        } else {
+          movePlayer((vx / len) * speed * dt, (vy / len) * speed * dt);
+        }
+      } else {
+        state.player.moving = false;
+      }
+
+      if (state.player.moving) {
+        state.player.frameTime += dt;
+        if (state.player.frameTime > 0.14) {
+          state.player.frame = (state.player.frame + 1) % 4;
+          state.player.frameTime = 0;
+        }
+      } else {
+        state.player.frame = 0;
+      }
+    }
+
+    function updateNpcs(dt) {
+      const frozenByModal = state.npcFreeze || talkModal.classList.contains("show") || iframeModal.classList.contains("show") || introModal.classList.contains("show");
+      updateNpcChat(dt, frozenByModal);
+      for (const master of state.cafeEntities.masters) {
+        updateSingleNpc(master, dt, frozenByModal);
+      }
+    }
+
+    function updateSingleNpc(master, dt, frozenByModal) {
+      const ai = master.ai;
+      if (!ai) return;
+      const playerDistance = dist(state.player, ai);
+      ai.highlighted = playerDistance < 120;
+      if (ai.highlighted) {
+        if (ai.chatting) endNpcChat();
+        ai.path = [];
+        ai.moving = false;
+        ai.dir = directionToward(ai, state.player);
+        return;
+      }
+      if (frozenByModal || ai.chatting) {
+        ai.moving = false;
+        return;
+      }
+
+      if (ai.path.length) {
+        const target = ai.path[0];
+        const vx = target.x - ai.x;
+        const vy = target.y - ai.y;
+        const len = Math.hypot(vx, vy);
+        if (len < 3) {
+          ai.path.shift();
+          if (!ai.path.length) {
+            ai.moving = false;
+            ai.idleTime = 1 + Math.random() * 2;
+          }
+        } else {
+          moveNpc(master, (vx / len) * 75 * dt, (vy / len) * 75 * dt);
+        }
+      } else {
+        ai.moving = false;
+        ai.idleTime -= dt;
+        if (ai.idleTime <= 0) {
+          if (Math.random() < 0.28) ai.dir = randomDir();
+          const target = randomPointInZone(master.roam_zone);
+          ai.path = findPath(ai, target).slice(0, 14);
+          if (!ai.path.length) ai.idleTime = 1 + Math.random() * 2;
+        }
+      }
+
+      if (ai.moving) {
+        ai.frameTime += dt;
+        if (ai.frameTime > 0.18) {
+          ai.frame = (ai.frame + 1) % 4;
+          ai.frameTime = 0;
+        }
+      } else {
+        ai.frame = 0;
+      }
+    }
+
+    function moveNpc(master, dx, dy) {
+      const ai = master.ai;
+      const nextX = ai.x + dx;
+      const nextY = ai.y + dy;
+      if (Math.abs(dx) > Math.abs(dy)) ai.dir = dx > 0 ? "right" : "left";
+      else if (dy !== 0) ai.dir = dy > 0 ? "down" : "up";
+      let moved = false;
+      if (canMoveTo(nextX, ai.y)) {
+        ai.x = nextX;
+        moved = true;
+      }
+      if (canMoveTo(ai.x, nextY)) {
+        ai.y = nextY;
+        moved = true;
+      }
+      master.position.x = ai.x;
+      master.position.y = ai.y;
+      ai.moving = moved;
+    }
+
+    function randomPointInZone(zone) {
+      for (let i = 0; i < 18; i++) {
+        const point = {
+          x: zone.x + Math.random() * zone.w,
+          y: zone.y + Math.random() * zone.h
+        };
+        if (canMoveTo(point.x, point.y)) return point;
+      }
+      return nearestWalkable({ x: zone.x + zone.w / 2, y: zone.y + zone.h / 2 });
+    }
+
+    function randomDir() {
+      return ["down", "left", "right", "up"][Math.floor(Math.random() * 4)];
+    }
+
+    function directionToward(from, to) {
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? "right" : "left";
+      return dy > 0 ? "down" : "up";
+    }
+
+    function updateNpcChat(dt, frozenByModal) {
+      if (state.activeNpcChat) {
+        state.activeNpcChat.time -= dt;
+        const [a, b] = state.activeNpcChat.masters;
+        if (dist(state.player, a.ai) < 120 || dist(state.player, b.ai) < 120 || state.activeNpcChat.time <= 0 || frozenByModal) {
+          endNpcChat();
+        }
+        return;
+      }
+      if (frozenByModal) return;
+      state.nextNpcChatAt -= dt;
+      if (state.nextNpcChatAt > 0) return;
+      state.nextNpcChatAt = 15 + Math.random() * 10;
+      const candidates = [];
+      const masters = state.cafeEntities.masters;
+      for (let i = 0; i < masters.length; i++) {
+        for (let j = i + 1; j < masters.length; j++) {
+          const a = masters[i];
+          const b = masters[j];
+          if (a.ai.highlighted || b.ai.highlighted || a.ai.path.length || b.ai.path.length) continue;
+          const d = dist(a.ai, b.ai);
+          if (d < 210) candidates.push([a, b, d]);
+        }
+      }
+      if (!candidates.length) return;
+      candidates.sort((a, b) => a[2] - b[2]);
+      const [a, b] = candidates[Math.min(candidates.length - 1, Math.floor(Math.random() * 3))];
+      startNpcChat(a, b);
+    }
+
+    function startNpcChat(a, b) {
+      const bubble = npcChatBubble(a.id, b.id);
+      a.ai.path = [];
+      b.ai.path = [];
+      a.ai.chatting = true;
+      b.ai.chatting = true;
+      a.ai.bubble = bubble;
+      b.ai.bubble = bubble;
+      a.ai.dir = directionToward(a.ai, b.ai);
+      b.ai.dir = directionToward(b.ai, a.ai);
+      state.activeNpcChat = { masters: [a, b], time: 4 + Math.random() * 2 };
+    }
+
+    function endNpcChat() {
+      if (!state.activeNpcChat) return;
+      for (const master of state.activeNpcChat.masters) {
+        master.ai.chatting = false;
+        master.ai.bubble = "";
+        master.ai.idleTime = 1 + Math.random() * 2;
+      }
+      state.activeNpcChat = null;
+    }
+
+    function npcChatBubble(a, b) {
+      const pair = [a, b].sort().join("+");
+      const bubbles = {
+        "cavagna+lieberman": "🦴",
+        "perry+studenski": "👣",
+        "bernstein+roberts": "⚡"
+      };
+      return bubbles[pair] || "💭";
+    }
+
+    function movePlayer(dx, dy) {
+      const nextX = state.player.x + dx;
+      const nextY = state.player.y + dy;
+      if (Math.abs(dx) > Math.abs(dy)) state.player.dir = dx > 0 ? "right" : "left";
+      else if (dy !== 0) state.player.dir = dy > 0 ? "down" : "up";
+      let moved = false;
+      if (canMoveTo(nextX, state.player.y)) {
+        state.player.x = nextX;
+        moved = true;
+      }
+      if (canMoveTo(state.player.x, nextY)) {
+        state.player.y = nextY;
+        moved = true;
+      }
+      state.player.moving = moved;
+    }
+
+    function drawImageCover(img) {
+      if (!img) return;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    function drawWorld() {
+      drawImageCover(state.images.world);
+      const cafe = state.worldZones.locations[0];
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 244, 221, 0.95)";
+      ctx.lineWidth = 4;
+      ctx.fillStyle = "rgba(242, 196, 109, 0.22)";
+      ctx.beginPath();
+      ctx.arc(cafe.x, cafe.y, cafe.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      drawLabel(cafe.name, cafe.x, cafe.y - 104, "#fff4dd", "#5d3922");
+      ctx.restore();
+    }
+
+    function drawCafe() {
+      drawImageCover(state.images.cafe);
+      drawBookshelf();
+      const drawables = [
+        ...state.cafeEntities.masters.map((m) => ({ type: "master", y: masterPoint(m).y, data: m })),
+        { type: "player", y: state.player.y, data: state.player }
+      ].sort((a, b) => a.y - b.y);
+      for (const item of drawables) {
+        if (item.type === "master") drawMaster(item.data);
+        else drawPlayer();
+      }
+      drawBookTooltip();
+    }
+
+    function drawBookshelf() {
+      const count = state.progress.masters_completed.length;
+      const img = state.images[`bookshelf${count}`];
+      if (!img) return;
+      const box = state.cafeEntities.bookshelf;
+      ctx.drawImage(img, box.x, box.y, box.w, box.h);
+      drawLabel("旅程書架", box.x + box.w / 2, box.label_y, "#fff4dd", "#4f321f");
+      for (let i = 0; i < state.progress.masters_completed.length; i++) {
+        const id = state.progress.masters_completed[i];
+        const x = box.x + 14 + i * 20;
+        const y = box.y + 34;
+        ctx.fillStyle = ["#be3f35", "#315f9b", "#3c8a55", "#d8ac45", "#7d4ca4", "#2e9ca0"][MASTER_ORDER.indexOf(id)];
+        ctx.fillRect(x, y, 10, 38);
+      }
+    }
+
+    function drawBookTooltip() {
+      if (!state.tooltip) return;
+      drawLabel(state.tooltip.text, state.tooltip.x, state.tooltip.y, "#2a1b12", "#fff4dd");
+    }
+
+    function drawMaster(master) {
+      const ai = master.ai || { x: master.position.x, y: master.position.y, dir: "down", frame: 0, highlighted: false, bubble: "" };
+      const walkImg = state.images[`walk_${master.id}`];
+      const staticImg = state.images[master.id];
+      const w = 52;
+      const h = 88;
+      if (walkImg) {
+        const row = DIRS[ai.dir].row;
+        const col = ai.frame || 0;
+        ctx.drawImage(walkImg, col * 64, row * 64, 64, 64, ai.x - 24, ai.y - 50, 48, 48);
+      } else if (staticImg) {
+        ctx.drawImage(staticImg, ai.x - w / 2, ai.y - h + 14, w, h);
+      }
+      if (state.progress.masters_completed.includes(master.id)) {
+        ctx.fillStyle = "#f2c46d";
+        ctx.beginPath();
+        ctx.arc(ai.x + 22, ai.y - 72, 7, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (ai.bubble) drawSpeechBubble(ai.bubble, ai.x, ai.y - 72);
+      const bg = ai.highlighted ? "rgba(92,57,34,0.94)" : "rgba(42,27,18,0.78)";
+      const color = ai.highlighted ? "#f2c46d" : "#fff4dd";
+      drawLabel(master.name, ai.x, ai.y - h + 2, color, bg, 12);
+    }
+
+    function drawSpeechBubble(text, x, y) {
+      ctx.save();
+      ctx.font = "20px ui-sans-serif, system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      roundRect(x - 20, y - 18, 40, 30, 8);
+      ctx.fillStyle = "rgba(255,244,221,0.92)";
+      ctx.fill();
+      ctx.fillStyle = "#2a1b12";
+      ctx.fillText(text, x, y - 3);
+      ctx.restore();
+    }
+
+    function drawPlayer() {
+      const img = state.images.player;
+      if (!img) return;
+      const row = DIRS[state.player.dir].row;
+      const col = state.player.frame;
+      ctx.drawImage(img, col * 64, row * 64, 64, 64, state.player.x - 24, state.player.y - 50, 48, 48);
+    }
+
+    function drawLabel(text, x, y, color = "#fff4dd", bg = "rgba(42,27,18,0.72)", size = 14) {
+      ctx.save();
+      ctx.font = `600 ${size}px ui-sans-serif, system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const metrics = ctx.measureText(text);
+      const width = Math.min(metrics.width + 18, 260);
+      const height = size + 12;
+      const left = Math.max(8, Math.min(canvas.width - width - 8, x - width / 2));
+      const top = y - height / 2;
+      roundRect(left, top, width, height, 7);
+      ctx.fillStyle = bg;
+      ctx.fill();
+      ctx.fillStyle = color;
+      ctx.fillText(text, left + width / 2, y, width - 12);
+      ctx.restore();
+    }
+
+    function roundRect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function updateTooltip(point) {
+      state.tooltip = null;
+      if (state.scene !== "cafe") return;
+      const box = state.cafeEntities.bookshelf;
+      if (!rectContains(box, point.x, point.y)) return;
+      const completed = state.progress.masters_completed;
+      const slot = Math.floor((point.x - box.x - 10) / 20);
+      const id = completed[slot];
+      if (id) state.tooltip = { text: BOOK_LABELS[id], x: point.x, y: point.y - 28 };
+    }
+
+    function handleCanvasClick(event) {
+      const point = toWorldPoint(event);
+      if (state.scene === "world") {
+        const cafe = state.worldZones.locations[0];
+        if (dist(point, cafe) <= cafe.radius) enterCafe();
+        return;
+      }
+      const master = masterAt(point);
+      if (master) {
+        state.player.path = findPath(state.player, approachPointForMaster(master));
+        state.player.autoInteract = master;
+      } else if (canMoveTo(point.x, point.y)) {
+        state.player.path = findPath(state.player, point);
+        state.player.autoInteract = null;
+      }
+    }
+
+    function approachPointForMaster(master) {
+      const p = masterPoint(master);
+      const vx = state.player.x - p.x;
+      const vy = state.player.y - p.y;
+      const len = Math.hypot(vx, vy) || 1;
+      return nearestWalkable({ x: p.x + (vx / len) * 58, y: p.y + (vy / len) * 58 });
+    }
+
+    canvas.addEventListener("pointerdown", handleCanvasClick);
+    canvas.addEventListener("pointermove", (event) => updateTooltip(toWorldPoint(event)));
+
+    window.addEventListener("keydown", (event) => {
+      const key = event.key.toLowerCase();
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d", " ", "enter"].includes(key)) {
+        event.preventDefault();
+      }
+      if (key === " " || key === "enter") {
+        const master = nearbyMaster();
+        if (master) startTalk(master);
+        return;
+      }
+      state.keys.add(key);
+    });
+
+    window.addEventListener("keyup", (event) => {
+      state.keys.delete(event.key.toLowerCase());
+    });
+
+    document.querySelectorAll(".touch-controls button").forEach((button) => {
+      button.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        state.touchDir = button.dataset.dir;
+        button.setPointerCapture(event.pointerId);
+      });
+      button.addEventListener("pointerup", () => state.touchDir = null);
+      button.addEventListener("pointercancel", () => state.touchDir = null);
+    });
+
+    interactTouch.addEventListener("click", () => {
+      const master = nearbyMaster();
+      if (master) startTalk(master);
+    });
+
+    startJourneyBtn.addEventListener("click", () => {
+      state.progress.intro_seen = true;
+      saveProgress();
+      introModal.classList.remove("show");
+    });
+
+    cancelTalk.addEventListener("click", () => {
+      talkModal.classList.remove("show");
+      state.npcFreeze = false;
+      state.activeMaster = null;
+    });
+
+    openDialogue.addEventListener("click", () => {
+      const master = state.activeMaster;
+      if (!master) return;
+      talkModal.classList.remove("show");
+      openDialogueExperience(master);
+    });
+
+    closeIframe.addEventListener("click", () => {
+      iframeModal.classList.remove("show");
+      dialogueFrame.src = "about:blank";
+      state.npcFreeze = false;
+    });
+
+    openTab.addEventListener("click", () => {
+      if (state.currentDialogueUrl) window.open(state.currentDialogueUrl, "_blank", "noopener,noreferrer");
+    });
+
+    manualUnlock.addEventListener("click", () => {
+      if (state.activeMaster) completeMaster(state.activeMaster.id);
+      iframeModal.classList.remove("show");
+      dialogueFrame.src = "about:blank";
+      state.npcFreeze = false;
+    });
+
+    backWorldBtn.addEventListener("click", enterWorld);
+
+    resetBtn.addEventListener("click", () => {
+      localStorage.removeItem(STORAGE_KEY);
+      state.progress = loadProgress();
+      introModal.classList.add("show");
+      hint.textContent = state.scene === "world" ? "點擊慢慢走咖啡館進入。" : "進度已重置。";
+    });
+
+    let last = performance.now();
+    function loop(now) {
+      const dt = Math.min(0.033, (now - last) / 1000);
+      last = now;
+      update(dt);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!state.assetsReady) {
+        ctx.fillStyle = "#211813";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawLabel("載入中...", canvas.width / 2, canvas.height / 2);
+      } else if (state.scene === "world") {
+        drawWorld();
+      } else {
+        drawCafe();
+      }
+      requestAnimationFrame(loop);
+    }
+
+    boot();
+  </script>
+</body>
+</html>
