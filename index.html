@@ -168,6 +168,8 @@
       height: min(760px, 92vh);
       display: grid;
       grid-template-rows: auto 1fr auto;
+      background: #1c1410;
+      border-color: rgba(190, 145, 80, 0.22);
     }
 
     .iframe-head,
@@ -176,15 +178,31 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 10px 12px;
-      background: #4f321f;
-      color: #fff4dd;
+      padding: 12px 18px;
+      background: #16100b;
+      color: #d4a55a;
+      border-bottom: 1px solid rgba(190, 145, 80, 0.18);
+      letter-spacing: 0.08em;
+      font-size: 14px;
+    }
+
+    .iframe-head button {
+      background: transparent;
+      color: #ead3aa;
+      border: 1px solid rgba(190, 145, 80, 0.35);
+    }
+
+    .iframe-head button:hover {
+      border-color: var(--gold);
+      background: rgba(212, 165, 90, 0.12);
     }
 
     .iframe-foot {
       font-size: 13px;
       justify-content: flex-end;
       flex-wrap: wrap;
+      border-bottom: 0;
+      border-top: 1px solid rgba(190, 145, 80, 0.18);
     }
 
     iframe {
@@ -192,6 +210,368 @@
       height: 100%;
       border: 0;
       background: #fff;
+    }
+
+    .dialogue-body {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background:
+        radial-gradient(120% 80% at 50% -10%, rgba(212, 165, 90, 0.06), transparent 60%),
+        #1c1410;
+      color: #e8d9b8;
+      padding: 26px 32px 32px;
+      line-height: 1.75;
+    }
+
+    .qa-image {
+      display: block;
+      max-width: 100%;
+      max-height: 280px;
+      margin: 0 auto 18px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .qa-hero {
+      background: rgba(50, 35, 22, 0.4);
+      border: 1px solid rgba(190, 145, 80, 0.18);
+      border-radius: 14px;
+      padding: 22px 26px 18px;
+      margin-bottom: 22px;
+    }
+
+    .qa-hero-title {
+      font-family: "Noto Serif TC", "Songti TC", "Noto Serif", serif;
+      color: #d4a55a;
+      font-size: 34px;
+      letter-spacing: 0.42em;
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+
+    .qa-hero-sub {
+      color: rgba(232, 217, 184, 0.62);
+      font-size: 13px;
+      margin: 0 0 16px;
+      line-height: 1.75;
+      letter-spacing: 0.04em;
+    }
+
+    .qa-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .qa-pill {
+      background: rgba(28, 20, 14, 0.7);
+      border: 1px solid rgba(190, 145, 80, 0.22);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: #ead3aa;
+      letter-spacing: 0.04em;
+    }
+
+    .qa-pill .pill-key {
+      color: rgba(232, 217, 184, 0.55);
+      margin-right: 6px;
+    }
+
+    .qa-pill.success {
+      background: rgba(45, 74, 53, 0.45);
+      border-color: rgba(143, 200, 156, 0.32);
+      color: #b6e3bf;
+    }
+
+    .qa-pill.success .pill-key {
+      color: rgba(182, 227, 191, 0.7);
+    }
+
+    .qa-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .qa-bio {
+      background: rgba(50, 35, 22, 0.4);
+      border: 1px solid rgba(190, 145, 80, 0.2);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+    }
+
+    .qa-bio-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #2a1f17;
+      border: 1px solid rgba(190, 145, 80, 0.2);
+    }
+
+    .qa-bio-label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: rgba(232, 217, 184, 0.5);
+      text-transform: uppercase;
+      margin: 4px 0 0;
+    }
+
+    .qa-bio-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      color: #d4a55a;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+    }
+
+    .qa-bio-lines {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: #e0cfa6;
+    }
+
+    .qa-bio-lines p {
+      margin: 0 0 6px;
+    }
+
+    .qa-bio-lines p:last-child {
+      margin: 0;
+    }
+
+    .qa-bio-title {
+      margin: 4px 0 0;
+      padding-top: 12px;
+      border-top: 1px solid rgba(190, 145, 80, 0.2);
+      font-size: 13px;
+      color: rgba(232, 217, 184, 0.55);
+      font-style: italic;
+    }
+
+    .qa-content {
+      min-width: 0;
+    }
+
+    .qa-cafe-tag {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      color: rgba(232, 217, 184, 0.5);
+      text-transform: uppercase;
+      margin: 0 0 14px;
+    }
+
+    .qa-question {
+      font-size: 19px;
+      margin: 0 0 22px;
+      color: #f0e0bb;
+      line-height: 1.85;
+    }
+
+    .qa-options {
+      display: grid;
+      gap: 12px;
+      margin: 0 0 18px;
+    }
+
+    .qa-options button {
+      text-align: left;
+      background: rgba(42, 30, 20, 0.55);
+      color: #ebd9b3;
+      border: 1px solid rgba(190, 145, 80, 0.25);
+      padding: 16px 20px;
+      line-height: 1.6;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    .qa-options button:hover {
+      border-color: var(--gold);
+      background: rgba(80, 56, 30, 0.5);
+    }
+
+    .qa-options button:disabled {
+      cursor: default;
+      opacity: 0.85;
+    }
+
+    .qa-options button.correct,
+    .qa-options button.wrong {
+      position: relative;
+      padding-right: 50px;
+      font-weight: 600;
+      opacity: 1;
+    }
+
+    .qa-options button.correct {
+      background: rgba(45, 74, 53, 0.55);
+      border-color: rgba(143, 200, 156, 0.55);
+      border-width: 2px;
+      color: #d6eecc;
+    }
+
+    .qa-options button.wrong {
+      background: rgba(110, 50, 38, 0.5);
+      border-color: rgba(220, 130, 100, 0.55);
+      border-width: 2px;
+      color: #f6d6c8;
+    }
+
+    .qa-options button.correct::after,
+    .qa-options button.wrong::after {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .qa-options button.correct::after {
+      content: "✓";
+      background: var(--leaf);
+    }
+
+    .qa-options button.wrong::after {
+      content: "✕";
+      background: #b35a3c;
+    }
+
+    @keyframes feedback-pop {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .qa-feedback {
+      margin: 0 0 18px;
+      padding: 16px 18px;
+      border-radius: 10px;
+      font-size: 15px;
+      line-height: 1.65;
+      animation: feedback-pop 0.22s ease-out;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    }
+
+    .qa-feedback .qa-feedback-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .qa-feedback .qa-feedback-head::before {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .qa-feedback.correct {
+      background: #4d7455;
+      color: #fff;
+    }
+
+    .qa-feedback.correct .qa-feedback-head::before {
+      content: "✓";
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .qa-feedback.wrong {
+      background: #b35a3c;
+      color: #fff;
+    }
+
+    .qa-feedback.wrong .qa-feedback-head::before {
+      content: "✕";
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .qa-feedback .qa-feedback-body {
+      margin: 0;
+    }
+
+    .qa-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .qa-actions button {
+      background: #5d3922;
+      color: #fff4dd;
+    }
+
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .shelf-book {
+      border: 1px solid rgba(42, 27, 18, 0.22);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+      cursor: pointer;
+      text-align: left;
+      color: var(--ink);
+      font: inherit;
+      line-height: 1.5;
+    }
+
+    .shelf-book:hover { border-color: var(--gold); }
+
+    .shelf-book.locked {
+      cursor: not-allowed;
+      color: rgba(42, 27, 18, 0.45);
+      background: rgba(42, 27, 18, 0.06);
+    }
+
+    .shelf-book .book-title {
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .shelf-book .book-sub {
+      font-size: 13px;
+      color: rgba(42, 27, 18, 0.65);
+    }
+
+    .book-detail h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .book-detail p { margin: 0 0 12px; }
+
+    .book-detail .back {
+      margin-top: 6px;
+      background: #5d3922;
+      color: #fff4dd;
     }
 
     .touch-controls {
@@ -237,6 +617,15 @@
       .dialogue-card { grid-template-columns: 74px 1fr; gap: 12px; }
       .avatar-frame { width: 74px; height: 74px; }
       .modal-content p { font-size: 15px; }
+      .qa-layout { grid-template-columns: 1fr; gap: 16px; }
+      .qa-bio { position: static; }
+      .qa-bio-image { max-height: 220px; aspect-ratio: auto; }
+      .qa-hero { padding: 16px 18px 14px; margin-bottom: 16px; }
+      .qa-hero-title { font-size: 24px; letter-spacing: 0.32em; }
+      .qa-hero-sub { font-size: 12px; }
+      .qa-pill { font-size: 12px; padding: 6px 10px; }
+      .qa-question { font-size: 16px; }
+      .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
 </head>
@@ -294,13 +683,12 @@
         <span id="iframeTitle">對話體驗</span>
         <button id="closeIframe" type="button">關閉</button>
       </div>
-      <iframe id="dialogueFrame" title="dialogue experience"></iframe>
+      <div id="dialogueBody" class="dialogue-body"></div>
     </div>
   </div>
 
   <script>
     const STORAGE_KEY = "walking_wisdom_progress";
-    const DIALOGUE_BASE = "https://script.google.com/macros/s/AKfycbxvH2V0k19oxwUqN4JIbQQQwlFHhP9BfhLqPSofoyW_ycASMm6SVK7hpSI_74LvPW5PNg/exec";
     const MASTER_ORDER = ["lieberman", "cavagna", "roberts", "perry", "bernstein", "studenski"];
     const BOOK_LABELS = {
       lieberman: "Lieberman 的書",
@@ -327,7 +715,7 @@
     const cancelTalk = document.getElementById("cancelTalk");
     const openDialogue = document.getElementById("openDialogue");
     const iframeModal = document.getElementById("iframeModal");
-    const dialogueFrame = document.getElementById("dialogueFrame");
+    const dialogueBody = document.getElementById("dialogueBody");
     const iframeTitle = document.getElementById("iframeTitle");
     const closeIframe = document.getElementById("closeIframe");
     const interactTouch = document.getElementById("interactTouch");
@@ -345,7 +733,7 @@
       activeNpcChat: null,
       progress: loadProgress(),
       activeMaster: null,
-      currentDialogueUrl: "",
+      dialogues: null,
       iframeTimer: 0,
       keys: new Set(),
       touchDir: null,
@@ -423,16 +811,18 @@
       }
       if (params.get("debug") === "collision") state.debugCollision = true;
 
-      const [worldZones, cafeEntities, collision, props] = await Promise.all([
+      const [worldZones, cafeEntities, collision, props, dialogues] = await Promise.all([
         json("data/world-zones.json"),
         json("data/cafe-entities.json"),
         json("data/cafe-collision.json"),
-        json("data/cafe-props.json")
+        json("data/cafe-props.json"),
+        json("data/dialogues.json")
       ]);
       state.worldZones = worldZones;
       state.cafeEntities = cafeEntities;
       state.collision = collision;
       state.props = props;
+      state.dialogues = dialogues;
 
       const imageEntries = [
         ["world", "assets/maps/world-map.png"],
@@ -619,15 +1009,56 @@
       iframeModal.classList.add("show");
       state.npcFreeze = true;
       state.openingShelf = true;
-      const sendOpen = () => {
-        try { dialogueFrame.contentWindow.postMessage("__openShelf__", "*"); } catch (e) {}
-      };
-      dialogueFrame.onload = () => {
-        setTimeout(sendOpen, 600);
-        setTimeout(sendOpen, 1500);
-        setTimeout(sendOpen, 3000);
-      };
-      dialogueFrame.src = DIALOGUE_BASE + "?openShelf=1";
+      renderShelf();
+    }
+
+    function renderShelf() {
+      const grid = document.createElement("div");
+      grid.className = "shelf-grid";
+      for (const id of MASTER_ORDER) {
+        const master = state.cafeEntities.masters.find((m) => m.id === id);
+        const dialogue = state.dialogues[id];
+        const unlocked = state.progress.masters_completed.includes(id);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "shelf-book" + (unlocked ? "" : " locked");
+        const titleText = unlocked && dialogue ? dialogue.bio.title : (master ? master.book_label : id);
+        const subText = unlocked ? "翻閱這本書" : "尚未解鎖 — 先去找這位智者對話";
+        button.innerHTML = `<p class="book-title"></p><p class="book-sub"></p>`;
+        button.querySelector(".book-title").textContent = titleText;
+        button.querySelector(".book-sub").textContent = subText;
+        if (unlocked) {
+          button.addEventListener("click", () => renderBookDetail(id));
+        } else {
+          button.disabled = true;
+        }
+        grid.appendChild(button);
+      }
+      dialogueBody.innerHTML = "";
+      dialogueBody.appendChild(grid);
+    }
+
+    function renderBookDetail(masterId) {
+      const dialogue = state.dialogues[masterId];
+      if (!dialogue) return;
+      const wrap = document.createElement("div");
+      wrap.className = "book-detail";
+      const heading = document.createElement("h3");
+      heading.textContent = dialogue.bio.title || "";
+      wrap.appendChild(heading);
+      for (const line of dialogue.bio.lines) {
+        const p = document.createElement("p");
+        p.textContent = line;
+        wrap.appendChild(p);
+      }
+      const back = document.createElement("button");
+      back.type = "button";
+      back.className = "back";
+      back.textContent = "回到書架";
+      back.addEventListener("click", renderShelf);
+      wrap.appendChild(back);
+      dialogueBody.innerHTML = "";
+      dialogueBody.appendChild(wrap);
     }
 
     function updateBookshelfHint() {
@@ -660,23 +1091,239 @@
       talkModal.classList.add("show");
     }
 
-    function dialogueUrl(master) {
-      const returnUrl = new URL(location.href);
-      returnUrl.search = "";
-      returnUrl.hash = "";
-      const url = new URL(DIALOGUE_BASE);
-      url.searchParams.set("master", master.id);
-      url.searchParams.set("return", returnUrl.toString());
-      return url.toString();
-    }
-
     function openDialogueExperience(master) {
-      const url = dialogueUrl(master);
-      state.currentDialogueUrl = url;
-      iframeTitle.textContent = master.name;
+      const dialogue = state.dialogues && state.dialogues[master.id];
+      if (!dialogue || !dialogue.questions.length) {
+        hint.textContent = `${master.name} 的對話內容尚未建立。`;
+        return;
+      }
+      iframeTitle.textContent = "慢慢走咖啡館";
       iframeModal.classList.add("show");
       state.npcFreeze = true;
-      dialogueFrame.src = url;
+      state.openingShelf = false;
+      const questionMap = new Map(dialogue.questions.map((q) => [q.id, q]));
+      const session = { answered: 0, correct: 0, wrong: 0, currentNodeId: dialogue.questions[0].id };
+      buildDialogueLayout(master, dialogue, session);
+      renderQuestion(master, dialogue, questionMap, dialogue.questions[0], session);
+    }
+
+    function buildDialogueLayout(master, dialogue, session) {
+      dialogueBody.innerHTML = "";
+
+      const hero = document.createElement("section");
+      hero.className = "qa-hero";
+
+      const heroTitle = document.createElement("h2");
+      heroTitle.className = "qa-hero-title";
+      heroTitle.textContent = "慢慢走咖啡館";
+      hero.appendChild(heroTitle);
+
+      const heroSub = document.createElement("p");
+      heroSub.className = "qa-hero-sub";
+      heroSub.textContent = "慢慢走咖啡館是一個以步態力學為主題的互動式劇情遊戲。每道題目都是一個節點，答對與答錯都會帶你走向不同的知識路徑。";
+      hero.appendChild(heroSub);
+
+      const pills = document.createElement("div");
+      pills.className = "qa-pills";
+      pills.id = "qaPills";
+      pills.appendChild(makePill("目前章節", dialogue.character_name || master.name));
+      pills.appendChild(makePill("節點 ID", session.currentNodeId, "qaPillNode"));
+      pills.appendChild(makePill("已回答", session.answered, "qaPillAnswered"));
+      const score = makePill("答對", `${session.correct} / 答錯：${session.wrong}`, "qaPillScore");
+      score.classList.add("success");
+      pills.appendChild(score);
+      hero.appendChild(pills);
+
+      dialogueBody.appendChild(hero);
+
+      const layout = document.createElement("div");
+      layout.className = "qa-layout";
+
+      const bio = document.createElement("aside");
+      bio.className = "qa-bio";
+
+      const firstImg = (dialogue.questions[0] && dialogue.questions[0].image) || master.avatar;
+      if (firstImg) {
+        const img = document.createElement("img");
+        img.className = "qa-bio-image";
+        img.id = "qaBioImage";
+        img.src = firstImg;
+        img.alt = dialogue.character_name || master.name;
+        bio.appendChild(img);
+      }
+
+      const label = document.createElement("p");
+      label.className = "qa-bio-label";
+      label.textContent = "CHARACTER";
+      bio.appendChild(label);
+
+      const name = document.createElement("h3");
+      name.className = "qa-bio-name";
+      name.textContent = dialogue.character_name || master.name;
+      bio.appendChild(name);
+
+      if (dialogue.bio && Array.isArray(dialogue.bio.lines) && dialogue.bio.lines.length) {
+        const lines = document.createElement("div");
+        lines.className = "qa-bio-lines";
+        for (const line of dialogue.bio.lines) {
+          const p = document.createElement("p");
+          p.textContent = line;
+          lines.appendChild(p);
+        }
+        bio.appendChild(lines);
+      }
+
+      if (dialogue.bio && dialogue.bio.title) {
+        const title = document.createElement("p");
+        title.className = "qa-bio-title";
+        title.textContent = dialogue.bio.title;
+        bio.appendChild(title);
+      }
+
+      const content = document.createElement("div");
+      content.className = "qa-content";
+      content.id = "qaContent";
+
+      layout.appendChild(bio);
+      layout.appendChild(content);
+      dialogueBody.appendChild(layout);
+    }
+
+    function makePill(key, value, valueId) {
+      const pill = document.createElement("div");
+      pill.className = "qa-pill";
+      const k = document.createElement("span");
+      k.className = "pill-key";
+      k.textContent = `${key} :`;
+      const v = document.createElement("span");
+      v.className = "pill-value";
+      if (valueId) v.id = valueId;
+      v.textContent = value;
+      pill.appendChild(k);
+      pill.appendChild(v);
+      return pill;
+    }
+
+    function updatePills(session) {
+      const node = document.getElementById("qaPillNode");
+      const answered = document.getElementById("qaPillAnswered");
+      const score = document.getElementById("qaPillScore");
+      if (node) node.textContent = session.currentNodeId;
+      if (answered) answered.textContent = session.answered;
+      if (score) score.textContent = `${session.correct} / 答錯：${session.wrong}`;
+    }
+
+    function renderQuestion(master, dialogue, questionMap, question, session) {
+      const content = document.getElementById("qaContent");
+      if (!content) return;
+
+      const bioImg = document.getElementById("qaBioImage");
+      if (bioImg && question.image) {
+        bioImg.src = question.image;
+      }
+
+      session.currentNodeId = question.id;
+      updatePills(session);
+
+      const wrap = document.createElement("div");
+
+      const tag = document.createElement("p");
+      tag.className = "qa-cafe-tag";
+      tag.textContent = "STEP BY STEP CAFE";
+      wrap.appendChild(tag);
+
+      const text = document.createElement("p");
+      text.className = "qa-question";
+      text.textContent = question.text;
+      wrap.appendChild(text);
+
+      const opts = document.createElement("div");
+      opts.className = "qa-options";
+      for (const option of question.options) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = option;
+        btn.addEventListener("click", () => {
+          const correct = option === question.answer;
+          for (const sibling of opts.querySelectorAll("button")) {
+            sibling.disabled = true;
+            if (sibling.textContent === question.answer) sibling.classList.add("correct");
+          }
+          if (!correct) btn.classList.add("wrong");
+          session.answered += 1;
+          if (correct) session.correct += 1; else session.wrong += 1;
+          updatePills(session);
+          showFeedback(master, dialogue, questionMap, question, correct, session);
+        });
+        opts.appendChild(btn);
+      }
+      wrap.appendChild(opts);
+
+      content.innerHTML = "";
+      content.appendChild(wrap);
+      dialogueBody.scrollTop = 0;
+    }
+
+    function showFeedback(master, dialogue, questionMap, question, correct, session) {
+      const content = document.getElementById("qaContent");
+      if (!content) return;
+
+      const feedback = document.createElement("div");
+      feedback.className = "qa-feedback " + (correct ? "correct" : "wrong");
+      const head = document.createElement("div");
+      head.className = "qa-feedback-head";
+      head.textContent = correct ? "答對了！" : "再想一想";
+      const body = document.createElement("p");
+      body.className = "qa-feedback-body";
+      body.textContent = correct ? question.feedback_correct : question.feedback_wrong;
+      feedback.appendChild(head);
+      feedback.appendChild(body);
+      content.appendChild(feedback);
+
+      const actions = document.createElement("div");
+      actions.className = "qa-actions";
+
+      const nextId = correct ? question.next_correct : question.next_wrong;
+      const nextQuestion = nextId != null ? questionMap.get(nextId) : null;
+
+      if (correct && !nextQuestion) {
+        completeMaster(master.id);
+        const finishBtn = document.createElement("button");
+        finishBtn.type = "button";
+        finishBtn.textContent = "完成對話";
+        finishBtn.addEventListener("click", closeDialogueModal);
+        actions.appendChild(finishBtn);
+      } else if (nextQuestion) {
+        const nextBtn = document.createElement("button");
+        nextBtn.type = "button";
+        nextBtn.textContent = correct ? "下一題" : "再試一次";
+        nextBtn.addEventListener("click", () => {
+          renderQuestion(master, dialogue, questionMap, nextQuestion, session);
+        });
+        actions.appendChild(nextBtn);
+      } else {
+        const closeBtn = document.createElement("button");
+        closeBtn.type = "button";
+        closeBtn.textContent = "下次再來";
+        closeBtn.addEventListener("click", closeDialogueModal);
+        actions.appendChild(closeBtn);
+      }
+
+      content.appendChild(actions);
+      dialogueBody.scrollTop = dialogueBody.scrollHeight;
+    }
+
+    function closeDialogueModal() {
+      iframeModal.classList.remove("show");
+      dialogueBody.innerHTML = "";
+      state.npcFreeze = false;
+      const wasShelf = state.openingShelf;
+      state.openingShelf = false;
+      if (wasShelf) return;
+      const m = state.activeMaster;
+      if (m && !state.progress.masters_completed.includes(m.id)) {
+        hint.textContent = `走到旅程書架前按 Space，翻閱 ${m.name} 的書。`;
+      }
     }
 
     function update(dt) {
@@ -1181,19 +1828,7 @@
       openDialogueExperience(master);
     });
 
-    closeIframe.addEventListener("click", () => {
-      iframeModal.classList.remove("show");
-      dialogueFrame.src = "about:blank";
-      dialogueFrame.onload = null;
-      state.npcFreeze = false;
-      const wasShelf = state.openingShelf;
-      state.openingShelf = false;
-      if (wasShelf) return;
-      const m = state.activeMaster;
-      if (m && !state.progress.masters_completed.includes(m.id)) {
-        hint.textContent = `走到旅程書架前按 Space，翻閱 ${m.name} 的書。`;
-      }
-    });
+    closeIframe.addEventListener("click", closeDialogueModal);
 
     backWorldBtn.addEventListener("click", enterWorld);
 

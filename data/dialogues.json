@@ -1,0 +1,522 @@
+{
+  "cavagna": {
+    "id": "cavagna",
+    "character_name": "Cavagna",
+    "bio": {
+      "title": "Giovanni Cavagna｜義大利運動生物力學先驅",
+      "lines": [
+        "任職於米蘭大學，長期研究人類與動物移動時的能量消耗、外部作功與地面反作用力。",
+        "代表研究包括 external work、force plate 與步行能量轉換模型，是步態力學的重要奠基者。"
+      ]
+    },
+    "questions": [
+      {
+        "id": 101,
+        "text": "「叮鈴...」你走進這間瀰漫著齒輪油味的咖啡廳。吧檯後的 Cavagna 沒抬頭，正撥弄著一個倒置的鐘擺：「嘿，旅人。你看這鐘擺，如果我讓它像你走路那樣『倒過來』擺動，你覺得支撐點在哪？」",
+        "options": [
+          "地面上的足跡",
+          "膝蓋關節",
+          "腰椎中心"
+        ],
+        "answer": "地面上的足跡",
+        "feedback_correct": "好眼力！在步態中，你的腳就是那個圓弧的中心。這就是『倒單擺模型』，你的身體就像在腳踝上盪鞦韆。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 102,
+        "next_wrong": 101,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Cavagna%201.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9DYXZhZ25hIDEucG5nIiwiaWF0IjoxNzc0NDI0MzA2LCJleHAiOjE4MDU5NjAzMDZ9.w5uGH3MrT6Pz6BI_ymmrpk8dX_YjQvWUH5ERk6bgA08"
+      },
+      {
+        "id": 102,
+        "text": "他遞給你一杯冒泡的黑咖啡。「當你撐在高點時，你慢了下來；下墜時，你又快了。旅人，你覺得這時候你的動能（速度）跟位能（高度）在玩什麼遊戲？」",
+        "options": [
+          "互相競爭",
+          "互補轉換",
+          "一起消失"
+        ],
+        "answer": "互補轉換",
+        "feedback_correct": "沒錯！就像完美的天平。位能變動能，動能再推回位能。這讓我們走路時能節省 65% 的肌肉功。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 103,
+        "next_wrong": 102,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Cavagna%202.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9DYXZhZ25hIDIucG5nIiwiaWF0IjoxNzc0NDI0MzQwLCJleHAiOjIwODk3ODQzNDB9.b5Xu2XT8vLKir-GEy7MRVroLgImUpwLrwQT9u_kqrkE"
+      },
+      {
+        "id": 103,
+        "text": "他突然用力拍了一下桌子，杯子跳了一下。「但現實是殘酷的！當你從左腳換到右腳的那一瞬間，能量會發生什麼事？那是我們最脆弱的時刻。」",
+        "options": [
+          "完美銜接",
+          "發生碰撞損失",
+          "瞬間加倍"
+        ],
+        "answer": "發生碰撞損失",
+        "feedback_correct": "砰！那是『步與步轉換』。前腳著地就像撞牆，會偷走你的能量。我們得耗費肌肉能量來補足這道裂痕。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 104,
+        "next_wrong": 103,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Cavagna%203.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9DYXZhZ25hIDMucG5nIiwiaWF0IjoxNzc0NDI0MzUzLCJleHAiOjIwODk3ODQzNTN9.v--BZZApn7jMGO9NPDeqfkspNLtxXu-Nv_UNBRgx26Q"
+      },
+      {
+        "id": 104,
+        "text": "Cavagna 拿出一張泛黃的書籍：「如果為了走快，你瘋狂跨大步，像個長腿怪手那樣，你覺得效率會如何？」",
+        "options": [
+          "越快越省力",
+          "跨越大越穩定",
+          "反而更耗能"
+        ],
+        "answer": "反而更耗能",
+        "feedback_correct": "喔！太大的步幅會讓重心降太低，導致著地碰撞更劇烈。適中的步幅才是這場力學遊戲的獲勝關鍵。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 105,
+        "next_wrong": 104,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Cavagna4.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9DYXZhZ25hNC5wbmciLCJpYXQiOjE3NzQ0MjQzNjgsImV4cCI6MjA4OTc4NDM2OH0.uSKetPst_DmjxbDgSQu1SZxtxdIgKtLKxXpq1PL2zoo"
+      },
+      {
+        "id": 105,
+        "text": "「最後一個問題，旅人。」他把咖啡杯推向你，「為什麼我們不跑，而選擇用這種『倒單擺』的方式走路？」",
+        "options": [
+          "為了省能量",
+          "為了耍帥",
+          "因為肌肉太少"
+        ],
+        "answer": "為了省能量",
+        "feedback_correct": "正是如此。這種自然的力學擺動是為了生存。現在，喝完這杯，帶著這份力學智慧繼續前行吧。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 201,
+        "next_wrong": 104,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Cavagna%205.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9DYXZhZ25hIDUucG5nIiwiaWF0IjoxNzc0NDI0MzgwLCJleHAiOjIwODk3ODQzODB9.Fyz8zrxzlEvcRnkpfmxrLWVdRGN5pHGxAVi6NeVZzZo"
+      }
+    ]
+  },
+  "lieberman": {
+    "id": "lieberman",
+    "character_name": "Lieberman",
+    "bio": {
+      "title": "Daniel Lieberman｜人類演化生物學家",
+      "lines": [
+        "Harvard 大學教授，研究人類步行、跑步與演化機制。",
+        "代表著作包含《The Story of the Human Body》，專注於人類如何透過移動適應環境。"
+      ]
+    },
+    "questions": [
+      {
+        "id": 201,
+        "text": "（伴隨著遠處咖啡機的蒸汽聲，Lieberman 教授推了推他的半框眼鏡，視線從桌上的地球儀移向你）「啊，旅人，請坐。你剛走進這家咖啡店時，我正在觀察你。你看這具黑猩猩的骨骼模型，再看看人類的。在百萬年前的非洲大草原上，我們的靈長類親戚擁有遠超我們的肌肉爆發力與速度。你認為，當我們的祖先選擇『站起來用兩條腿走路』時，我們放棄了蠻力，究竟換來了什麼演化優勢？」",
+        "options": [
+          "為了獲得更強的爆發力來狩獵",
+          "為了換取極致的「能量效率」",
+          "為了讓視野變得更高來躲避天敵"
+        ],
+        "answer": "為了換取極致的「能量效率」",
+        "feedback_correct": "完全命中！我們是動物界最精打細算的『節能大師』，這讓我們能走得比任何靈長類都遠。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 202,
+        "next_wrong": 201,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Lieberman%201.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9MaWViZXJtYW4gMS5qcGVnIiwiaWF0IjoxNzc0NjY2NTQ3LCJleHAiOjIwOTAwMjY1NDd9.ggE-mAMD6U7_qjfGDmXLkG-XXKY3iYhGzoTaRI-4HUg"
+      },
+      {
+        "id": 202,
+        "text": "「說到節能，人類還有一項作弊般的生理構造。當黑猩猩在太陽下跑不到十分鐘就中暑時，我們的祖先卻能頂著烈日追逐羚羊好幾個小時。你覺得我們是靠什麼機制讓自己不至於『當機』的？」",
+        "options": [
+          "擁有更大的心臟",
+          "全身發達的汗腺與無毛的皮膚",
+          "更強壯的大腿肌肉"
+        ],
+        "answer": "全身發達的汗腺與無毛的皮膚",
+        "feedback_correct": "正確！全身發達的汗腺與無毛的皮膚是人類最強大的散熱機制，讓我們能在大太陽下進行長距離追蹤。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 203,
+        "next_wrong": 202,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Lieberman%202.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9MaWViZXJtYW4gMi5qcGVnIiwiaWF0IjoxNzc0NjY2NTY1LCJleHAiOjIwOTAwMjY1NjV9.zwqV-F3rxOskQElHTUhoaQk--ubzzHaX6hs_-z47b-A"
+      },
+      {
+        "id": 203,
+        "text": "「現在看看你的腳。比起黑猩猩扁平且抓握力強的腳掌，人類的腳有一個明顯的拱型結構。你認為這個『足弓』在我們奔跑時扮演了什麼物理角色？」",
+        "options": [
+          "穩定重心的支柱",
+          "吸收衝擊的避震器",
+          "儲存並釋放能量的彈簧"
+        ],
+        "answer": "儲存並釋放能量的彈簧",
+        "feedback_correct": "足弓就像一個儲能彈簧，在踩踏時變形儲能，彈起時釋放動力，讓我們跑得更省力。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 204,
+        "next_wrong": 203,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Lieberman%203.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9MaWViZXJtYW4gMy5qcGVnIiwiaWF0IjoxNzc0NjY2NTgxLCJleHAiOjIwOTAwMjY1ODF9.B4XJeteqBpmVUuMcvsaJdVwZISlmVEZXs_fKsjnEbkQ"
+      },
+      {
+        "id": 204,
+        "text": "「你可能沒注意到，人類擁有動物界中比例極大的『臀大肌』。有趣的是，單純走路時這塊肌肉幾乎不出力。那你覺得演化為什麼要給我們這麼大的一個屁股？」",
+        "options": [
+          "為了坐著休息時更舒服",
+          "為了平衡奔跑時上半身的晃動",
+          "為了讓站立姿態更美觀"
+        ],
+        "answer": "為了平衡奔跑時上半身的晃動",
+        "feedback_correct": "當我們奔跑時，身體會劇烈晃動，巨大的臀大肌能穩定軀幹，防止我們摔倒。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 205,
+        "next_wrong": 204,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Lieberman%204.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9MaWViZXJtYW4gNC5qcGVnIiwiaWF0IjoxNzc0NjY2NjAwLCJleHAiOjIwOTAwMjY2MDB9.f9imY7Ed1KprfAsI06cZezL1_VCQYeB6FOFcrsy5Bdo"
+      },
+      {
+        "id": 205,
+        "text": "「最後，旅人。我們演化成了長距離移動的精英，但現代人卻大多時間坐著。這種生理設計與現代生活的衝突，我稱之為『演化失調（Mismatch）』。你認為這會對身體造成什麼影響？」",
+        "options": [
+          "身體會迅速適應靜態生活",
+          "引發各種如糖尿病或背痛的現代疾病",
+          "肌肉會自動轉化為脂肪儲存"
+        ],
+        "answer": "引發各種如糖尿病或背痛的現代疾病",
+        "feedback_correct": "這種生理設計與現代生活的衝突，會引發如糖尿病、背痛等演化失調疾病。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 301,
+        "next_wrong": 205,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Lieberman%205.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9MaWViZXJtYW4gNS5qcGVnIiwiaWF0IjoxNzc0NjY2NjI2LCJleHAiOjIwOTAwMjY2MjZ9.5vKGQL2o52MSHFiY9zy4X8FeGQhhjh235ZwR8p_Rzak"
+      }
+    ]
+  },
+  "roberts": {
+    "id": "roberts",
+    "character_name": "Roberts",
+    "bio": {
+      "title": "Thomas Roberts｜肌肉與肌腱彈性力學研究者",
+      "lines": [
+        "Brown University 教授，專注於肌肉、肌腱與動物／人類 locomotion 的彈性機制。",
+        "代表研究聚焦 tendon elasticity、energy storage 與 muscle-tendon interaction，強調移動中的「省力」來自彈性回彈。"
+      ]
+    },
+    "questions": [
+      {
+        "id": 301,
+        "text": "（Thomas 看到你走近，笑著將手裡的橡皮筋拉長又放開，發出『啪』的一聲）「嘿，旅人！來杯布朗大學特調的 Espresso 嗎？看你走了一整天的路，腿一定很酸吧。考考你，當你在長途步行或跑步時，你覺得是什麼動力讓你能這樣高效地『省力』前進？」",
+        "options": [
+          "強大的肌肉不斷收縮用力推動",
+          "具有彈性的肌腱像橡皮筋般拉長與回彈",
+          "骨骼關節的卡榫機制"
+        ],
+        "answer": "具有彈性的肌腱像橡皮筋般拉長與回彈",
+        "feedback_correct": "肌腱能像橡皮筋一樣回收彈性能量，這讓我們前進時節省了巨大的體力。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 302,
+        "next_wrong": 201,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Thomas%201.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9UaG9tYXMgMS5qcGVnIiwiaWF0IjoxNzc0NjY2NjQ4LCJleHAiOjIwOTAwMjY2NDh9.S8yj4SQuhJsvgcVDVoEdeV1Qjb2NdUvfXE6xjEfua9M"
+      },
+      {
+        "id": 302,
+        "text": "（Thomas 轉身指著義式咖啡機上正在累積壓力的指針）「就像這台機器利用壓力儲存能量一樣，人體也在儲存能量。當你往前邁步、腳跟落地的瞬間，肌腱是『如何』儲存這些免費能量的？」",
+        "options": [
+          "大腦發送強烈電流刺激肌腱膨脹",
+          "利用身體往前倒的重力與動量來拉長肌腱",
+          "讓肌腱與骨骼摩擦產生熱能"
+        ],
+        "answer": "利用身體往前倒的重力與動量來拉長肌腱",
+        "feedback_correct": "利用身體前傾的動量拉長肌腱，能量就這樣被儲存起來了。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 303,
+        "next_wrong": 302,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Thomas%202.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9UaG9tYXMgMi5qcGVnIiwiaWF0IjoxNzc0NjY2NjYyLCJleHAiOjIwOTAwMjY2NjJ9.NCsnXjvHa2g7eWuFa7R0LopQugbj-N1QuB0hmzf6SX4"
+      },
+      {
+        "id": 303,
+        "text": "（Thomas 喝了一口濃縮咖啡，神情變得認真）「既然肌腱包辦了拉伸和彈射的工作，那『肌肉』在幹嘛？難道它在睡午覺嗎？當肌腱像彈簧一樣被拉長時，連接在上面的肌肉到底在做什麼？」",
+        "options": [
+          "完全放鬆軟趴趴，不干擾肌腱",
+          "保持長度不變（等長收縮），成為堅固的錨點",
+          "跟著肌腱一起被大幅度拉長"
+        ],
+        "answer": "保持長度不變（等長收縮），成為堅固的錨點",
+        "feedback_correct": "肌肉此時維持長度不變，讓肌腱能像固定在牆上的彈簧一樣盡情拉伸。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 304,
+        "next_wrong": 305,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Thomas%203.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9UaG9tYXMgMy5qcGVnIiwiaWF0IjoxNzc0NjY2Njc0LCJleHAiOjIwOTAwMjY2NzR9.kLtWGk-76BFdnLTktWp9zAIt890zJp3-G795ahG4fpc"
+      },
+      {
+        "id": 304,
+        "text": "（Thomas 快速且連續地拉扯橡皮筋，然後把它貼在你的手背上，你感覺到橡皮筋變熱了）「天下沒有白吃的午餐。雖然肌腱能回收能量，但這套彈性系統是 100% 完美的嗎？為什麼走久了還是會累？」",
+        "options": [
+          "是的，人體是完美的永動機",
+          "不是，約有百分之七的能量會變成熱能流失",
+          "不是，因為肌腱會把一半的能量抵銷掉"
+        ],
+        "answer": "不是，約有百分之七的能量會變成熱能流失",
+        "feedback_correct": "能量回收過程中會有熱能流失，所以即使有效率，我們還是會感到疲倦。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 305,
+        "next_wrong": 304,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Thomas%204.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9UaG9tYXMgNC5qcGVnIiwiaWF0IjoxNzc0NjY2Njg3LCJleHAiOjIwOTAwMjY2ODd9.CgMBypXhfAggJdUV1QD31qKR9MrZKoY-oO3gTzMhCv8"
+      },
+      {
+        "id": 305,
+        "text": "（Thomas 將橡皮筋套在手指上，準備將它彈射向對面的咖啡豆罐）「最後一個問題，旅人。既然你知道了這套『彈簧機制』，在現實世界中，你該怎麼走路或跑步，才能榨出肌腱最大的省力效能？」",
+        "options": [
+          "保持平穩規律的節奏，讓動能順暢傳遞",
+          "走走停停，每走三步就停下來休息一秒",
+          "讓雙腿保持完全僵硬筆直不彎曲"
+        ],
+        "answer": "保持平穩規律的節奏，讓動能順暢傳遞",
+        "feedback_correct": "保持穩定的步頻和節奏，能讓這套彈性回收系統運作到極致。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 401,
+        "next_wrong": 305,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Thomas%205.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9UaG9tYXMgNS5qcGVnIiwiaWF0IjoxNzc0NjY2NzAyLCJleHAiOjIwOTAwMjY3MDJ9.XFHlpP0CH-Ey-licrUsDWjtMDuN2XYcUDvk1UW8dlRk"
+      }
+    ]
+  },
+  "studenski": {
+    "id": "studenski",
+    "character_name": "Studenski",
+    "bio": {
+      "title": "醫學博士，老年醫學與步態分析權威。",
+      "lines": [
+        "提出「步速為第六生命徵象」，強調步行能力在預測生存率與健康狀態中的核心地位。"
+      ]
+    },
+    "questions": [
+      {
+        "id": 401,
+        "text": "（當你走向櫃檯，一位滿頭黑色卷髮但眼神銳利的女士按下了手中的秒錶。她是 Stephanie Studenski 醫師）「旅人，從大門走到這裡，你花了4.2秒。步態穩定，配速均勻。」她將秒錶掛回脖子上，笑著說：「身為一名老年醫學的『醫療偵探』，我不需要抽血，光看你的『步速』就能窺探你的整體健康狀況。在我們的偵探術語中，步速通常被賦予什麼樣的稱號？」",
+        "options": [
+          "第六生命徵象（The Sixth Vital Sign）",
+          "肌肉力量的絕對指標",
+          "平衡感商數"
+        ],
+        "answer": "第六生命徵象（The Sixth Vital Sign）",
+        "feedback_correct": "步速被視為第六生命徵象，它誠實地反映了身體各系統的協同狀態。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 402,
+        "next_wrong": 401,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Stephanie%20Studenski%201.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9TdGVwaGFuaWUgU3R1ZGVuc2tpIDEuanBlZyIsImlhdCI6MTc3NDY2NjcyMCwiZXhwIjoyMDkwMDI2NzIwfQ.P0_ICSGjHWndBGLBQWEU_kayVtUiE0yNizReAT3lvn4"
+      },
+      {
+        "id": 402,
+        "text": "（她端起咖啡，指了指窗外正緩慢走過的老先生）「你看，走路看似簡單，實際上是一場極度複雜的交響樂。為什麼單單測量『走得快不快』，就能當作預測整體健康與生理年齡的強大指標呢？」",
+        "options": [
+          "因為步速完全取決於肌肉流失（肌少症）的程度",
+          "因為步行需要神經、心血管與骨骼肌肉系統的完美整合與高度協調"
+        ],
+        "answer": "因為步行需要神經、心血管與骨骼肌肉系統的完美整合與高度協調",
+        "feedback_correct": "步行需要心血管、神經與骨骼肌肉系統的完美整合，所以它是健康的強大指標。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 403,
+        "next_wrong": 402,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Studenski%202.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9TdHVkZW5za2kgMi5qcGVnIiwiaWF0IjoxNzc0NjY2NzMwLCJleHAiOjIwOTAwMjY3MzB9.J_9abmEgkv-XhBPDokbkIkIMv8LnIKFrjHRenTY7PIs"
+      },
+      {
+        "id": 403,
+        "text": "（她翻開一本寫滿數據的筆記本，上面記錄著匹茲堡數萬名長者的追蹤資料）「我的秒錶不只紀錄時間，它還能預測未來。我們針對數萬名老年人進行了長期觀察，發現『步速變慢』與一個非常嚴肅的臨床結果有著明確的統計學關聯。你認為那是什麼？」",
+        "options": [
+          "早期死亡率（Mortality）的增加與功能衰退",
+          "膝關節需要置換的手術機率",
+          "未來罹患糖尿病的機率"
+        ],
+        "answer": "早期死亡率（Mortality）的增加與功能衰退",
+        "feedback_correct": "步速下降與死亡率及功能衰退有高度統計相關，是預測壽命的關鍵。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 404,
+        "next_wrong": 403,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Studenski%203.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9TdHVkZW5za2kgMy5qcGVnIiwiaWF0IjoxNzc0NjY2NzQ1LCJleHAiOjIwOTAwMjY3NDV9.23rHep_VC-v4bco5B65RGq5OjGlyUvlFU2uX8N1KhwQ"
+      },
+      {
+        "id": 404,
+        "text": "（Studenski 遞給你一個備用的秒錶）「來，換你當偵探。在臨床觀察上，我們會設定一個『健康門檻』來判斷長者是否具備安全的社區活動能力（例如在綠燈倒數完前過馬路）。一般來說，大於多少的步速會被我們視為高活動力的健康標準？」",
+        "options": [
+          "大於 0.4 m/s",
+          "大於 1.0 m/s",
+          "大於 2.0 m/s"
+        ],
+        "answer": "大於 1.0 m/s",
+        "feedback_correct": "1.0 m/s 是健康老化的重要門檻，低於此數值代表跌倒風險增加。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 405,
+        "next_wrong": 404,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Studenski%204.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9TdHVkZW5za2kgNC5qcGVnIiwiaWF0IjoxNzc0NjY2NzU2LCJleHAiOjIwOTAwMjY3NTZ9.BLN-MnXfPagHmTkOP-94gX_qajGACYLlmUY-W9DiHt4"
+      },
+      {
+        "id": 405,
+        "text": "（她收回秒錶，眼神變得溫和）「那麼，最後一個問題：既然步速是預測死亡與衰退的指標，如果我們在臨床上發現一位病人的步速很慢，我們作為醫療人員該怎麼做？難道這就是命中注定嗎？」",
+        "options": [
+          "要求病人刻意走快一點，藉此欺騙秒錶並延長壽命",
+          "將步速下降視為早期警報，介入針對性的復健與運動訓練來改善潛在問題"
+        ],
+        "answer": "將步速下降視為早期警報，介入針對性的復健與運動訓練來改善潛在問題",
+        "feedback_correct": "我們應將步速變慢視為早期警報，透過精準介入復健來改善系統功能。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 501,
+        "next_wrong": 405,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Studenski%205.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9TdHVkZW5za2kgNS5qcGVnIiwiaWF0IjoxNzc0NjY2NzY5LCJleHAiOjIwOTAwMjY3Njl9.a3-QB9D-XtgIMFYTM73miOEAGZh7HKKRLKsoQhn2QTQ"
+      }
+    ]
+  },
+  "bernstein": {
+    "id": "bernstein",
+    "character_name": "Bernstein",
+    "bio": {
+      "title": "Nikolai Bernstein｜動作控制理論泰斗",
+      "lines": [
+        "被譽為動作控制之父，提出「自由度問題」與「沒有重複的重複」。",
+        "研究神經系統如何解決人體運動中的複雜計算難題，奠定了現代運動科學的基礎。"
+      ]
+    },
+    "questions": [
+      {
+        "id": 501,
+        "text": "（你走向咖啡店最深處的角落，光線黯淡，只有幾條宛如神經網絡般的螢光藍線懸浮在空中。被譽為動作控制之父的蘇聯學者 Nikolai Bernstein 坐在那裡，雙手像操偶師般撥弄著光線，牽動著下方一個木製人偶。）「旅人，你來了。看看這個人偶，它有數百條代表肌肉的線和幾十個關節。如果你的大腦必須在每邁出一步時，『有意識且獨立地』控制這600多條肌肉與多個關節，你認為會發生什麼事？」",
+        "options": [
+          "我只要足夠專注，就能完美控制它",
+          "我的大腦會因為需要處理太多變數而當機、無法動彈"
+        ],
+        "answer": "我的大腦會因為需要處理太多變數而當機、無法動彈",
+        "feedback_correct": "大腦無法控制 600 多條肌肉，這就是著名的『自由度問題』。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 502,
+        "next_wrong": 501,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Bernstein%201.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9CZXJuc3RlaW4gMS5qcGVnIiwiaWF0IjoxNzc0NjY2ODAwLCJleHAiOjIwOTAwMjY4MDB9.HFbPEI70nTgpKj4vDX8mdoPOIjzEOMKM-WsBql1iWS8"
+      },
+      {
+        "id": 502,
+        "text": "（Bernstein 輕彈了一下手指，人偶連續踢了兩次腳邊的銅鈴。）「既然大腦無法單獨控制所有肌肉，那麼當我要求你『重複』一個簡單的動作，例如在直線上走兩步。你覺得這兩步的肌肉收縮軌跡，會是完全一模一樣的嗎？」",
+        "options": [
+          "是的，大腦會記憶最完美的公式並精準重現",
+          "不是的，即使外觀看起來一樣，每一次的微小肌肉控制其實都不同"
+        ],
+        "answer": "不是的，即使外觀看起來一樣，每一次的微小肌肉控制其實都不同",
+        "feedback_correct": "這就是『沒有重複的重複』，每一次動作的微小控制其實都是獨特的。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 503,
+        "next_wrong": 502,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Bernstein%202.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9CZXJuc3RlaW4gMi5qcGVnIiwiaWF0IjoxNzc0NjY2ODEzLCJleHAiOjIwOTAwMjY4MTN9.oGMzEGufb7t90ALmY8XvVUo6F4yo3R3yYmsQC8FLZI0"
+      },
+      {
+        "id": 503,
+        "text": "（他將手中數百條散亂的螢光線，俐落地整合成五條粗壯的光束，人偶瞬間流暢地走動起來。）「既然不能單獨控制，每次動作又都不同，大腦究竟是如何簡化這個龐大的計算難題，讓我們能輕鬆步行的？」",
+        "options": [
+          "它將肌肉組成幾個『協同模組（Synergies）』，大腦只需要對這些群組發送指令",
+          "它放棄控制小肌肉，只專注於控制幾條主要的大肌肉"
+        ],
+        "answer": "它將肌肉組成幾個『協同模組（Synergies）』，大腦只需要對這些群組發送指令",
+        "feedback_correct": "大腦將肌肉組成『協同模組』，簡化了原本複雜的計算難題。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 504,
+        "next_wrong": 503,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Bernstein%203.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9CZXJuc3RlaW4gMy5qcGVnIiwiaWF0IjoxNzc0NjY2ODI1LCJleHAiOjIwOTAwMjY4MjV9.vO4Nt7tQnb1cl9KyzSVSP-6G_icrWgna3RBSEJWkR1c"
+      },
+      {
+        "id": 504,
+        "text": "（Bernstein 鬆開手，人偶沒有倒下，反而隨著慣性在空中像倒單擺一樣優雅地晃動。）「看啊，它自己動起來了！當我們在空間中移動時，大腦發出的神經指令只是其中一環，還有什麼在『控制』著我們的身體？」",
+        "options": [
+          "只有骨骼的幾何排列限制了我們的動作",
+          "環境中的物理力量，例如重力、慣性與地面反作用力"
+        ],
+        "answer": "環境中的物理力量，例如重力、慣性與地面反作用力",
+        "feedback_correct": "動作是中樞神經指令與環境物理力量（如重力、慣性）互動的結果。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 505,
+        "next_wrong": 504,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Bernstein%204.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9CZXJuc3RlaW4gNC5qcGVnIiwiaWF0IjoxNzc0NjY2ODM2LCJleHAiOjIwOTAwMjY4MzZ9.8JAu_9hszLEZag0i481EL3fip3Lol-0qsTUwWGpgenI"
+      },
+      {
+        "id": 505,
+        "text": "（螢光線開始隨著某種混沌卻美麗的節奏閃爍著，人偶的步伐時大時小，卻異常穩健地避開了桌上的咖啡杯。）「最後一個問題，我的同志。如果我們的步態總是充滿這種微小的變異性（Variability），你認為這代表系統的『缺陷』，還是『卓越』的象徵？」",
+        "options": [
+          "這量缺陷，代表神經系統無法維持完美的穩定度",
+          "這是卓越，代表系統具有適應未知環境的彈性與健康"
+        ],
+        "answer": "這是卓越，代表系統具有適應未知環境的彈性與健康",
+        "feedback_correct": "最佳動作變異性代表系統具有適應未知環境的彈性與健康。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 601,
+        "next_wrong": 505,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Bernstein%205.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9CZXJuc3RlaW4gNS5qcGVnIiwiaWF0IjoxNzc0NjY2ODQ4LCJleHAiOjIwOTAwMjY4NDh9.L5JhgXgtJlCrJxu2dk_HnCoxdy9Teqo-Yn-NTuC6Nm8"
+      }
+    ]
+  },
+  "perry": {
+    "id": "perry",
+    "character_name": "Perry",
+    "bio": {
+      "title": "Jacquelin Perry 博士｜步態分析的先驅",
+      "lines": [
+        "任職於洛杉磯 Rancho Los Amigos 醫院，步態分析與復健醫學的傳奇人物。",
+        "著作《Gait Analysis》定義了步態週期的階段與滾動機制，將人體視為精密的機械結構。"
+      ]
+    },
+    "questions": [
+      {
+        "id": 601,
+        "text": "（你走到咖啡店最安靜的角落。桌上一塵不染，精確對齊著各種木製與金屬的下肢骨骼模型。一位身穿白袍、身影微微透著幽光的優雅女士正在微調一個足部模型。） 「啊，年輕的旅人。我在洛杉磯的 Rancho Los Amigos 醫院觀察了幾十年的病患，人們總以為『走路』就是用力往前蹬。」Perry 博士抬起頭，眼神銳利如掃描儀：「但步態週期（Gait Cycle）是一套極度精密的力學程式。告訴我，當你的腳跟在空中擺動結束，接觸到地面的那最初 10% 的瞬間，你的系統必須完成什麼『最關鍵的任務』？」",
+        "options": [
+          "立刻收縮肌肉將身體往前推",
+          "吸收衝擊力並平穩地接收體重（Weight Acceptance）",
+          "鎖死所有關節以維持絕對的平衡"
+        ],
+        "answer": "吸收衝擊力並平穩地接收體重（Weight Acceptance）",
+        "feedback_correct": "承重接收（Weight Acceptance）是步態週期中最重要的避震與接體重階段。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 602,
+        "next_wrong": 601,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Perry%201.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9QZXJyeSAxLmpwZWciLCJpYXQiOjE3NzQ2NjY4NjQsImV4cCI6MjA5MDAyNjg2NH0.KQuU-CUgpW-JmevOxt1tYWyHaYUB7PWxIVyziZ2geXQ"
+      },
+      {
+        "id": 602,
+        "text": "（她拿起木製足部模型，將腳跟輕輕敲擊桌面。） 「腳底不是一塊死板的平地，而是由四個『滾動機制（Rockers）』組成的動態齒輪。第一個啟動的是『足跟滾動（Heel Rocker）』。在腳跟著地、腳掌順勢放平的這零點幾秒內，力量是如何向上传遞，讓身體達到避震效果的？」",
+        "options": [
+          "腳掌放平的動能，會牽動小腿骨向前，迫使膝蓋微微彎曲避震",
+          "腳踝會完全僵硬，把力量直接傳給髖關節",
+          "阿基里斯腱會像彈簧一樣立刻把腳跟拉起"
+        ],
+        "answer": "腳掌放平的動能，會牽動小腿骨向前，迫使膝蓋微微彎曲避震",
+        "feedback_correct": "足跟滾動引導膝蓋彎曲 15 度，這是大自然設計的完美避震器。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 603,
+        "next_wrong": 602,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/perry%202.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9wZXJyeSAyLmpwZWciLCJpYXQiOjE3NzQ2NjY4NzksImV4cCI6MjA5MDAyNjg3OX0.wYA0TCF7C_T2lzbrrrA0KePSkSW_y5dcZ2qySCeyzD0"
+      },
+      {
+        "id": 603,
+        "text": "（她將模型的整個腳底平貼於桌面，代表進入了站立中期 Mid Stance。） 「現在，腳掌完全貼地，身體的重心必須從腳跟上方移動到腳趾前方。這時候啟動的是第二齒輪『腳踝滾動（Ankle Rocker）』。在這個階段，為了讓身體像『倒單擺』一樣順滑地滑過腳踝，小腿的肌肉（小腿肚）在做什麼工作？」",
+        "options": [
+          "它們處於完全放鬆狀態，讓身體自由往前倒",
+          "它們在做『離心收縮』，像煞車一樣精準控制小腿往前倒的速度",
+          "它們強烈地『向心收縮』，把身體往前推"
+        ],
+        "answer": "它們在做『離心收縮』，像煞車一樣精準控制小腿往前倒的速度",
+        "feedback_correct": "比目魚肌進行離心收縮，像煞車一樣控制小腿前傾的速度，維持穩定。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 604,
+        "next_wrong": 603,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Perry%203.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9QZXJyeSAzLmpwZWciLCJpYXQiOjE3NzQ2NjY4OTAsImV4cCI6MjA5MDAyNjg5MH0.Gux-biuBqvlLDiTAFa3AOPHJVBeH4gtthVIELDjBFGg"
+      },
+      {
+        "id": 604,
+        "text": "（Perry 博士用修長的手指將模型的腳跟抬起，只讓前腳掌接觸桌面。） 「站立末期（Terminal Stance）。腳跟離開地面，系統切換到『前腳掌滾動（Forefoot Rocker）』。在這個身體即將往前推進的關鍵時刻，足部與腳踝的狀態會發生什麼根本性的變化？」",
+        "options": [
+          "足部變得像柔軟的彈簧墊，準備吸收下一步的衝擊",
+          "小腿肌肉張力達到頂峰，把足部鎖死成一根『剛性槓桿』",
+          "腳踝關節完全解鎖，允許各種方向的旋轉"
+        ],
+        "answer": "小腿肌肉張力達到頂峰，把足部鎖死成一根『剛性槓桿』",
+        "feedback_correct": "足部在推進期鎖死成剛性槓桿，才能創造最長步幅並積蓄能量。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": 605,
+        "next_wrong": 604,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Perry%204.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9QZXJyeSA0LmpwZWciLCJpYXQiOjE3NzQ2NjY5MDIsImV4cCI6MjA5MDAyNjkwMn0.n5JgNkeaSUyjCu7pe0_TARlqHIj5QnwoHX503_12lyQ"
+      },
+      {
+        "id": 605,
+        "text": "（她將足部模型與上方的膝蓋、骨盆模型透過精密的引線連接起來，形成完整的動力鏈。） 「最後一題，旅人。力量在關節之間的傳導是連續的（Joint Sequence）。在腳尖即將離地的瞬間（Toe Rocker），如果一個病患因為關節退化，『大拇趾無法彎曲伸展』，這會對上方更遠的關節造成什麼代償性的災難？」",
+        "options": [
+          "毫無影響，上方關節不知道下面發生了什麼事",
+          "足底失去彈射機制（Catapult），迫使髖關節屈肌必須過度耗能來把腿往前拉",
+          "膝蓋會自動啟動第二套推進引擎來彌補"
+        ],
+        "answer": "足底失去彈射機制（Catapult），迫使髖關節屈肌必須過度耗能來把腿往前拉",
+        "feedback_correct": "大拇趾退化會導致彈射機制失效，迫使髖關節代償，拖垮效率。",
+        "feedback_wrong": "我的想法跟你不同....你再去了解我的著作我們再接著聊下去吧！",
+        "next_correct": null,
+        "next_wrong": null,
+        "image": "https://ciqlfqfgzqqgdrogedxg.supabase.co/storage/v1/object/sign/step%20by%20step%20cafe/Perry%205.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTJkZjliYS03NmIzLTRkNmMtODYwZS1jZDkzNWE0ZDk4ZmQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdGVwIGJ5IHN0ZXAgY2FmZS9QZXJyeSA1LmpwZWciLCJpYXQiOjE3NzQ2NjY5MTMsImV4cCI6MjA5MDAyNjkxM30.2sygiP7zm81ZapKAph-mnUz88Xi91crogcQGARr6eUg"
+      }
+    ]
+  }
+}
