@@ -528,22 +528,29 @@
     .shelf-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 14px;
+      gap: 18px;
     }
 
     .shelf-book {
       border: 1px solid rgba(42, 27, 18, 0.22);
       border-radius: 8px;
-      padding: 14px;
+      padding: 0;
       background: #fff;
       cursor: pointer;
       text-align: left;
       color: var(--ink);
       font: inherit;
       line-height: 1.5;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, border-color 0.18s ease;
     }
 
-    .shelf-book:hover { border-color: var(--gold); }
+    .shelf-book:hover:not(.locked) {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
 
     .shelf-book.locked {
       cursor: not-allowed;
@@ -551,27 +558,163 @@
       background: rgba(42, 27, 18, 0.06);
     }
 
+    .book-cover-img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      display: block;
+      background: rgba(42, 27, 18, 0.08);
+    }
+
+    .shelf-book.locked .book-cover-img {
+      filter: grayscale(1) brightness(0.55);
+    }
+
+    .shelf-book .book-meta {
+      padding: 10px 12px 12px;
+    }
+
     .shelf-book .book-title {
       font-weight: 600;
       margin: 0 0 4px;
+      font-size: 14px;
     }
 
     .shelf-book .book-sub {
-      font-size: 13px;
+      font-size: 12px;
       color: rgba(42, 27, 18, 0.65);
+      margin: 0;
+    }
+
+    .book-detail-head {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .book-detail-cover {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     }
 
     .book-detail h3 {
-      margin: 0 0 12px;
-      font-size: 18px;
+      margin: 0 0 8px;
+      font-size: 20px;
     }
 
-    .book-detail p { margin: 0 0 12px; }
+    .book-detail .book-author-line {
+      margin: 0 0 6px;
+      color: rgba(42, 27, 18, 0.7);
+      font-size: 13px;
+    }
+
+    .book-detail .book-bio {
+      margin: 0 0 14px;
+      font-size: 14px;
+      color: rgba(42, 27, 18, 0.78);
+    }
+
+    .chapter-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chapter-list button {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      background: rgba(42, 27, 18, 0.05);
+      border: 1px solid rgba(42, 27, 18, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--ink);
+      font: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .chapter-list button:hover {
+      background: rgba(214,170,95,0.12);
+      border-color: var(--gold);
+    }
+
+    .chapter-list .chapter-num {
+      display: inline-block;
+      width: 28px;
+      font-weight: 600;
+      color: rgba(42, 27, 18, 0.55);
+    }
+
+    .chapter-list .chapter-title {
+      font-weight: 500;
+    }
 
     .book-detail .back {
       margin-top: 6px;
       background: #5d3922;
       color: #fff4dd;
+    }
+
+    .chapter-reader h3 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+
+    .chapter-reader .chapter-tag {
+      margin: 0 0 18px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .chapter-reader .chapter-body {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--ink);
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .chapter-reader .chapter-body p { margin: 0 0 16px; }
+    .chapter-reader .chapter-body h1,
+    .chapter-reader .chapter-body h2 {
+      font-size: 18px;
+      margin: 18px 0 10px;
+    }
+    .chapter-reader .chapter-body blockquote {
+      margin: 0 0 16px;
+      padding: 10px 14px;
+      border-left: 3px solid var(--gold);
+      background: rgba(214,170,95,0.08);
+      color: rgba(42, 27, 18, 0.85);
+      font-style: italic;
+    }
+    .chapter-reader .chapter-body::-webkit-scrollbar { width: 8px; }
+    .chapter-reader .chapter-body::-webkit-scrollbar-thumb {
+      background: rgba(42,27,18,0.25);
+      border-radius: 4px;
+    }
+
+    .chapter-reader .reader-nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 760px) {
+      .book-detail-head { grid-template-columns: 90px 1fr; gap: 12px; }
+      .chapter-reader .chapter-body { max-height: 55vh; font-size: 14px; }
     }
 
     .touch-controls {
@@ -811,18 +954,20 @@
       }
       if (params.get("debug") === "collision") state.debugCollision = true;
 
-      const [worldZones, cafeEntities, collision, props, dialogues] = await Promise.all([
+      const [worldZones, cafeEntities, collision, props, dialogues, books] = await Promise.all([
         json("data/world-zones.json"),
         json("data/cafe-entities.json"),
         json("data/cafe-collision.json"),
         json("data/cafe-props.json"),
-        json("data/dialogues.json")
+        json("data/dialogues.json"),
+        json("data/books.json").catch(() => ({}))
       ]);
       state.worldZones = worldZones;
       state.cafeEntities = cafeEntities;
       state.collision = collision;
       state.props = props;
       state.dialogues = dialogues;
+      state.books = books;
 
       const imageEntries = [
         ["world", "assets/maps/world-map.png"],
@@ -1018,13 +1163,21 @@
       for (const id of MASTER_ORDER) {
         const master = state.cafeEntities.masters.find((m) => m.id === id);
         const dialogue = state.dialogues[id];
+        const book = state.books && state.books[id];
         const unlocked = state.progress.masters_completed.includes(id);
         const button = document.createElement("button");
         button.type = "button";
         button.className = "shelf-book" + (unlocked ? "" : " locked");
-        const titleText = unlocked && dialogue ? dialogue.bio.title : (master ? master.book_label : id);
+        const titleText = (book && book.book_title) ||
+                          (unlocked && dialogue ? dialogue.bio.title : (master ? master.book_label : id));
         const subText = unlocked ? "翻閱這本書" : "尚未解鎖 — 先去找這位智者對話";
-        button.innerHTML = `<p class="book-title"></p><p class="book-sub"></p>`;
+        const coverHtml = book && book.cover_url
+          ? `<img class="book-cover-img" alt="" loading="lazy">`
+          : "";
+        button.innerHTML = `${coverHtml}<div class="book-meta"><p class="book-title"></p><p class="book-sub"></p></div>`;
+        if (book && book.cover_url) {
+          button.querySelector(".book-cover-img").src = book.cover_url;
+        }
         button.querySelector(".book-title").textContent = titleText;
         button.querySelector(".book-sub").textContent = subText;
         if (unlocked) {
@@ -1040,25 +1193,166 @@
 
     function renderBookDetail(masterId) {
       const dialogue = state.dialogues[masterId];
-      if (!dialogue) return;
+      const master = state.cafeEntities.masters.find((m) => m.id === masterId);
+      const book = state.books && state.books[masterId];
+      if (!dialogue && !book) return;
+
       const wrap = document.createElement("div");
       wrap.className = "book-detail";
-      const heading = document.createElement("h3");
-      heading.textContent = dialogue.bio.title || "";
-      wrap.appendChild(heading);
-      for (const line of dialogue.bio.lines) {
-        const p = document.createElement("p");
-        p.textContent = line;
-        wrap.appendChild(p);
+
+      const head = document.createElement("div");
+      head.className = "book-detail-head";
+      if (book && book.cover_url) {
+        const img = document.createElement("img");
+        img.className = "book-detail-cover";
+        img.src = book.cover_url;
+        img.alt = "";
+        head.appendChild(img);
       }
+      const headText = document.createElement("div");
+      const heading = document.createElement("h3");
+      heading.textContent = (book && book.book_title) || (dialogue && dialogue.bio.title) || "";
+      headText.appendChild(heading);
+      if (master) {
+        const authorLine = document.createElement("p");
+        authorLine.className = "book-author-line";
+        authorLine.textContent = master.name;
+        headText.appendChild(authorLine);
+      }
+      if (dialogue && dialogue.bio && Array.isArray(dialogue.bio.lines)) {
+        for (const line of dialogue.bio.lines) {
+          const p = document.createElement("p");
+          p.className = "book-bio";
+          p.textContent = line;
+          headText.appendChild(p);
+        }
+      }
+      head.appendChild(headText);
+      wrap.appendChild(head);
+
+      if (book && Array.isArray(book.chapters) && book.chapters.length) {
+        const list = document.createElement("ol");
+        list.className = "chapter-list";
+        book.chapters.forEach((ch, idx) => {
+          const li = document.createElement("li");
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.innerHTML = `<span class="chapter-num"></span><span class="chapter-title"></span>`;
+          btn.querySelector(".chapter-num").textContent = String(ch.number || idx + 1).padStart(2, "0");
+          btn.querySelector(".chapter-title").textContent = ch.title || `第 ${idx + 1} 章`;
+          btn.addEventListener("click", () => renderChapterReader(masterId, idx));
+          li.appendChild(btn);
+          list.appendChild(li);
+        });
+        wrap.appendChild(list);
+      } else {
+        const empty = document.createElement("p");
+        empty.className = "book-bio";
+        empty.textContent = "（本書尚未填入章節內容）";
+        wrap.appendChild(empty);
+      }
+
       const back = document.createElement("button");
       back.type = "button";
       back.className = "back";
       back.textContent = "回到書架";
       back.addEventListener("click", renderShelf);
       wrap.appendChild(back);
+
       dialogueBody.innerHTML = "";
       dialogueBody.appendChild(wrap);
+    }
+
+    function renderChapterReader(masterId, chapterIdx) {
+      const book = state.books && state.books[masterId];
+      if (!book || !book.chapters || !book.chapters[chapterIdx]) return;
+      const ch = book.chapters[chapterIdx];
+      const total = book.chapters.length;
+
+      const wrap = document.createElement("div");
+      wrap.className = "book-detail chapter-reader";
+
+      const tag = document.createElement("p");
+      tag.className = "chapter-tag";
+      tag.textContent = `${book.book_title || ""} · 第 ${ch.number || chapterIdx + 1} / ${total} 章`;
+      wrap.appendChild(tag);
+
+      const heading = document.createElement("h3");
+      heading.textContent = ch.title || `第 ${chapterIdx + 1} 章`;
+      wrap.appendChild(heading);
+
+      const body = document.createElement("div");
+      body.className = "chapter-body";
+      body.innerHTML = mdToHtml(ch.body || "");
+      wrap.appendChild(body);
+
+      const nav = document.createElement("div");
+      nav.className = "reader-nav";
+      if (chapterIdx > 0) {
+        const prev = document.createElement("button");
+        prev.type = "button";
+        prev.className = "back";
+        prev.textContent = "← 上一章";
+        prev.addEventListener("click", () => renderChapterReader(masterId, chapterIdx - 1));
+        nav.appendChild(prev);
+      }
+      const toc = document.createElement("button");
+      toc.type = "button";
+      toc.className = "back";
+      toc.textContent = "目錄";
+      toc.addEventListener("click", () => renderBookDetail(masterId));
+      nav.appendChild(toc);
+      if (chapterIdx < total - 1) {
+        const next = document.createElement("button");
+        next.type = "button";
+        next.className = "back";
+        next.textContent = "下一章 →";
+        next.addEventListener("click", () => renderChapterReader(masterId, chapterIdx + 1));
+        nav.appendChild(next);
+      }
+      const shelfBack = document.createElement("button");
+      shelfBack.type = "button";
+      shelfBack.className = "back";
+      shelfBack.textContent = "回到書架";
+      shelfBack.addEventListener("click", renderShelf);
+      nav.appendChild(shelfBack);
+      wrap.appendChild(nav);
+
+      dialogueBody.innerHTML = "";
+      dialogueBody.appendChild(wrap);
+      const scrollBody = wrap.querySelector(".chapter-body");
+      if (scrollBody) scrollBody.scrollTop = 0;
+    }
+
+    function mdToHtml(md) {
+      const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const lines = md.split(/\r?\n/);
+      const out = [];
+      let para = [];
+      const flush = () => {
+        if (!para.length) return;
+        let text = escape(para.join(" ")).trim();
+        text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        text = text.replace(/\*(.+?)\*/g, "<em>$1</em>");
+        out.push(`<p>${text}</p>`);
+        para = [];
+      };
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line) { flush(); continue; }
+        if (line.startsWith("# ")) { flush(); out.push(`<h2>${escape(line.slice(2))}</h2>`); continue; }
+        if (line.startsWith("## ")) { flush(); out.push(`<h2>${escape(line.slice(3))}</h2>`); continue; }
+        if (line.startsWith("> ")) {
+          flush();
+          let bq = escape(line.slice(2));
+          bq = bq.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>");
+          out.push(`<blockquote>${bq}</blockquote>`);
+          continue;
+        }
+        para.push(line);
+      }
+      flush();
+      return out.join("\n");
     }
 
     function updateBookshelfHint() {
