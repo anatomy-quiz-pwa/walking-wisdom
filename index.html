@@ -588,10 +588,10 @@
 
     .book-detail-head {
       display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 18px;
+      grid-template-columns: 130px 1fr;
+      gap: 22px;
       align-items: start;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
 
     .book-detail-cover {
@@ -599,122 +599,170 @@
       aspect-ratio: 3 / 4;
       object-fit: cover;
       border-radius: 6px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      box-shadow: 0 6px 22px rgba(0,0,0,0.45);
     }
 
     .book-detail h3 {
-      margin: 0 0 8px;
-      font-size: 20px;
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #f5e6c1;
+      letter-spacing: 0.02em;
     }
 
     .book-detail .book-author-line {
-      margin: 0 0 6px;
-      color: rgba(42, 27, 18, 0.7);
+      margin: 0 0 10px;
+      color: #d4a55a;
       font-size: 13px;
+      letter-spacing: 0.08em;
     }
 
     .book-detail .book-bio {
-      margin: 0 0 14px;
-      font-size: 14px;
-      color: rgba(42, 27, 18, 0.78);
+      margin: 0 0 12px;
+      font-size: 14.5px;
+      color: rgba(232, 217, 184, 0.82);
+      line-height: 1.7;
     }
 
     .chapter-list {
       list-style: none;
       padding: 0;
-      margin: 0 0 18px;
+      margin: 8px 0 22px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .chapter-list button {
       width: 100%;
       text-align: left;
-      padding: 12px 14px;
-      background: rgba(42, 27, 18, 0.05);
-      border: 1px solid rgba(42, 27, 18, 0.15);
-      border-radius: 6px;
+      padding: 14px 16px;
+      background: rgba(50, 35, 22, 0.5);
+      border: 1px solid rgba(190, 145, 80, 0.22);
+      border-radius: 8px;
       cursor: pointer;
-      color: var(--ink);
+      color: #e8d9b8;
       font: inherit;
-      transition: background 0.15s ease, border-color 0.15s ease;
+      font-size: 15px;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
     }
 
     .chapter-list button:hover {
-      background: rgba(214,170,95,0.12);
+      background: rgba(214,170,95,0.14);
       border-color: var(--gold);
+      transform: translateX(3px);
     }
 
     .chapter-list .chapter-num {
       display: inline-block;
-      width: 28px;
+      width: 32px;
       font-weight: 600;
-      color: rgba(42, 27, 18, 0.55);
+      color: var(--gold);
+      letter-spacing: 0.04em;
     }
 
     .chapter-list .chapter-title {
       font-weight: 500;
+      color: #f0e1bd;
     }
 
     .book-detail .back {
       margin-top: 6px;
-      background: #5d3922;
+      background: rgba(93, 57, 34, 0.85);
       color: #fff4dd;
+      border: 1px solid rgba(190, 145, 80, 0.3);
+    }
+
+    .book-detail .back:hover {
+      background: rgba(120, 75, 45, 0.95);
+      border-color: var(--gold);
     }
 
     .chapter-reader h3 {
-      margin: 0 0 6px;
-      font-size: 22px;
+      margin: 0 0 8px;
+      font-size: 26px;
+      font-weight: 600;
+      color: #f5e6c1;
+      letter-spacing: 0.01em;
     }
 
     .chapter-reader .chapter-tag {
-      margin: 0 0 18px;
+      margin: 0 0 20px;
       font-size: 12px;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.22em;
       color: var(--gold);
       text-transform: uppercase;
+      font-weight: 500;
     }
 
     .chapter-reader .chapter-body {
-      font-size: 15px;
-      line-height: 1.85;
-      color: var(--ink);
-      max-height: 60vh;
+      font-size: 16px;
+      line-height: 1.95;
+      color: #ece0c2;
+      max-height: 58vh;
       overflow-y: auto;
-      padding-right: 8px;
+      padding-right: 12px;
+      letter-spacing: 0.01em;
     }
 
-    .chapter-reader .chapter-body p { margin: 0 0 16px; }
-    .chapter-reader .chapter-body h1,
-    .chapter-reader .chapter-body h2 {
-      font-size: 18px;
-      margin: 18px 0 10px;
+    .chapter-reader .chapter-body p {
+      margin: 0 0 18px;
     }
-    .chapter-reader .chapter-body blockquote {
-      margin: 0 0 16px;
-      padding: 10px 14px;
-      border-left: 3px solid var(--gold);
-      background: rgba(214,170,95,0.08);
-      color: rgba(42, 27, 18, 0.85);
+
+    .chapter-reader .chapter-body p strong {
+      color: #f5e6c1;
+      font-weight: 600;
+    }
+
+    .chapter-reader .chapter-body p em {
+      color: #e8c987;
       font-style: italic;
     }
-    .chapter-reader .chapter-body::-webkit-scrollbar { width: 8px; }
+
+    .chapter-reader .chapter-body h1,
+    .chapter-reader .chapter-body h2 {
+      font-size: 19px;
+      color: #f5e6c1;
+      margin: 24px 0 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .chapter-reader .chapter-body blockquote {
+      margin: 0 0 22px;
+      padding: 14px 18px;
+      border-left: 3px solid var(--gold);
+      background: rgba(214,170,95,0.08);
+      color: #f0dcae;
+      font-style: italic;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .chapter-reader .chapter-body::-webkit-scrollbar { width: 10px; }
+    .chapter-reader .chapter-body::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+    }
     .chapter-reader .chapter-body::-webkit-scrollbar-thumb {
-      background: rgba(42,27,18,0.25);
-      border-radius: 4px;
+      background: rgba(190,145,80,0.35);
+      border-radius: 5px;
+    }
+    .chapter-reader .chapter-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(214,170,95,0.55);
     }
 
     .chapter-reader .reader-nav {
       display: flex;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(190,145,80,0.18);
       flex-wrap: wrap;
     }
 
     @media (max-width: 760px) {
-      .book-detail-head { grid-template-columns: 90px 1fr; gap: 12px; }
-      .chapter-reader .chapter-body { max-height: 55vh; font-size: 14px; }
+      .book-detail-head { grid-template-columns: 100px 1fr; gap: 14px; margin-bottom: 18px; }
+      .book-detail h3 { font-size: 19px; }
+      .chapter-reader h3 { font-size: 22px; }
+      .chapter-reader .chapter-body { max-height: 55vh; font-size: 15px; line-height: 1.85; }
+      .chapter-list button { padding: 12px 14px; font-size: 14.5px; }
     }
 
     .touch-controls {
