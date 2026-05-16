@@ -68,11 +68,11 @@
     "subtitle": "Giovanni Alfonso Borelli · De Motu Animalium",
     "what_it_proved": "動物的身體不是神創的奇蹟，是一台可以用槓桿、力矩、肌肉拉力分析的機器——這是生物力學的第一聲。",
     "location": {
-      "x": 432,
-      "y": 300
+      "x": 320,
+      "y": 235
     },
-    "trigger_radius": 55,
-    "anchor_label": "中央工作台上的古書",
+    "trigger_radius": 50,
+    "anchor_label": "工作台上的厚皮書（De Motu Animalium）",
     "map_label": "動物力學 · 1680",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Houghton_IC6_B6447_680db_-_De_motu_animalium%2C_TAB_IV.jpg",
     "image_caption": "*De Motu Animalium* (Rome, 1680) Tabula IV — Borelli 對人類四肢力學分析的原版插圖。從 Harvard Houghton Library 數位典藏。Public domain.",
@@ -88,11 +88,11 @@
     "subtitle": "Wilhelm & Eduard Weber · Mechanik der menschlichen Gehwerkzeuge",
     "what_it_proved": "走路的腿不是用力推、是用力學的鐘擺在擺——擺動腿在擺盪期幾乎不用肌肉，這是人類最節能的祕密。",
     "location": {
-      "x": 565,
-      "y": 300
+      "x": 445,
+      "y": 230
     },
-    "trigger_radius": 55,
-    "anchor_label": "中央工作台上的小擺鐘",
+    "trigger_radius": 50,
+    "anchor_label": "工作台上的銅製計時器與沙漏",
     "map_label": "擺動腿模型 · 1836",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Wilhelm_Eduard_Weber_II.jpg",
     "image_caption": "Wilhelm Eduard Weber (1804–1891)，哥廷根大學物理學教授，跟弟弟 Eduard 在 1836 年合著 *Mechanik der menschlichen Gehwerkzeuge*——史上第一本以擺鐘力學分析人類步態的書。Public domain.",
@@ -108,11 +108,11 @@
     "subtitle": "Hans Conrad Sonderegger × Kistler Instruments AG",
     "what_it_proved": "腳踩地不是一個力——是一條完整的曲線：第一峰是衝擊力、第二峰是推進力，中間有一個低谷叫 mid-stance valley。整個步態的故事都藏在這條曲線裡。",
     "location": {
-      "x": 745,
-      "y": 580
+      "x": 390,
+      "y": 520
     },
-    "trigger_radius": 50,
-    "anchor_label": "右下方地板上發光的長方形（走上去看看）",
+    "trigger_radius": 70,
+    "anchor_label": "下方銅框走道（走上去看看）",
     "map_label": "力板 · 1965",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Kistler_plates.jpg",
     "image_caption": "Kistler 力板實物照——四個角落各裝一個壓電晶體（piezoelectric crystal），同步量測三軸力 + 三軸力矩，採樣率 1000-2000 Hz。1965 年 Kistler Instruments AG 在瑞士 Winterthur 推出第一代商用版本。Public domain.",
