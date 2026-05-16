@@ -7,11 +7,11 @@
     "subtitle": "Eadweard Muybridge · The Horse in Motion",
     "what_it_proved": "馬奔跑時四蹄真的會同時離地——而且不在前後蹄伸展時，而是四蹄全部收回腹下的瞬間。",
     "location": {
-      "x": 380,
-      "y": 720
+      "x": 135,
+      "y": 605
     },
-    "trigger_radius": 70,
-    "anchor_label": "左下牆上的小畫",
+    "trigger_radius": 50,
+    "anchor_label": "左下沙發前的咖啡桌",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg",
     "image_caption": "Eadweard Muybridge, *The Horse in Motion* (1878), Sallie Gardner running at a gallop. Public domain.",
     "connects_to_master": "lieberman",
@@ -50,7 +50,7 @@
       "x": 170,
       "y": 540
     },
-    "trigger_radius": 70,
+    "trigger_radius": 60,
     "anchor_label": "左下沙發（後方靠牆那組）",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/84/%C3%89tienne-Jules_Marey_-_Movements_in_Pole_Vaulting_-_Google_Art_Project.jpg",
     "image_caption": "Étienne-Jules Marey, *Movements in Pole Vaulting* (約 1890)，這是長曝光 chronophotography 的代表作——Bernstein 1920 年代在莫斯科借用的就是這個方法：在工人關節綁上小燈泡，黑暗中按下快門，留下整個動作的時空軌跡。Public domain (Google Art Project).",
