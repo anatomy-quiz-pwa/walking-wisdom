@@ -765,6 +765,108 @@
       .chapter-list button { padding: 12px 14px; font-size: 14.5px; }
     }
 
+    .landmark-detail .era-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(214,170,95,0.14);
+      border: 1px solid rgba(214,170,95,0.45);
+      border-radius: 999px;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .landmark-detail h3 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      color: #f5e6c1;
+    }
+
+    .landmark-detail .landmark-subtitle {
+      margin: 0 0 18px;
+      font-size: 13px;
+      color: #d4a55a;
+      letter-spacing: 0.08em;
+      font-style: italic;
+    }
+
+    .landmark-hero {
+      margin: 0 0 18px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(190,145,80,0.25);
+    }
+
+    .landmark-hero-image {
+      width: 100%;
+      max-height: 320px;
+      object-fit: contain;
+      display: block;
+      background: #0e0805;
+    }
+
+    .landmark-hero-caption {
+      padding: 10px 14px;
+      font-size: 12px;
+      color: rgba(232, 217, 184, 0.65);
+      line-height: 1.6;
+      font-style: italic;
+      border-top: 1px solid rgba(190,145,80,0.15);
+    }
+
+    .landmark-proved {
+      margin: 0 0 22px;
+      padding: 14px 18px;
+      background: rgba(214,170,95,0.08);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      color: #f0dcae;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .landmark-proved::before {
+      content: "證明了什麼 · ";
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .landmark-connect {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 10px 16px;
+      background: rgba(50, 35, 22, 0.6);
+      border: 1px solid rgba(190, 145, 80, 0.35);
+      border-radius: 6px;
+      color: #f0e1bd;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .landmark-connect:hover {
+      background: rgba(214,170,95,0.14);
+      border-color: var(--gold);
+    }
+
+    .landmark-connect::before {
+      content: "↗ ";
+      color: var(--gold);
+    }
+
+    @media (max-width: 760px) {
+      .landmark-detail h3 { font-size: 21px; }
+      .landmark-hero-image { max-height: 240px; }
+      .landmark-proved { font-size: 14px; padding: 12px 14px; }
+    }
+
     .touch-controls {
       position: fixed;
       left: max(16px, env(safe-area-inset-left));
@@ -819,7 +921,7 @@
       .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
-  <!-- build 1778859524 -->
+  <!-- build 1778913961 -->
 </head>
 <body>
   <div id="app">
@@ -1003,13 +1105,14 @@
       }
       if (params.get("debug") === "collision") state.debugCollision = true;
 
-      const [worldZones, cafeEntities, collision, props, dialogues, books] = await Promise.all([
+      const [worldZones, cafeEntities, collision, props, dialogues, books, landmarks] = await Promise.all([
         json("data/world-zones.json"),
         json("data/cafe-entities.json"),
         json("data/cafe-collision.json"),
         json("data/cafe-props.json"),
         json("data/dialogues.json"),
-        json("data/books.json").catch(() => ({}))
+        json("data/books.json").catch(() => ({})),
+        json("data/landmarks.json").catch(() => ({}))
       ]);
       state.worldZones = worldZones;
       state.cafeEntities = cafeEntities;
@@ -1017,6 +1120,8 @@
       state.props = props;
       state.dialogues = dialogues;
       state.books = books;
+      state.landmarks = landmarks;
+      state.landmarkNear = null;
 
       const imageEntries = [
         ["world", "assets/maps/world-map.png"],
@@ -1184,6 +1289,148 @@
       const cx = Math.max(box.x, Math.min(px, box.x + box.w));
       const cy = Math.max(box.y, Math.min(py, box.y + box.h));
       return Math.hypot(px - cx, py - cy) < 90;
+    }
+
+    function nearbyLandmark() {
+      if (!state.landmarks) return null;
+      const px = state.player.x;
+      const py = state.player.y;
+      let best = null;
+      let bestD = Infinity;
+      for (const id of Object.keys(state.landmarks)) {
+        const lm = state.landmarks[id];
+        if (!lm.location) continue;
+        const r = lm.trigger_radius || 70;
+        const d = Math.hypot(px - lm.location.x, py - lm.location.y);
+        if (d < r && d < bestD) {
+          best = lm;
+          bestD = d;
+        }
+      }
+      return best;
+    }
+
+    function interactLandmark(lm) {
+      const landmark = lm || nearbyLandmark();
+      if (!landmark) return;
+      iframeTitle.textContent = "學習角落";
+      iframeModal.classList.add("show");
+      state.npcFreeze = true;
+      state.openingShelf = true;
+      renderLandmarkDetail(landmark.id);
+    }
+
+    function renderLandmarkDetail(landmarkId) {
+      const lm = state.landmarks && state.landmarks[landmarkId];
+      if (!lm) return;
+
+      const wrap = document.createElement("div");
+      wrap.className = "book-detail landmark-detail";
+
+      if (lm.era_label) {
+        const era = document.createElement("span");
+        era.className = "era-badge";
+        era.textContent = lm.era_label;
+        wrap.appendChild(era);
+      }
+
+      const heading = document.createElement("h3");
+      heading.textContent = lm.title || "";
+      wrap.appendChild(heading);
+
+      if (lm.subtitle) {
+        const sub = document.createElement("p");
+        sub.className = "landmark-subtitle";
+        sub.textContent = lm.subtitle;
+        wrap.appendChild(sub);
+      }
+
+      if (lm.image_url) {
+        const hero = document.createElement("figure");
+        hero.className = "landmark-hero";
+        const img = document.createElement("img");
+        img.className = "landmark-hero-image";
+        img.src = lm.image_url;
+        img.alt = lm.title || "";
+        img.loading = "lazy";
+        img.referrerPolicy = "no-referrer";
+        img.onerror = () => { hero.style.display = "none"; };
+        hero.appendChild(img);
+        if (lm.image_caption) {
+          const cap = document.createElement("figcaption");
+          cap.className = "landmark-hero-caption";
+          cap.innerHTML = mdToHtml(lm.image_caption).replace(/^<p>|<\/p>$/g, "");
+          hero.appendChild(cap);
+        }
+        wrap.appendChild(hero);
+      }
+
+      if (lm.what_it_proved) {
+        const proved = document.createElement("div");
+        proved.className = "landmark-proved";
+        proved.textContent = lm.what_it_proved;
+        wrap.appendChild(proved);
+      }
+
+      if (lm.story_md) {
+        const body = document.createElement("div");
+        body.className = "chapter-body";
+        body.innerHTML = mdToHtml(lm.story_md);
+        wrap.appendChild(body);
+      }
+
+      if (lm.connects_to_master && state.cafeEntities && state.cafeEntities.masters) {
+        const master = state.cafeEntities.masters.find((m) => m.id === lm.connects_to_master);
+        const unlocked = state.progress.masters_completed.includes(lm.connects_to_master);
+        if (master) {
+          const connect = document.createElement("button");
+          connect.type = "button";
+          connect.className = "landmark-connect";
+          connect.textContent = unlocked
+            ? `翻到《${(state.books && state.books[master.id] && state.books[master.id].book_title) || master.book_label}》`
+            : `想知道更多？先去找 ${master.name} 對話`;
+          if (unlocked) {
+            connect.addEventListener("click", () => {
+              iframeTitle.textContent = "旅程書架";
+              renderBookDetail(master.id);
+            });
+          } else {
+            connect.disabled = true;
+            connect.style.cursor = "not-allowed";
+            connect.style.opacity = "0.6";
+          }
+          wrap.appendChild(document.createElement("div")).appendChild(connect);
+        }
+      }
+
+      const back = document.createElement("button");
+      back.type = "button";
+      back.className = "back";
+      back.style.marginTop = "18px";
+      back.textContent = "關閉";
+      back.addEventListener("click", () => {
+        iframeModal.classList.remove("show");
+        state.npcFreeze = false;
+        state.openingShelf = false;
+      });
+      wrap.appendChild(back);
+
+      dialogueBody.innerHTML = "";
+      dialogueBody.appendChild(wrap);
+      const scrollBody = wrap.querySelector(".chapter-body");
+      if (scrollBody) scrollBody.scrollTop = 0;
+    }
+
+    function updateLandmarkHint() {
+      if (state.bookshelfNear) return;
+      const lm = nearbyLandmark();
+      const cur = state.landmarkNear && state.landmarkNear.id;
+      const next = lm && lm.id;
+      if (cur === next) return;
+      state.landmarkNear = lm;
+      if (lm) {
+        hint.textContent = `按 Space 看 ${lm.era_label || ""} · ${lm.title}`;
+      }
     }
 
     function interactBookshelf() {
@@ -1673,6 +1920,7 @@
       if (!state.assetsReady || state.scene !== "cafe") return;
       updateNpcs(dt);
       updateBookshelfHint();
+      updateLandmarkHint();
       const speed = 150;
       let dx = 0;
       let dy = 0;
@@ -2120,6 +2368,11 @@
             interactBookshelf();
             return;
           }
+          const lm = nearbyLandmark();
+          if (lm) {
+            interactLandmark(lm);
+            return;
+          }
           const master = nearbyMaster();
           if (master) {
             startTalk(master);
@@ -2148,6 +2401,8 @@
     interactTouch.addEventListener("click", () => {
       if (state.scene !== "cafe") return;
       if (nearbyBookshelf()) { interactBookshelf(); return; }
+      const lm = nearbyLandmark();
+      if (lm) { interactLandmark(lm); return; }
       const master = nearbyMaster();
       if (master) startTalk(master);
     });
