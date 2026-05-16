@@ -921,7 +921,7 @@
       .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
-  <!-- build 1778940661 -->
+  <!-- build 1778940947 -->
 </head>
 <body>
   <div id="app">
@@ -2510,6 +2510,7 @@
       const ids = Object.keys(state.landmarks);
       for (const id of ids) {
         const lm = state.landmarks[id];
+        if ((lm.scene || "cafe") !== state.scene) continue;
         if (!lm.location) continue;
         const near = id === nearId;
         const x = lm.location.x;
