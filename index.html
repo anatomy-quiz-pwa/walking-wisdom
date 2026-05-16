@@ -921,7 +921,7 @@
       .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
-  <!-- build 1778940947 -->
+  <!-- build 1778941710 -->
 </head>
 <body>
   <div id="app">
@@ -1404,21 +1404,10 @@
       return best;
     }
 
-    const WEEKLY_CHALLENGES = [
-      "本週挑戰：今天找一段你從沒走過的小巷，慢慢走，不滑手機。",
-      "本週挑戰：下班少搭一站地鐵，改走過去。3 公里左右。",
-      "本週挑戰：跟家人約一起走 30 分鐘，誰都不准戴耳機。",
-      "本週挑戰：赤腳在草地上走 5 分鐘，感受腳底的承重。",
-      "本週挑戰：上樓梯時試試「腳跟先觸地、腳掌滾過去」（Perry 第二章）。",
-      "本週挑戰：明天走路時把手插在口袋——你會發現平常多用力在擺手。",
-      "本週挑戰：走 30 分鐘不講話、不聽音樂、不想事情，只看路。",
-      "本週挑戰：找一條從家走到咖啡店的「最美路線」，不是最短的，是最美的。"
-    ];
+    const STEPMATE_URL = "https://stepwise-lovat.vercel.app/";
 
     function openBlackboard() {
-      const idx = Math.floor((Date.now() / (1000 * 60 * 60 * 24 * 3)) % WEEKLY_CHALLENGES.length);
-      const challenge = WEEKLY_CHALLENGES[idx];
-      iframeTitle.textContent = "黑板 · 本週步行挑戰";
+      iframeTitle.textContent = "黑板 · 試試你自己的步態";
       iframeModal.classList.add("show");
       state.npcFreeze = true;
       state.openingShelf = true;
@@ -1426,24 +1415,42 @@
       wrap.className = "book-detail landmark-detail";
       const era = document.createElement("span");
       era.className = "era-badge";
-      era.textContent = "Step by Step Cafe · 後廳";
+      era.textContent = "Step by Step Cafe · 走出咖啡店";
       wrap.appendChild(era);
       const h = document.createElement("h3");
-      h.textContent = "本週步行挑戰";
+      h.textContent = "試試你自己的步態 — Stepmate";
       wrap.appendChild(h);
       const proved = document.createElement("div");
       proved.className = "landmark-proved";
-      proved.textContent = challenge;
-      proved.style.fontSize = "17px";
+      proved.textContent = "你讀完了智者們 350 年的故事——現在輪到你自己的腳了。錄一段 30 秒走路，看看你的步頻、穩定度、跟你的 \"moving age\"。";
+      proved.style.fontSize = "16px";
       wrap.appendChild(proved);
       const body = document.createElement("div");
       body.className = "chapter-body";
-      body.innerHTML = "<p>智者們每幾天會換一次題目。完成了不用回報——身體會記得。</p><p>下次來咖啡店記得告訴我們今天走了哪。</p>";
+      body.innerHTML = `
+        <p>Bernstein 一百年前在莫斯科要在工人身上綁燈泡才能量出 cyclogram。Kistler 1965 年要把整片壓電晶體裝進地板才能量出地面反作用力。Vicon 1980 年代要十二台紅外攝影機才能還原 3D 關節角度。</p>
+        <p>2026 年——你口袋裡那支手機就夠了。</p>
+        <p>Stepmate 把這 350 年的研究壓進一支可以隨身走的 app：錄 30 秒走路，分析你的步頻 (cadence)、步態穩定度 (gait stability)、跟一個有點好玩、有點殘酷的指標——你的 <em>moving age</em>（你身體的「走路年齡」）。</p>
+        <p>它也會告訴你附近哪裡可以散步、給你看相關的步態研究、連到合作的物理治療所跟長照單位。</p>
+        <p style="margin-top: 22px; color: #d4a55a; font-size: 13px; letter-spacing: 0.12em;">↓ 走出咖啡店，看看自己。</p>
+      `;
       wrap.appendChild(body);
+
+      // big CTA button
+      const cta = document.createElement("a");
+      cta.href = STEPMATE_URL;
+      cta.target = "_blank";
+      cta.rel = "noopener";
+      cta.textContent = "開啟 Stepmate →";
+      cta.style.cssText = "display:inline-block;margin-top:16px;padding:14px 28px;background:linear-gradient(180deg,#d4a55a,#a87838);color:#fff4dd;border:1px solid rgba(245,209,141,0.6);border-radius:8px;text-decoration:none;font-size:16px;font-weight:600;letter-spacing:0.06em;box-shadow:0 6px 20px rgba(214,165,90,0.32);cursor:pointer;";
+      cta.addEventListener("mouseenter", () => { cta.style.transform = "translateY(-1px)"; cta.style.boxShadow = "0 8px 26px rgba(245,209,141,0.45)"; });
+      cta.addEventListener("mouseleave", () => { cta.style.transform = "translateY(0)"; cta.style.boxShadow = "0 6px 20px rgba(214,165,90,0.32)"; });
+      wrap.appendChild(cta);
+
       const close = document.createElement("button");
       close.type = "button";
       close.className = "back";
-      close.style.marginTop = "18px";
+      close.style.cssText = "margin-top:18px;margin-left:12px;";
       close.textContent = "關閉";
       close.addEventListener("click", () => {
         iframeModal.classList.remove("show");
