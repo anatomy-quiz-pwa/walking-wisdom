@@ -921,7 +921,7 @@
       .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
-  <!-- build 1778913961 -->
+  <!-- build 1778939268 -->
 </head>
 <body>
   <div id="app">
@@ -947,7 +947,8 @@
   <div id="introModal" class="modal-backdrop">
     <div class="modal">
       <div class="modal-content">
-        <p>歡迎來到慢慢走咖啡館。這裡有六位智者在不同角落等著與你對話。走近他們，按 Space 或點擊開始對話。每完成一場對話，書架上會多一本書。</p>
+        <p>歡迎來到慢慢走咖啡館。這裡有六位智者在不同角落等著與你對話——走近他們，按 Space 或點擊開始對話，每完成一場對話，書架上會多一本書。</p>
+        <p style="margin-top:10px; color:#d4a55a;">☼ 咖啡店裡還藏著三個發光的學習角落（金色光點），是 1878-1925 年人類研究步態的歷史里程碑。走近金點，按 Space 翻看。</p>
         <div class="modal-actions">
           <button id="startJourney" type="button">開始旅程</button>
         </div>
@@ -1264,7 +1265,10 @@
       state.player.y = spawn.y;
       state.player.path = [];
       state.player.autoInteract = null;
-      hint.textContent = "走近智者，按 Space / Enter 或點擊 NPC 開始對話。";
+      const lmCount = state.landmarks ? Object.keys(state.landmarks).length : 0;
+      hint.textContent = lmCount > 0
+        ? `走近智者按 Space 對話 · 咖啡店裡還有 ${lmCount} 個金色光點 = 步態研究里程碑（彩蛋）。`
+        : "走近智者，按 Space / Enter 或點擊 NPC 開始對話。";
     }
 
     function enterWorld() {
@@ -2172,6 +2176,7 @@
     function drawCafe() {
       drawImageCover(state.images.cafe);
       drawBookshelf();
+      drawLandmarks();
       const drawables = [
         ...state.cafeEntities.masters.map((m) => ({ type: "master", y: masterPoint(m).y, data: m })),
         { type: "player", y: state.player.y, data: state.player }
@@ -2182,6 +2187,44 @@
       }
       drawBookTooltip();
       if (state.debugCollision) drawDebugCollision();
+    }
+
+    function drawLandmarks() {
+      if (!state.landmarks) return;
+      const nearId = state.landmarkNear && state.landmarkNear.id;
+      const ids = Object.keys(state.landmarks);
+      for (const id of ids) {
+        const lm = state.landmarks[id];
+        if (!lm.location) continue;
+        const near = id === nearId;
+        const x = lm.location.x;
+        const y = lm.location.y;
+
+        // pulsing gold dot at trigger center
+        ctx.save();
+        const t = (performance.now() / 600) % 1;
+        const pulseR = 6 + Math.sin(t * Math.PI * 2) * 2;
+        ctx.shadowColor = near ? "rgba(245, 209, 141, 0.95)" : "rgba(214, 165, 90, 0.75)";
+        ctx.shadowBlur = near ? 24 : 14;
+        ctx.fillStyle = near ? "#f5d18d" : "#d4a55a";
+        ctx.beginPath();
+        ctx.arc(x, y, pulseR, 0, Math.PI * 2);
+        ctx.fill();
+        // inner core
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#fff4dd";
+        ctx.beginPath();
+        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // label above the dot
+        const label = lm.map_label || `${lm.title} · ${lm.year}`;
+        drawLabel(label, x, y - 18,
+          near ? "#f5d18d" : "#ead3aa",
+          near ? "#5c3922" : "rgba(42, 27, 18, 0.78)",
+          12);
+      }
     }
 
     function drawDebugCollision() {
