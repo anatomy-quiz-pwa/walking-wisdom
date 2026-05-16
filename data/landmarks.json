@@ -26,11 +26,11 @@
     "subtitle": "Étienne-Jules Marey · Fusil photographique",
     "what_it_proved": "運動不是一張一張的照片——運動是一條連續的軌跡。把這條軌跡畫出來，速度、加速度、夾角、節奏，全部都可以測量。",
     "location": {
-      "x": 700,
-      "y": 130
+      "x": 380,
+      "y": 235
     },
-    "trigger_radius": 65,
-    "anchor_label": "廚房窗戶旁",
+    "trigger_radius": 60,
+    "anchor_label": "吧台檯面（糕點櫃旁）",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Chronophotographic_gun-CnAM_16955-IMG_5275-gradient.jpg",
     "image_caption": "Étienne-Jules Marey, *Fusil photographique* (1882) 實物，巴黎工藝博物館 CnAM 16955 號藏品。Public domain.",
     "connects_to_master": "bernstein",
