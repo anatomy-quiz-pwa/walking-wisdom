@@ -88,11 +88,11 @@
     "subtitle": "Wilhelm & Eduard Weber · Mechanik der menschlichen Gehwerkzeuge",
     "what_it_proved": "走路的腿不是用力推、是用力學的鐘擺在擺——擺動腿在擺盪期幾乎不用肌肉，這是人類最節能的祕密。",
     "location": {
-      "x": 445,
-      "y": 230
+      "x": 810,
+      "y": 145
     },
     "trigger_radius": 50,
-    "anchor_label": "工作台上的銅製計時器與沙漏",
+    "anchor_label": "右上解剖骨架旁邊",
     "map_label": "擺動腿模型 · 1836",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Wilhelm_Eduard_Weber_II.jpg",
     "image_caption": "Wilhelm Eduard Weber (1804–1891)，哥廷根大學物理學教授，跟弟弟 Eduard 在 1836 年合著 *Mechanik der menschlichen Gehwerkzeuge*——史上第一本以擺鐘力學分析人類步態的書。Public domain.",
