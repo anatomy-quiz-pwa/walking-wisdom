@@ -38,8 +38,8 @@
       "x": 905,
       "y": 510,
       "trigger_radius": 55,
-      "label": "本週步行挑戰",
-      "anchor_label": "右下黑板"
+      "label": "試試你自己的步態 (Stepmate)",
+      "anchor_label": "右下黑板（連到 Stepmate）"
     },
     {
       "id": "gramophone",
