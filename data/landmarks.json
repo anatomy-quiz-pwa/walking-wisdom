@@ -7,11 +7,11 @@
     "subtitle": "Eadweard Muybridge · The Horse in Motion",
     "what_it_proved": "馬奔跑時四蹄真的會同時離地——而且不在前後蹄伸展時，而是四蹄全部收回腹下的瞬間。",
     "location": {
-      "x": 135,
-      "y": 605
+      "x": 810,
+      "y": 395
     },
     "trigger_radius": 50,
-    "anchor_label": "左下沙發前的咖啡桌",
+    "anchor_label": "右側下方卡座桌上",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/73/The_Horse_in_Motion.jpg",
     "image_caption": "Eadweard Muybridge, *The Horse in Motion* (1878), Sallie Gardner running at a gallop. Public domain.",
     "connects_to_master": "lieberman",
