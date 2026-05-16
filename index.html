@@ -921,7 +921,7 @@
       .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
-  <!-- build 1778941710 -->
+  <!-- build 1778941890 -->
 </head>
 <body>
   <div id="app">
@@ -1563,6 +1563,27 @@
           }
           wrap.appendChild(document.createElement("div")).appendChild(connect);
         }
+      }
+
+      if (lm.external_tool && lm.external_tool.url) {
+        const toolBox = document.createElement("div");
+        toolBox.style.cssText = "margin-top:24px;padding:18px 20px;background:rgba(50,35,22,0.5);border:1px solid rgba(190,145,80,0.3);border-radius:10px;";
+        if (lm.external_tool.lead) {
+          const lead = document.createElement("p");
+          lead.textContent = lm.external_tool.lead;
+          lead.style.cssText = "margin:0 0 14px;font-size:14px;color:#ece0c2;line-height:1.7;";
+          toolBox.appendChild(lead);
+        }
+        const cta = document.createElement("a");
+        cta.href = lm.external_tool.url;
+        cta.target = "_blank";
+        cta.rel = "noopener";
+        cta.textContent = lm.external_tool.label || "開啟工具 →";
+        cta.style.cssText = "display:inline-block;padding:12px 22px;background:linear-gradient(180deg,#d4a55a,#a87838);color:#fff4dd;border:1px solid rgba(245,209,141,0.6);border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;letter-spacing:0.04em;box-shadow:0 6px 20px rgba(214,165,90,0.32);cursor:pointer;transition:transform 0.15s ease,box-shadow 0.15s ease;";
+        cta.addEventListener("mouseenter", () => { cta.style.transform = "translateY(-1px)"; cta.style.boxShadow = "0 8px 26px rgba(245,209,141,0.45)"; });
+        cta.addEventListener("mouseleave", () => { cta.style.transform = "translateY(0)"; cta.style.boxShadow = "0 6px 20px rgba(214,165,90,0.32)"; });
+        toolBox.appendChild(cta);
+        wrap.appendChild(toolBox);
       }
 
       const back = document.createElement("button");
