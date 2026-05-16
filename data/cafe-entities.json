@@ -1,5 +1,8 @@
 {
-  "player_spawn": { "x": 500, "y": 675 },
+  "player_spawn": {
+    "x": 500,
+    "y": 675
+  },
   "bookshelf": {
     "x": 560,
     "y": 80,
@@ -13,11 +16,22 @@
       "name": "Daniel E. Lieberman",
       "book_label": "Lieberman 的書",
       "theme": "presence / mindfulness",
-      "position": { "x": 245, "y": 260 },
-      "approach": { "x": 245, "y": 330 },
+      "position": {
+        "x": 245,
+        "y": 260
+      },
+      "approach": {
+        "x": 245,
+        "y": 330
+      },
       "sprite": "assets/sprites/masters/lieberman.png",
       "walk_sprite": "assets/sprites/masters/lieberman-walk-4x4.png",
-      "roam_zone": { "x": 155, "y": 258, "w": 210, "h": 120 },
+      "roam_zone": {
+        "x": 155,
+        "y": 258,
+        "w": 210,
+        "h": 120
+      },
       "avatar": "assets/sprites/avatars/lieberman.png",
       "intro": "先慢下來，才聽得見身體正在告訴你的路。"
     },
@@ -26,11 +40,22 @@
       "name": "Giovanni Cavagna",
       "book_label": "Cavagna 的書",
       "theme": "deep learning",
-      "position": { "x": 748, "y": 170 },
-      "approach": { "x": 748, "y": 260 },
+      "position": {
+        "x": 748,
+        "y": 170
+      },
+      "approach": {
+        "x": 748,
+        "y": 260
+      },
       "sprite": "assets/sprites/masters/cavagna.png",
       "walk_sprite": "assets/sprites/masters/cavagna-walk-4x4.png",
-      "roam_zone": { "x": 650, "y": 225, "w": 190, "h": 105 },
+      "roam_zone": {
+        "x": 650,
+        "y": 225,
+        "w": 190,
+        "h": 105
+      },
       "avatar": "assets/sprites/avatars/cavagna.png",
       "intro": "真正的學習，是反覆走進問題的深處。"
     },
@@ -39,11 +64,22 @@
       "name": "Thomas Roberts",
       "book_label": "Roberts 的書",
       "theme": "noticing details",
-      "position": { "x": 882, "y": 340 },
-      "approach": { "x": 812, "y": 340 },
+      "position": {
+        "x": 882,
+        "y": 340
+      },
+      "approach": {
+        "x": 812,
+        "y": 340
+      },
       "sprite": "assets/sprites/masters/roberts.png",
       "walk_sprite": "assets/sprites/masters/roberts-walk-4x4.png",
-      "roam_zone": { "x": 742, "y": 306, "w": 105, "h": 190 },
+      "roam_zone": {
+        "x": 742,
+        "y": 306,
+        "w": 105,
+        "h": 190
+      },
       "avatar": "assets/sprites/avatars/roberts.png",
       "intro": "細節不是裝飾，它們常常就是答案本身。"
     },
@@ -52,11 +88,22 @@
       "name": "Jacquelin Perry",
       "book_label": "Perry 的書",
       "theme": "dialogue",
-      "position": { "x": 520, "y": 390 },
-      "approach": { "x": 520, "y": 470 },
+      "position": {
+        "x": 520,
+        "y": 390
+      },
+      "approach": {
+        "x": 520,
+        "y": 470
+      },
       "sprite": "assets/sprites/masters/perry.png",
       "walk_sprite": "assets/sprites/masters/perry-walk-4x4.png",
-      "roam_zone": { "x": 330, "y": 300, "w": 360, "h": 280 },
+      "roam_zone": {
+        "x": 330,
+        "y": 300,
+        "w": 360,
+        "h": 280
+      },
       "avatar": "assets/sprites/avatars/perry.png",
       "intro": "好的對話，會讓你把已知重新走一遍。"
     },
@@ -65,11 +112,22 @@
       "name": "Nikolai A. Bernstein",
       "book_label": "Bernstein 的書",
       "theme": "pace and rhythm",
-      "position": { "x": 812, "y": 610 },
-      "approach": { "x": 760, "y": 590 },
+      "position": {
+        "x": 812,
+        "y": 610
+      },
+      "approach": {
+        "x": 760,
+        "y": 590
+      },
       "sprite": "assets/sprites/masters/bernstein.png",
       "walk_sprite": "assets/sprites/masters/bernstein-walk-4x4.png",
-      "roam_zone": { "x": 690, "y": 542, "w": 200, "h": 110 },
+      "roam_zone": {
+        "x": 690,
+        "y": 542,
+        "w": 200,
+        "h": 110
+      },
       "avatar": "assets/sprites/avatars/bernstein.png",
       "intro": "節奏不是速度，而是身體和世界協調的方式。"
     },
@@ -78,13 +136,41 @@
       "name": "Stephanie Studenski",
       "book_label": "Studenski 的書",
       "theme": "process",
-      "position": { "x": 465, "y": 155 },
-      "approach": { "x": 465, "y": 250 },
+      "position": {
+        "x": 465,
+        "y": 155
+      },
+      "approach": {
+        "x": 465,
+        "y": 250
+      },
       "sprite": "assets/sprites/masters/studenski.png",
       "walk_sprite": "assets/sprites/masters/studenski-walk-4x4.png",
-      "roam_zone": { "x": 400, "y": 220, "w": 160, "h": 110 },
+      "roam_zone": {
+        "x": 400,
+        "y": 220,
+        "w": 160,
+        "h": 110
+      },
       "avatar": "assets/sprites/avatars/studenski.png",
       "intro": "穩定的進步，來自你願意尊重每一道工序。"
+    }
+  ],
+  "doors": [
+    {
+      "id": "to_atelier",
+      "x": 395,
+      "y": 78,
+      "w": 50,
+      "h": 38,
+      "label": "智者工作室",
+      "target_scene": "atelier",
+      "approach": {
+        "x": 420,
+        "y": 130
+      },
+      "unlock_min_masters": 1,
+      "locked_hint": "先去找一位智者對話，後廳的門就會開。"
     }
   ]
 }
