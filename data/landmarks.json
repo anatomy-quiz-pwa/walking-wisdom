@@ -47,11 +47,11 @@
     "subtitle": "Nikolai A. Bernstein · 莫斯科勞動研究所",
     "what_it_proved": "同一個工人打十次鐵，鐵錘畫出來的十條軌跡看似一樣、但沒有一條真的相同——大腦不是在重複動作，大腦是在重複「目的」。",
     "location": {
-      "x": 135,
-      "y": 700
+      "x": 170,
+      "y": 540
     },
     "trigger_radius": 70,
-    "anchor_label": "左下角的立燈",
+    "anchor_label": "左下沙發（後方靠牆那組）",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/84/%C3%89tienne-Jules_Marey_-_Movements_in_Pole_Vaulting_-_Google_Art_Project.jpg",
     "image_caption": "Étienne-Jules Marey, *Movements in Pole Vaulting* (約 1890)，這是長曝光 chronophotography 的代表作——Bernstein 1920 年代在莫斯科借用的就是這個方法：在工人關節綁上小燈泡，黑暗中按下快門，留下整個動作的時空軌跡。Public domain (Google Art Project).",
     "connects_to_master": "bernstein",
