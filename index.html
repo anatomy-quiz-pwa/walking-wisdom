@@ -921,7 +921,7 @@
       .qa-options button { font-size: 15px; padding: 14px 16px; }
     }
   </style>
-  <!-- build 1778939268 -->
+  <!-- build 1778940352 -->
 </head>
 <body>
   <div id="app">
@@ -1106,23 +1106,31 @@
       }
       if (params.get("debug") === "collision") state.debugCollision = true;
 
-      const [worldZones, cafeEntities, collision, props, dialogues, books, landmarks] = await Promise.all([
+      const [worldZones, cafeEntities, collision, props, dialogues, books, landmarks, atelierEntities, atelierCollision] = await Promise.all([
         json("data/world-zones.json"),
         json("data/cafe-entities.json"),
         json("data/cafe-collision.json"),
         json("data/cafe-props.json"),
         json("data/dialogues.json"),
         json("data/books.json").catch(() => ({})),
-        json("data/landmarks.json").catch(() => ({}))
+        json("data/landmarks.json").catch(() => ({})),
+        json("data/atelier-entities.json").catch(() => null),
+        json("data/atelier-collision.json").catch(() => null)
       ]);
       state.worldZones = worldZones;
       state.cafeEntities = cafeEntities;
+      state.cafeCollision = collision;
       state.collision = collision;
+      state.atelierEntities = atelierEntities;
+      state.atelierCollision = atelierCollision;
       state.props = props;
       state.dialogues = dialogues;
       state.books = books;
       state.landmarks = landmarks;
       state.landmarkNear = null;
+      state.doorNear = null;
+      state.objectNear = null;
+      state.footprints = [];
 
       const imageEntries = [
         ["world", "assets/maps/world-map.png"],
@@ -1257,24 +1265,64 @@
       return [nearestWalkable(target)];
     }
 
-    function enterCafe() {
+    function enterCafe(spawnAtDoor) {
+      const prev = state.scene;
       state.scene = "cafe";
+      state.collision = state.cafeCollision;
       backWorldBtn.hidden = false;
-      const spawn = state.cafeEntities.player_spawn;
+      backWorldBtn.textContent = "返回世界地圖";
+      if (spawnAtDoor && prev === "atelier" && state.cafeEntities.doors) {
+        const d = state.cafeEntities.doors.find((x) => x.id === "to_atelier");
+        if (d && d.approach) {
+          state.player.x = d.approach.x;
+          state.player.y = d.approach.y;
+        }
+      } else {
+        const spawn = state.cafeEntities.player_spawn;
+        state.player.x = spawn.x;
+        state.player.y = spawn.y;
+      }
+      state.player.path = [];
+      state.player.autoInteract = null;
+      state.footprints = [];
+      const lmCafeCount = countLandmarksInScene("cafe");
+      hint.textContent = lmCafeCount > 0
+        ? `走近智者按 Space 對話 · 咖啡店裡還有 ${lmCafeCount} 個金色光點（彩蛋）· 上方門通往智者工作室。`
+        : "走近智者，按 Space / Enter 或點擊 NPC 開始對話。";
+    }
+
+    function enterAtelier() {
+      if (!state.atelierEntities || !state.atelierCollision) {
+        hint.textContent = "工作室還沒準備好。";
+        return;
+      }
+      state.scene = "atelier";
+      state.collision = state.atelierCollision;
+      backWorldBtn.hidden = false;
+      backWorldBtn.textContent = "← 回咖啡店";
+      const spawn = state.atelierEntities.player_spawn;
       state.player.x = spawn.x;
       state.player.y = spawn.y;
       state.player.path = [];
       state.player.autoInteract = null;
-      const lmCount = state.landmarks ? Object.keys(state.landmarks).length : 0;
-      hint.textContent = lmCount > 0
-        ? `走近智者按 Space 對話 · 咖啡店裡還有 ${lmCount} 個金色光點 = 步態研究里程碑（彩蛋）。`
-        : "走近智者，按 Space / Enter 或點擊 NPC 開始對話。";
+      state.footprints = [];
+      state.bookshelfNear = false;
+      state.landmarkNear = null;
+      state.doorNear = null;
+      state.objectNear = null;
+      const lmAtelierCount = countLandmarksInScene("atelier");
+      hint.textContent = `智者工作室 · ${lmAtelierCount} 個歷史里程碑藏在裡面 · 中間走道有發光腳印。`;
     }
 
     function enterWorld() {
       state.scene = "world";
       backWorldBtn.hidden = true;
       hint.textContent = "點擊慢慢走咖啡館進入。";
+    }
+
+    function countLandmarksInScene(scene) {
+      if (!state.landmarks) return 0;
+      return Object.values(state.landmarks).filter((l) => (l.scene || "cafe") === scene).length;
     }
 
     function masterAt(point) {
@@ -1303,6 +1351,7 @@
       let bestD = Infinity;
       for (const id of Object.keys(state.landmarks)) {
         const lm = state.landmarks[id];
+        if ((lm.scene || "cafe") !== state.scene) continue;
         if (!lm.location) continue;
         const r = lm.trigger_radius || 70;
         const d = Math.hypot(px - lm.location.x, py - lm.location.y);
@@ -1312,6 +1361,107 @@
         }
       }
       return best;
+    }
+
+    function nearbyDoor() {
+      const ents = state.scene === "cafe" ? state.cafeEntities
+                  : state.scene === "atelier" ? state.atelierEntities : null;
+      if (!ents || !ents.doors) return null;
+      const px = state.player.x;
+      const py = state.player.y;
+      for (const d of ents.doors) {
+        if (rectContains(d, px, py, 28)) return d;
+      }
+      return null;
+    }
+
+    function interactDoor(door) {
+      if (!door) door = nearbyDoor();
+      if (!door) return;
+      if (door.unlock_min_masters && state.progress.masters_completed.length < door.unlock_min_masters) {
+        hint.textContent = door.locked_hint || "這扇門還沒開。";
+        return;
+      }
+      if (door.target_scene === "atelier") enterAtelier();
+      else if (door.target_scene === "cafe") enterCafe(true);
+    }
+
+    function nearbyObject() {
+      if (state.scene !== "atelier" || !state.atelierEntities || !state.atelierEntities.objects) return null;
+      const px = state.player.x;
+      const py = state.player.y;
+      let best = null;
+      let bestD = Infinity;
+      for (const o of state.atelierEntities.objects) {
+        const r = o.trigger_radius || 60;
+        const d = Math.hypot(px - o.x, py - o.y);
+        if (d < r && d < bestD) {
+          best = o;
+          bestD = d;
+        }
+      }
+      return best;
+    }
+
+    const WEEKLY_CHALLENGES = [
+      "本週挑戰：今天找一段你從沒走過的小巷，慢慢走，不滑手機。",
+      "本週挑戰：下班少搭一站地鐵，改走過去。3 公里左右。",
+      "本週挑戰：跟家人約一起走 30 分鐘，誰都不准戴耳機。",
+      "本週挑戰：赤腳在草地上走 5 分鐘，感受腳底的承重。",
+      "本週挑戰：上樓梯時試試「腳跟先觸地、腳掌滾過去」（Perry 第二章）。",
+      "本週挑戰：明天走路時把手插在口袋——你會發現平常多用力在擺手。",
+      "本週挑戰：走 30 分鐘不講話、不聽音樂、不想事情，只看路。",
+      "本週挑戰：找一條從家走到咖啡店的「最美路線」，不是最短的，是最美的。"
+    ];
+
+    function openBlackboard() {
+      const idx = Math.floor((Date.now() / (1000 * 60 * 60 * 24 * 3)) % WEEKLY_CHALLENGES.length);
+      const challenge = WEEKLY_CHALLENGES[idx];
+      iframeTitle.textContent = "黑板 · 本週步行挑戰";
+      iframeModal.classList.add("show");
+      state.npcFreeze = true;
+      state.openingShelf = true;
+      const wrap = document.createElement("div");
+      wrap.className = "book-detail landmark-detail";
+      const era = document.createElement("span");
+      era.className = "era-badge";
+      era.textContent = "Step by Step Cafe · 後廳";
+      wrap.appendChild(era);
+      const h = document.createElement("h3");
+      h.textContent = "本週步行挑戰";
+      wrap.appendChild(h);
+      const proved = document.createElement("div");
+      proved.className = "landmark-proved";
+      proved.textContent = challenge;
+      proved.style.fontSize = "17px";
+      wrap.appendChild(proved);
+      const body = document.createElement("div");
+      body.className = "chapter-body";
+      body.innerHTML = "<p>智者們每幾天會換一次題目。完成了不用回報——身體會記得。</p><p>下次來咖啡店記得告訴我們今天走了哪。</p>";
+      wrap.appendChild(body);
+      const close = document.createElement("button");
+      close.type = "button";
+      close.className = "back";
+      close.style.marginTop = "18px";
+      close.textContent = "關閉";
+      close.addEventListener("click", () => {
+        iframeModal.classList.remove("show");
+        state.npcFreeze = false;
+        state.openingShelf = false;
+      });
+      wrap.appendChild(close);
+      dialogueBody.innerHTML = "";
+      dialogueBody.appendChild(wrap);
+    }
+
+    function interactObject(obj) {
+      if (!obj) obj = nearbyObject();
+      if (!obj) return;
+      if (obj.type === "blackboard") { openBlackboard(); return; }
+      if (obj.phase === 3) {
+        hint.textContent = `${obj.label} — Phase 3 才開放，敬請期待。`;
+        return;
+      }
     }
 
     function interactLandmark(lm) {
@@ -1434,6 +1584,58 @@
       state.landmarkNear = lm;
       if (lm) {
         hint.textContent = `按 Space 看 ${lm.era_label || ""} · ${lm.title}`;
+      }
+    }
+
+    function updateDoorHint() {
+      const door = nearbyDoor();
+      const curId = state.doorNear && state.doorNear.id;
+      const nextId = door && door.id;
+      if (curId === nextId) return;
+      state.doorNear = door;
+      if (door) {
+        const locked = door.unlock_min_masters && state.progress.masters_completed.length < door.unlock_min_masters;
+        hint.textContent = locked
+          ? `${door.label} · ${door.locked_hint || "尚未開放"}`
+          : `按 Space 進入「${door.label}」`;
+      }
+    }
+
+    function updateObjectHint() {
+      const o = nearbyObject();
+      const curId = state.objectNear && state.objectNear.id;
+      const nextId = o && o.id;
+      if (curId === nextId) return;
+      state.objectNear = o;
+      if (o && !state.landmarkNear) {
+        if (o.phase === 3) {
+          hint.textContent = `${o.label} · Phase 3 才開放，敬請期待。`;
+        } else {
+          hint.textContent = `按 Space 看「${o.label}」`;
+        }
+      }
+    }
+
+    function updateFootprintTrail(dt) {
+      if (state.scene !== "atelier" || !state.atelierEntities) return;
+      const zone = state.atelierEntities.footprint_zone;
+      if (!zone) return;
+      // age + cull
+      for (const fp of state.footprints) fp.age += dt;
+      state.footprints = state.footprints.filter((fp) => fp.age < 3);
+      // emit when player is moving inside zone
+      if (state.player.moving && rectContains(zone, state.player.x, state.player.y, 8)) {
+        const last = state.footprints[state.footprints.length - 1];
+        const dx = last ? state.player.x - last.x : 99;
+        const dy = last ? state.player.y - last.y : 99;
+        if (!last || Math.hypot(dx, dy) > 22) {
+          state.footprints.push({
+            x: state.player.x + (Math.random() - 0.5) * 4,
+            y: state.player.y + 4 + (Math.random() - 0.5) * 3,
+            age: 0,
+            side: state.footprints.length % 2
+          });
+        }
       }
     }
 
@@ -1921,10 +2123,19 @@
     }
 
     function update(dt) {
-      if (!state.assetsReady || state.scene !== "cafe") return;
-      updateNpcs(dt);
-      updateBookshelfHint();
-      updateLandmarkHint();
+      if (!state.assetsReady) return;
+      if (state.scene !== "cafe" && state.scene !== "atelier") return;
+      if (state.scene === "cafe") {
+        updateNpcs(dt);
+        updateBookshelfHint();
+        updateLandmarkHint();
+        updateDoorHint();
+      } else {
+        updateLandmarkHint();
+        updateDoorHint();
+        updateObjectHint();
+        updateFootprintTrail(dt);
+      }
       const speed = 150;
       let dx = 0;
       let dy = 0;
@@ -2176,6 +2387,7 @@
     function drawCafe() {
       drawImageCover(state.images.cafe);
       drawBookshelf();
+      drawDoors(state.cafeEntities && state.cafeEntities.doors);
       drawLandmarks();
       const drawables = [
         ...state.cafeEntities.masters.map((m) => ({ type: "master", y: masterPoint(m).y, data: m })),
@@ -2187,6 +2399,195 @@
       }
       drawBookTooltip();
       if (state.debugCollision) drawDebugCollision();
+    }
+
+    function drawDoors(doors) {
+      if (!doors) return;
+      const completed = state.progress.masters_completed.length;
+      for (const d of doors) {
+        const cx = d.x + d.w / 2;
+        const cy = d.y + d.h / 2;
+        const locked = d.unlock_min_masters && completed < d.unlock_min_masters;
+        const near = state.doorNear && state.doorNear.id === d.id;
+        ctx.save();
+        // arched glow
+        const t = (performance.now() / 1100) % 1;
+        const pulse = 0.5 + Math.sin(t * Math.PI * 2) * 0.5;
+        ctx.shadowColor = locked ? "rgba(120, 90, 60, 0.7)"
+                                 : (near ? "rgba(245, 209, 141, 0.95)" : "rgba(214, 165, 90, 0.7)");
+        ctx.shadowBlur = locked ? 8 : 18 + pulse * 10;
+        ctx.fillStyle = locked ? "rgba(60, 45, 30, 0.55)" : "rgba(245, 209, 141, 0.32)";
+        ctx.strokeStyle = locked ? "rgba(120, 90, 60, 0.85)"
+                                 : (near ? "#f5d18d" : "#d4a55a");
+        ctx.lineWidth = 2;
+        // arch shape
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y + d.h);
+        ctx.lineTo(d.x, d.y + d.h * 0.45);
+        ctx.quadraticCurveTo(d.x, d.y, d.x + d.w / 2, d.y);
+        ctx.quadraticCurveTo(d.x + d.w, d.y, d.x + d.w, d.y + d.h * 0.45);
+        ctx.lineTo(d.x + d.w, d.y + d.h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+        drawLabel(locked ? `🔒 ${d.label}` : d.label, cx, d.y - 8,
+          near ? "#f5d18d" : "#ead3aa",
+          near ? "#5c3922" : "rgba(42, 27, 18, 0.78)",
+          11);
+      }
+    }
+
+    function drawAtelier() {
+      const ents = state.atelierEntities;
+      if (!ents) {
+        ctx.fillStyle = "#1a120c";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawLabel("工作室載入中…", canvas.width / 2, canvas.height / 2);
+        return;
+      }
+      // 1. floor (warm oak planks with subtle stripes)
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, "#2a1c12");
+      grad.addColorStop(0.5, "#3a2818");
+      grad.addColorStop(1, "#2a1c12");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // floor planks
+      ctx.strokeStyle = "rgba(60, 40, 25, 0.45)";
+      ctx.lineWidth = 1;
+      for (let y = 110; y < 700; y += 48) {
+        ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(canvas.width - 20, y); ctx.stroke();
+      }
+      // 2. decor rects (rug, workbench, walls, fixtures) as placeholder
+      const decor = ents.decor_rects || [];
+      for (const r of decor) {
+        ctx.fillStyle = r.color || "#3a2818";
+        ctx.fillRect(r.x, r.y, r.w, r.h);
+        if (r.type === "rug") {
+          // rug pattern stripes
+          ctx.strokeStyle = "rgba(245, 209, 141, 0.15)";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(r.x + 10, r.y + 10, r.w - 20, r.h - 20);
+          ctx.strokeRect(r.x + 24, r.y + 24, r.w - 48, r.h - 48);
+        }
+        if (r.type === "workbench") {
+          // brass trim + texture
+          ctx.strokeStyle = "rgba(214, 165, 90, 0.85)";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(r.x + 4, r.y + 4, r.w - 8, r.h - 8);
+          ctx.fillStyle = "rgba(214, 165, 90, 0.12)";
+          ctx.fillRect(r.x + 8, r.y + 8, r.w - 16, r.h - 16);
+        }
+        if (r.type === "shelf_l" || r.type === "shelf_r") {
+          // book spines
+          ctx.fillStyle = "#5b3a23";
+          for (let by = r.y + 16; by < r.y + r.h - 8; by += 32) {
+            ctx.fillRect(r.x + 8, by, r.w - 16, 26);
+            ctx.strokeStyle = "rgba(214, 165, 90, 0.5)";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(r.x + 8, by, r.w - 16, 26);
+          }
+        }
+        if (r.type === "walkway") {
+          // subtle brass strips at edges
+          ctx.fillStyle = "rgba(214, 165, 90, 0.7)";
+          ctx.fillRect(r.x, r.y, r.w, 2);
+          ctx.fillRect(r.x, r.y + r.h - 2, r.w, 2);
+        }
+        if (r.type === "blackboard") {
+          ctx.strokeStyle = "rgba(165, 120, 70, 0.85)";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(r.x + 3, r.y + 3, r.w - 6, r.h - 6);
+          ctx.fillStyle = "rgba(245, 209, 141, 0.65)";
+          ctx.font = "italic 10px ui-sans-serif, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("本週", r.x + r.w / 2, r.y + 32);
+          ctx.fillText("挑戰", r.x + r.w / 2, r.y + 50);
+        }
+        if (r.type === "force_plate") {
+          ctx.fillStyle = "rgba(214, 165, 90, 0.18)";
+          ctx.fillRect(r.x, r.y, r.w, r.h);
+          ctx.strokeStyle = "rgba(245, 209, 141, 0.85)";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
+        }
+        if (r.type === "armchair") {
+          ctx.fillStyle = "#3d5942";
+          ctx.fillRect(r.x + 6, r.y - 14, r.w - 12, 24);
+        }
+        if (r.type === "sidetable") {
+          ctx.fillStyle = "#5a3a22";
+          ctx.beginPath();
+          ctx.arc(r.x + r.w / 2, r.y + r.h / 2, 28, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        if (r.type === "doormat") {
+          ctx.strokeStyle = "rgba(245, 209, 141, 0.35)";
+          ctx.setLineDash([4, 3]);
+          ctx.strokeRect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
+          ctx.setLineDash([]);
+        }
+      }
+
+      // 3. window light into armchair area
+      ctx.save();
+      const wg = ctx.createRadialGradient(80, 590, 10, 80, 590, 180);
+      wg.addColorStop(0, "rgba(245, 220, 160, 0.18)");
+      wg.addColorStop(1, "rgba(245, 220, 160, 0)");
+      ctx.fillStyle = wg;
+      ctx.fillRect(0, 440, 280, 280);
+      ctx.restore();
+
+      // 4. footprint trail
+      drawFootprints();
+
+      // 5. doors + landmarks + objects + player
+      drawDoors(ents.doors);
+      drawLandmarks();
+      drawAtelierObjects();
+      drawPlayer();
+      drawBookTooltip();
+      if (state.debugCollision) drawDebugCollision();
+    }
+
+    function drawFootprints() {
+      for (const fp of state.footprints) {
+        const opacity = Math.max(0, 1 - fp.age / 3);
+        ctx.save();
+        ctx.shadowColor = `rgba(245, 209, 141, ${opacity * 0.8})`;
+        ctx.shadowBlur = 14 * opacity;
+        ctx.fillStyle = `rgba(245, 209, 141, ${opacity * 0.85})`;
+        ctx.beginPath();
+        ctx.ellipse(fp.x + (fp.side ? 6 : -6), fp.y, 5, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawAtelierObjects() {
+      const ents = state.atelierEntities;
+      if (!ents || !ents.objects) return;
+      const nearId = state.objectNear && state.objectNear.id;
+      for (const o of ents.objects) {
+        const near = o.id === nearId;
+        const locked = o.phase === 3;
+        ctx.save();
+        const t = (performance.now() / 700) % 1;
+        const pulse = 4 + Math.sin(t * Math.PI * 2) * 1.5;
+        ctx.shadowColor = locked ? "rgba(120, 90, 60, 0.5)"
+                                 : (near ? "rgba(245, 209, 141, 0.95)" : "rgba(214, 165, 90, 0.65)");
+        ctx.shadowBlur = locked ? 6 : (near ? 22 : 12);
+        ctx.fillStyle = locked ? "#5a4a30" : (near ? "#f5d18d" : "#d4a55a");
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, pulse, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        drawLabel(locked ? `🔒 ${o.label}` : o.label, o.x, o.y - 18,
+          near ? "#f5d18d" : "#ead3aa",
+          near ? "#5c3922" : "rgba(42, 27, 18, 0.78)",
+          11);
+      }
     }
 
     function drawLandmarks() {
@@ -2407,20 +2808,20 @@
       }
       if (key === " " || key === "enter") {
         if (state.scene === "cafe") {
-          if (nearbyBookshelf()) {
-            interactBookshelf();
-            return;
-          }
+          const door = nearbyDoor();
+          if (door) { interactDoor(door); return; }
+          if (nearbyBookshelf()) { interactBookshelf(); return; }
           const lm = nearbyLandmark();
-          if (lm) {
-            interactLandmark(lm);
-            return;
-          }
+          if (lm) { interactLandmark(lm); return; }
           const master = nearbyMaster();
-          if (master) {
-            startTalk(master);
-            return;
-          }
+          if (master) { startTalk(master); return; }
+        } else if (state.scene === "atelier") {
+          const door = nearbyDoor();
+          if (door) { interactDoor(door); return; }
+          const lm = nearbyLandmark();
+          if (lm) { interactLandmark(lm); return; }
+          const obj = nearbyObject();
+          if (obj) { interactObject(obj); return; }
         }
         return;
       }
@@ -2442,12 +2843,22 @@
     });
 
     interactTouch.addEventListener("click", () => {
-      if (state.scene !== "cafe") return;
-      if (nearbyBookshelf()) { interactBookshelf(); return; }
-      const lm = nearbyLandmark();
-      if (lm) { interactLandmark(lm); return; }
-      const master = nearbyMaster();
-      if (master) startTalk(master);
+      if (state.scene === "cafe") {
+        const door = nearbyDoor();
+        if (door) { interactDoor(door); return; }
+        if (nearbyBookshelf()) { interactBookshelf(); return; }
+        const lm = nearbyLandmark();
+        if (lm) { interactLandmark(lm); return; }
+        const master = nearbyMaster();
+        if (master) startTalk(master);
+      } else if (state.scene === "atelier") {
+        const door = nearbyDoor();
+        if (door) { interactDoor(door); return; }
+        const lm = nearbyLandmark();
+        if (lm) { interactLandmark(lm); return; }
+        const obj = nearbyObject();
+        if (obj) interactObject(obj);
+      }
     });
 
     startJourneyBtn.addEventListener("click", () => {
@@ -2471,7 +2882,10 @@
 
     closeIframe.addEventListener("click", closeDialogueModal);
 
-    backWorldBtn.addEventListener("click", enterWorld);
+    backWorldBtn.addEventListener("click", () => {
+      if (state.scene === "atelier") enterCafe(true);
+      else enterWorld();
+    });
 
     resetBtn.addEventListener("click", () => {
       localStorage.removeItem(STORAGE_KEY);
@@ -2492,6 +2906,8 @@
         drawLabel("載入中...", canvas.width / 2, canvas.height / 2);
       } else if (state.scene === "world") {
         drawWorld();
+      } else if (state.scene === "atelier") {
+        drawAtelier();
       } else {
         drawCafe();
       }
