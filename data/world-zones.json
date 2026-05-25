@@ -1,12 +1,95 @@
 {
+  "town_name": "夜光拆書小鎮",
+  "town_subtitle": "慢慢走，讓每個故事成為夜光",
   "locations": [
     {
       "id": "cafe",
       "name": "慢慢走咖啡館",
+      "name_en": "Slowstep Café",
       "unlocked": true,
       "x": 176,
       "y": 456,
-      "radius": 92
+      "radius": 92,
+      "emoji": "☕",
+      "theme_color": "#f2c46d",
+      "scene": "cafe",
+      "coming_soon_text": null
+    },
+    {
+      "id": "inn",
+      "name": "睡眠旅館",
+      "name_en": "Slumber Inn",
+      "unlocked": false,
+      "x": 605,
+      "y": 210,
+      "radius": 85,
+      "emoji": "🛏️",
+      "theme_color": "#8a7fb8",
+      "scene": null,
+      "coming_soon_text": "夜深了，旅館的燈火還沒亮起。在咖啡館完成 5 個學者對話後，老闆會替你留一盞燈。"
+    },
+    {
+      "id": "spring",
+      "name": "疲勞溫泉",
+      "name_en": "Weary Spring",
+      "unlocked": false,
+      "x": 875,
+      "y": 245,
+      "radius": 75,
+      "emoji": "♨️",
+      "theme_color": "#6fa8b8",
+      "scene": null,
+      "coming_soon_text": "山頂的溫泉煙霧繚繞，但小徑還未開通。繼續累積你的拆書經驗，自會有人帶路。"
+    },
+    {
+      "id": "park",
+      "name": "按摩公園",
+      "name_en": "Soothing Park",
+      "unlocked": false,
+      "x": 380,
+      "y": 200,
+      "radius": 80,
+      "emoji": "💆",
+      "theme_color": "#4d7455",
+      "scene": null,
+      "coming_soon_text": "石拱底下的噴泉還靜靜流著。等你拆開更多故事，園子才會迎客。"
+    },
+    {
+      "id": "tower",
+      "name": "夜讀圖書塔",
+      "name_en": "Lumen Library",
+      "unlocked": false,
+      "x": 855,
+      "y": 565,
+      "radius": 85,
+      "emoji": "📚",
+      "theme_color": "#d4a55a",
+      "scene": null,
+      "coming_soon_text": "圖書塔的螺旋階梯通向未讀的書。先在咖啡館練好基本功，塔門自然為你而開。"
+    },
+    {
+      "id": "windmill",
+      "name": "呼吸風車丘",
+      "name_en": "Breath Hill",
+      "unlocked": false,
+      "x": 605,
+      "y": 605,
+      "radius": 75,
+      "emoji": "🌬️",
+      "theme_color": "#a8c4d8",
+      "scene": null,
+      "coming_soon_text": "風車還沒轉動。在小鎮多停留一陣，風會記得來找你。"
     }
-  ]
+  ],
+  "floating_island": {
+    "id": "island_soon",
+    "name": "敬請期待",
+    "name_en": "Yet to Bloom",
+    "subtitle": "更多區域陸續開發中",
+    "x": 950,
+    "y": 90,
+    "radius": 48,
+    "emoji": "✨",
+    "theme_color": "#c8b89a"
+  }
 }

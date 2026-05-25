@@ -919,17 +919,767 @@
       .qa-pill { font-size: 12px; padding: 6px 10px; }
       .qa-question { font-size: 16px; }
       .qa-options button { font-size: 15px; padding: 14px 16px; }
+      /* HUD 字級用 cqw 自動縮放，這裡不再 override */
+      .floating-island .island-bubble {
+        width: clamp(56px, 8.5cqw, 110px);
+        height: clamp(56px, 8.5cqw, 110px);
+      }
+    }
+
+    /* ============ 夜光拆書小鎮 HUD ============ */
+
+    .game-frame {
+      position: relative;
+      width: min(100vw, calc(100vh * 4 / 3));
+      height: min(100vh, calc(100vw * 3 / 4));
+      display: grid;
+      container-type: inline-size;
+    }
+
+    .game-frame > canvas {
+      grid-area: 1 / 1;
+      width: 100%;
+      height: 100%;
+    }
+
+    .world-tint {
+      grid-area: 1 / 1;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      background:
+        radial-gradient(60% 50% at 50% 30%, rgba(80, 60, 140, 0.35), rgba(35, 20, 70, 0.62));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: inherit;
+    }
+
+    .world-tint.show { opacity: 1; }
+
+    .world-glow {
+      grid-area: 1 / 1;
+      pointer-events: none;
+      background:
+        radial-gradient(20% 20% at 17% 60%, rgba(255, 220, 140, 0.32), transparent 70%),
+        radial-gradient(14% 14% at 59% 28%, rgba(180, 160, 240, 0.22), transparent 70%),
+        radial-gradient(12% 12% at 85% 32%, rgba(150, 220, 230, 0.20), transparent 70%),
+        radial-gradient(13% 13% at 37% 26%, rgba(160, 220, 170, 0.20), transparent 70%),
+        radial-gradient(14% 14% at 83% 74%, rgba(245, 200, 130, 0.22), transparent 70%),
+        radial-gradient(13% 13% at 59% 79%, rgba(190, 220, 240, 0.18), transparent 70%);
+      mix-blend-mode: screen;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .world-glow.show { opacity: 1; }
+
+    .world-hud {
+      grid-area: 1 / 1;
+      position: relative;
+      pointer-events: none;
+      display: none;
+    }
+
+    .world-hud.show { display: block; }
+
+    .town-title-wrap {
+      position: absolute;
+      top: 3%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: #f8e6b9;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7), 0 0 6px rgba(0, 0, 0, 0.55);
+      pointer-events: none;
+    }
+
+    .town-title-wrap::before,
+    .town-title-wrap::after {
+      content: "✦";
+      color: rgba(242, 196, 109, 0.75);
+      margin: 0 14px;
+      font-size: 0.6em;
+      vertical-align: middle;
+    }
+
+    .town-title {
+      font-family: "Noto Serif TC", "Songti TC", "Noto Serif", serif;
+      font-size: 30px;
+      font-size: clamp(22px, 4.4cqw, 62px);
+      letter-spacing: 0.36em;
+      font-weight: 700;
+      display: inline-block;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(242, 196, 109, 0.35);
+    }
+
+    .town-subtitle {
+      margin: 8px 0 0;
+      font-size: 13px;
+      font-size: clamp(12px, 1.85cqw, 26px);
+      letter-spacing: 0.18em;
+      color: rgba(245, 220, 170, 0.9);
+      font-style: italic;
+    }
+
+    .player-badge {
+      position: absolute;
+      top: 3%;
+      left: 2.6%;
+      background: rgba(28, 18, 12, 0.78);
+      border: 1px solid rgba(242, 196, 109, 0.55);
+      border-radius: 10px;
+      padding: 10px 14px;
+      padding: clamp(7px, 1cqw, 14px) clamp(10px, 1.4cqw, 18px);
+      color: #f5e0b0;
+      font-size: 13px;
+      font-size: clamp(13px, 1.85cqw, 24px);
+      line-height: 1.55;
+      pointer-events: auto;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      max-width: 38%;
+    }
+
+    .player-badge .badge-row-1 {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .player-badge .badge-emoji { color: #f2c46d; }
+
+    .player-badge .badge-progress {
+      font-size: 11px;
+      font-size: clamp(11px, 1.5cqw, 18px);
+      color: rgba(245, 224, 176, 0.85);
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+    .player-badge .badge-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(242, 196, 109, 0.22);
+      border: 1px solid rgba(242, 196, 109, 0.45);
+      font-size: 10px;
+      font-size: clamp(11px, 1.5cqw, 18px);
+      color: #f2c46d;
+      margin-left: 8px;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+    }
+
+    .zone-cards {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .zone-card {
+      position: absolute;
+      transform: translate(-50%, 0);
+      background: rgba(28, 18, 12, 0.82);
+      border: 1px solid rgba(242, 196, 109, 0.4);
+      border-radius: 8px;
+      padding: 8px 16px;
+      padding: clamp(6px, 1cqw, 14px) clamp(12px, 1.9cqw, 24px);
+      font-size: 17px;
+      color: #fff4dd;
+      letter-spacing: 0.08em;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: auto;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+      transition: transform 0.15s ease, border-color 0.15s ease;
+      min-width: 140px;
+      min-width: clamp(108px, 17cqw, 220px);
+    }
+
+    .zone-card:hover {
+      transform: translate(-50%, -2px);
+      border-color: var(--gold);
+    }
+
+    .zone-card.unlocked {
+      border-color: rgba(242, 196, 109, 0.75);
+      background: rgba(48, 32, 18, 0.88);
+    }
+
+    .zone-card.locked {
+      color: rgba(255, 244, 221, 0.85);
+    }
+
+    .zone-card .zone-name-zh {
+      display: block;
+      font-size: 17px;
+      font-size: clamp(17px, 3.1cqw, 40px);
+      font-weight: 700;
+      line-height: 1.3;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 12px rgba(0, 0, 0, 0.7);
+    }
+
+    .zone-card .zone-name-en {
+      display: block;
+      font-family: "Cormorant Garamond", "Noto Serif", Georgia, serif;
+      font-size: 12.5px;
+      font-size: clamp(13px, 2.2cqw, 28px);
+      font-style: italic;
+      letter-spacing: 0.16em;
+      color: rgba(255, 220, 160, 0.92);
+      line-height: 1.2;
+      margin-top: 2px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+    }
+
+    .zone-card.unlocked .zone-name-en { color: rgba(255, 230, 170, 0.95); }
+
+    .zone-card .zone-status {
+      display: block;
+      font-size: 11px;
+      font-size: clamp(11px, 1.7cqw, 22px);
+      margin-top: 6px;
+      letter-spacing: 0.18em;
+      color: rgba(245, 224, 176, 0.78);
+      padding-top: 4px;
+      border-top: 1px solid rgba(242, 196, 109, 0.18);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+    }
+
+    .zone-card.unlocked .zone-status { color: #b6e3bf; border-top-color: rgba(143, 200, 156, 0.32); }
+
+    /* 歡迎勇者卷軸 */
+    .welcome-scroll {
+      position: absolute;
+      top: 15%;
+      left: 2.4%;
+      max-width: 34%;
+      min-width: clamp(180px, 22cqw, 380px);
+      padding: clamp(12px, 1.8cqw, 26px) clamp(16px, 2.4cqw, 32px);
+      background: linear-gradient(180deg, rgba(48, 30, 18, 0.92) 0%, rgba(28, 18, 12, 0.94) 100%);
+      border: 1.5px solid rgba(242, 196, 109, 0.5);
+      border-radius: 8px;
+      color: #f5e0b0;
+      text-align: center;
+      pointer-events: none;
+      font-family: "Noto Serif TC", "Songti TC", "Noto Serif", serif;
+      box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.7),
+        0 0 22px rgba(255, 200, 110, 0.18),
+        inset 0 1px 0 rgba(255, 230, 170, 0.18),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .welcome-scroll::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(242, 196, 109, 0.22);
+      border-radius: 5px;
+      pointer-events: none;
+    }
+
+    .welcome-deco {
+      color: rgba(242, 196, 109, 0.8);
+      font-size: clamp(11px, 1.6cqw, 20px);
+      letter-spacing: 0.5em;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .welcome-scroll .welcome-deco:last-child {
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+
+    .welcome-title {
+      font-size: clamp(16px, 2.9cqw, 38px);
+      font-weight: 700;
+      color: #f2c46d;
+      letter-spacing: 0.22em;
+      margin: 10px 0 12px;
+      text-shadow:
+        0 0 14px rgba(255, 200, 110, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .welcome-body {
+      font-size: clamp(14px, 2.2cqw, 28px);
+      line-height: 1.6;
+      color: rgba(248, 230, 185, 0.98);
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    }
+
+    .welcome-body p {
+      margin: 0;
+    }
+
+    .welcome-body .welcome-gap {
+      height: clamp(6px, 0.8cqw, 12px);
+      line-height: 1;
+    }
+
+    .welcome-body .welcome-emph {
+      color: #f2c46d;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      margin-top: 2px;
+      text-shadow: 0 0 10px rgba(255, 200, 110, 0.45), 0 2px 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .floating-island {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: auto;
+      cursor: help;
+    }
+
+    .floating-island .island-bubble {
+      width: 84px;
+      height: 84px;
+      width: clamp(64px, 9cqw, 120px);
+      height: clamp(64px, 9cqw, 120px);
+      border-radius: 50%;
+      background: rgba(28, 18, 12, 0.7);
+      border: 2px dashed rgba(242, 196, 109, 0.45);
+      display: grid;
+      place-items: center;
+      color: rgba(245, 224, 176, 0.85);
+      font-size: 13px;
+      font-size: clamp(11px, 1.5cqw, 17px);
+      letter-spacing: 0.16em;
+      line-height: 1.3;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+      animation: island-float 4s ease-in-out infinite;
+    }
+
+    .floating-island .island-bubble small {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: rgba(245, 224, 176, 0.85);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .floating-island .island-bubble small em {
+      display: block;
+      font-family: "Cormorant Garamond", "Noto Serif", Georgia, serif;
+      font-size: 9.5px;
+      font-style: italic;
+      letter-spacing: 0.14em;
+      color: rgba(255, 220, 160, 0.7);
+      margin-top: 2px;
+    }
+
+    @keyframes island-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* 命名 modal 樣式（深色金邊） */
+    .name-modal {
+      width: min(440px, 92vw);
+      background: linear-gradient(180deg, #2a1f17 0%, #1c1410 100%);
+      color: #f5e0b0;
+      border: 1px solid rgba(242, 196, 109, 0.35);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7);
+    }
+
+    .name-modal .modal-content {
+      padding: 28px 28px 22px;
+      text-align: center;
+    }
+
+    .name-modal h2 {
+      font-family: "Noto Serif TC", "Songti TC", serif;
+      color: #f2c46d;
+      font-size: 22px;
+      letter-spacing: 0.22em;
+      margin: 0 0 6px;
+    }
+
+    .name-modal .name-sub {
+      font-size: 13px;
+      color: rgba(245, 224, 176, 0.65);
+      margin: 0 0 18px;
+      line-height: 1.7;
+      letter-spacing: 0.06em;
+    }
+
+    .name-modal input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(242, 196, 109, 0.35);
+      border-radius: 8px;
+      color: #fff4dd;
+      font: inherit;
+      font-size: 16px;
+      text-align: center;
+      letter-spacing: 0.18em;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    .name-modal input:focus { border-color: var(--gold); }
+
+    .name-modal button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(180deg, #6e4528 0%, #4a2e1a 100%);
+      color: #f8e6b9;
+      border: 1px solid rgba(242, 196, 109, 0.5);
+      border-radius: 8px;
+      font-size: 15px;
+      letter-spacing: 0.22em;
+      cursor: pointer;
+    }
+
+    .name-modal button:hover { border-color: var(--gold); }
+
+    .name-modal .name-error {
+      color: #f6b9a3;
+      font-size: 12px;
+      margin: -8px 0 12px;
+      min-height: 16px;
+    }
+
+    /* coming-soon modal 樣式（仿夜光拆書） */
+    .coming-soon-modal {
+      width: min(480px, 92vw);
+      background: linear-gradient(180deg, #2a1f17 0%, #1c1410 100%);
+      color: #f5e0b0;
+      border: 1px solid rgba(242, 196, 109, 0.3);
+    }
+
+    .coming-soon-modal .modal-content {
+      padding: 28px;
+      text-align: center;
+    }
+
+    .coming-soon-modal .cs-emoji {
+      font-size: 48px;
+      margin: 0 0 10px;
+      filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+    }
+
+    .coming-soon-modal h2 {
+      font-family: "Noto Serif TC", "Songti TC", serif;
+      color: #f2c46d;
+      font-size: 22px;
+      letter-spacing: 0.26em;
+      margin: 0 0 12px;
+    }
+
+    .coming-soon-modal .cs-lock-tag {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      color: rgba(245, 224, 176, 0.55);
+      border: 1px solid rgba(242, 196, 109, 0.3);
+      border-radius: 999px;
+      padding: 3px 12px;
+      margin-bottom: 16px;
+    }
+
+    .coming-soon-modal .cs-text {
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: rgba(245, 224, 176, 0.82);
+      margin: 0 0 22px;
+    }
+
+    .coming-soon-modal button {
+      background: rgba(80, 56, 30, 0.6);
+      color: #f5e0b0;
+      border: 1px solid rgba(242, 196, 109, 0.4);
+      padding: 10px 24px;
+      letter-spacing: 0.18em;
+    }
+
+    /* ============ 夜光氛圍 Polish Pack ============ */
+
+    .atmosphere {
+      grid-area: 1 / 1;
+      position: relative;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .atmosphere.show { opacity: 1; }
+
+    .moon {
+      position: absolute;
+      top: 5.5%;
+      right: 8%;
+      width: 70px;
+      height: 70px;
+      width: clamp(56px, 8cqw, 120px);
+      height: clamp(56px, 8cqw, 120px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%, #fff7d6 0%, #f5dca3 45%, #d8a86a 100%);
+      box-shadow:
+        0 0 24px rgba(255, 230, 170, 0.55),
+        0 0 60px rgba(255, 215, 145, 0.32),
+        inset -10px -8px 22px rgba(120, 80, 40, 0.45);
+      animation: moon-pulse 6s ease-in-out infinite;
+    }
+
+    .moon::before {
+      content: "";
+      position: absolute;
+      inset: 8% 10%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 35%, rgba(200, 160, 110, 0.35) 0 8%, transparent 9%),
+        radial-gradient(circle at 65% 60%, rgba(200, 160, 110, 0.28) 0 6%, transparent 7%),
+        radial-gradient(circle at 45% 75%, rgba(200, 160, 110, 0.22) 0 4%, transparent 5%);
+    }
+
+    @keyframes moon-pulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.08); }
+    }
+
+    .stars { position: absolute; inset: 0; }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.85), 0 0 12px rgba(200, 220, 255, 0.5);
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+
+    .fireflies { position: absolute; inset: 0; }
+
+    .firefly {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff8b0 0%, #f2c46d 50%, transparent 75%);
+      box-shadow:
+        0 0 8px rgba(255, 230, 130, 0.95),
+        0 0 18px rgba(245, 200, 110, 0.7),
+        0 0 32px rgba(220, 170, 80, 0.4);
+      filter: blur(0.3px);
+      animation: firefly-fly var(--dur, 12s) ease-in-out infinite, firefly-blink var(--blink, 2.4s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s), var(--blink-delay, 0s);
+      top: var(--y, 50%);
+      left: var(--x, 50%);
+    }
+
+    @keyframes firefly-fly {
+      0%   { transform: translate(0, 0); }
+      25%  { transform: translate(60px, -40px); }
+      50%  { transform: translate(-30px, -80px); }
+      75%  { transform: translate(-70px, -20px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes firefly-blink {
+      0%, 100% { opacity: 0.25; }
+      50%      { opacity: 1; }
+    }
+
+    .window-lights { position: absolute; inset: 0; }
+
+    .win-light {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: win-breathe var(--br, 3.5s) ease-in-out infinite;
+      animation-delay: var(--bd, 0s);
+    }
+
+    .win-light.warm {
+      background: #ffe39a;
+      box-shadow:
+        0 0 12px rgba(255, 215, 120, 0.95),
+        0 0 28px rgba(255, 180, 90, 0.6),
+        0 0 48px rgba(240, 150, 70, 0.32);
+    }
+
+    .win-light.cold {
+      background: #b8c8ff;
+      box-shadow:
+        0 0 8px rgba(160, 180, 240, 0.5),
+        0 0 18px rgba(120, 140, 200, 0.3);
+      opacity: 0.55;
+    }
+
+    @keyframes win-breathe {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50%      { transform: translate(-50%, -50%) scale(1.18); opacity: 0.7; }
+    }
+
+    /* 升級紫光 tint — 多層漸層 */
+    .world-tint {
+      background:
+        linear-gradient(180deg, rgba(20, 14, 60, 0.55) 0%, rgba(40, 25, 85, 0.32) 45%, rgba(30, 20, 55, 0.5) 100%);
+    }
+
+    /* 升級名片 — 羊皮紙金線（保留前面 base style 的 padding/font-size） */
+    .zone-card {
+      background: linear-gradient(180deg, rgba(58, 38, 22, 0.94) 0%, rgba(28, 18, 12, 0.96) 100%);
+      border: 1.5px solid rgba(242, 196, 109, 0.55);
+      box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 220, 160, 0.18),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+      font-family: "Noto Serif TC", "Songti TC", serif;
+    }
+
+    .zone-card::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 6px;
+      border: 1px solid rgba(242, 196, 109, 0.18);
+      pointer-events: none;
+    }
+
+    .zone-card.unlocked {
+      background: linear-gradient(180deg, rgba(86, 56, 28, 0.95) 0%, rgba(58, 36, 18, 0.95) 100%);
+      border-color: rgba(255, 220, 140, 0.85);
+      box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.6),
+        0 0 22px rgba(255, 200, 110, 0.35),
+        inset 0 1px 0 rgba(255, 230, 170, 0.22);
+      animation: card-glow 3.2s ease-in-out infinite;
+    }
+
+    @keyframes card-glow {
+      0%, 100% { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 22px rgba(255, 200, 110, 0.35), inset 0 1px 0 rgba(255, 230, 170, 0.22); }
+      50%      { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 34px rgba(255, 210, 130, 0.55), inset 0 1px 0 rgba(255, 230, 170, 0.3); }
+    }
+
+    .town-title {
+      text-shadow:
+        0 0 14px rgba(255, 215, 130, 0.45),
+        0 0 30px rgba(255, 195, 100, 0.25),
+        0 2px 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .town-subtitle { text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); }
+
+    .player-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px 8px 8px;
+      background: linear-gradient(180deg, rgba(45, 28, 16, 0.92) 0%, rgba(28, 18, 12, 0.92) 100%);
+      border: 1px solid rgba(242, 196, 109, 0.6);
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.55),
+        0 0 18px rgba(255, 200, 110, 0.18),
+        inset 0 1px 0 rgba(255, 230, 170, 0.18);
+    }
+
+    .player-badge .badge-avatar {
+      width: 44px;
+      height: 44px;
+      width: clamp(34px, 4.6cqw, 60px);
+      height: clamp(34px, 4.6cqw, 60px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #6b4a2a 0%, #2b1a10 100%);
+      border: 2px solid #f2c46d;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-size: clamp(16px, 2.4cqw, 32px);
+      box-shadow: 0 0 14px rgba(255, 200, 110, 0.42), inset 0 -2px 6px rgba(0,0,0,0.45);
+      flex-shrink: 0;
+    }
+
+    .player-badge .badge-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.4;
+    }
+
+    .floating-island .island-bubble {
+      background: radial-gradient(circle at 30% 25%, rgba(58, 42, 28, 0.85) 0%, rgba(20, 14, 10, 0.9) 100%);
+      box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.55),
+        0 0 22px rgba(200, 180, 130, 0.25),
+        inset 0 1px 0 rgba(255, 230, 170, 0.15);
     }
   </style>
   <!-- build 1778941890 -->
 </head>
 <body>
   <div id="app">
-    <canvas id="game" width="1024" height="768" aria-label="慢慢走 Walking Wisdom game canvas"></canvas>
+    <div class="game-frame">
+      <canvas id="game" width="1024" height="768" aria-label="夜光拆書小鎮 game canvas"></canvas>
+      <div id="worldTint" class="world-tint"></div>
+      <div id="atmosphere" class="atmosphere">
+        <div class="moon"></div>
+        <div class="stars" id="starsLayer"></div>
+        <div class="fireflies" id="firefliesLayer"></div>
+        <div class="window-lights" id="windowLightsLayer"></div>
+      </div>
+      <div id="worldGlow" class="world-glow"></div>
+      <div id="worldHud" class="world-hud">
+        <div class="town-title-wrap">
+          <div class="town-title" id="townTitleText">夜光拆書小鎮</div>
+          <p class="town-subtitle" id="townSubtitleText">慢慢走，讓每個故事成為夜光</p>
+        </div>
+        <div class="player-badge" id="playerBadge">
+          <div class="badge-avatar">⚔️</div>
+          <div class="badge-text">
+            <div class="badge-row-1">
+              <span id="badgeName">旅人</span>
+              <span class="badge-tag" id="badgeLevel">Lv.1</span>
+            </div>
+            <div class="badge-progress" id="badgeProgress">1 / 6 區域已開啟</div>
+          </div>
+        </div>
+
+        <aside class="welcome-scroll" id="welcomeScroll" aria-label="歡迎詞">
+          <div class="welcome-deco">✦ ✦ ✦</div>
+          <div class="welcome-title">致 夜光小鎮的勇者</div>
+          <div class="welcome-body">
+            <p>這座小鎮棲息著</p>
+            <p>影響人類歷史的學者靈魂，</p>
+            <p>他們把畢生淬鍊的知識，</p>
+            <p>藏在每一扇門後。</p>
+            <p class="welcome-gap">　</p>
+            <p>能走到這裡的人，</p>
+            <p>從不是一般人——</p>
+            <p>你不會空手而歸。</p>
+            <p class="welcome-gap">　</p>
+            <p class="welcome-emph">推開門，開始你的旅程吧。</p>
+          </div>
+          <div class="welcome-deco">✦ ✦ ✦</div>
+        </aside>
+
+        <div class="zone-cards" id="zoneCards"></div>
+      </div>
+    </div>
   </div>
 
   <div class="hud">
-    <div id="hint" class="pill">點擊慢慢走咖啡館進入。</div>
+    <div id="hint" class="pill">點擊建築物進入。</div>
     <div class="settings">
       <button id="backWorld" type="button" hidden>返回世界地圖</button>
       <button id="resetProgress" type="button">重置進度</button>
@@ -982,6 +1732,30 @@
     </div>
   </div>
 
+  <div id="nameModal" class="modal-backdrop">
+    <div class="modal name-modal">
+      <div class="modal-content">
+        <h2>勇者命名</h2>
+        <p class="name-sub">夜光拆書小鎮的燈火，正等著叫得出你名字的旅人。</p>
+        <input id="nameInput" type="text" maxlength="8" placeholder="輸入你的名字（限 8 字）" autocomplete="off">
+        <div class="name-error" id="nameError"></div>
+        <button id="nameSubmit" type="button">開始冒險</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="comingSoonModal" class="modal-backdrop">
+    <div class="modal coming-soon-modal">
+      <div class="modal-content">
+        <div class="cs-emoji" id="csEmoji">🔒</div>
+        <h2 id="csTitle">敬請期待</h2>
+        <div class="cs-lock-tag" id="csLockTag">尚未解鎖</div>
+        <p class="cs-text" id="csText"></p>
+        <button id="csClose" type="button">回小鎮</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const STORAGE_KEY = "walking_wisdom_progress";
     const MASTER_ORDER = ["lieberman", "cavagna", "roberts", "perry", "bernstein", "studenski"];
@@ -1014,6 +1788,32 @@
     const iframeTitle = document.getElementById("iframeTitle");
     const closeIframe = document.getElementById("closeIframe");
     const interactTouch = document.getElementById("interactTouch");
+
+    const worldHud = document.getElementById("worldHud");
+    const worldTint = document.getElementById("worldTint");
+    const worldGlow = document.getElementById("worldGlow");
+    const atmosphere = document.getElementById("atmosphere");
+    const starsLayer = document.getElementById("starsLayer");
+    const firefliesLayer = document.getElementById("firefliesLayer");
+    const windowLightsLayer = document.getElementById("windowLightsLayer");
+    const zoneCardsEl = document.getElementById("zoneCards");
+    const townTitleText = document.getElementById("townTitleText");
+    const townSubtitleText = document.getElementById("townSubtitleText");
+    const badgeName = document.getElementById("badgeName");
+    const badgeLevel = document.getElementById("badgeLevel");
+    const badgeProgress = document.getElementById("badgeProgress");
+
+    const nameModal = document.getElementById("nameModal");
+    const nameInput = document.getElementById("nameInput");
+    const nameError = document.getElementById("nameError");
+    const nameSubmit = document.getElementById("nameSubmit");
+
+    const comingSoonModal = document.getElementById("comingSoonModal");
+    const csEmoji = document.getElementById("csEmoji");
+    const csTitle = document.getElementById("csTitle");
+    const csLockTag = document.getElementById("csLockTag");
+    const csText = document.getElementById("csText");
+    const csClose = document.getElementById("csClose");
 
     const state = {
       scene: "world",
@@ -1055,22 +1855,214 @@
     };
 
     function loadProgress() {
+      const fallback = { version: 2, masters_completed: [], intro_seen: false, name: "", unlocked_zones: ["cafe"] };
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return { version: 1, masters_completed: [], intro_seen: false };
+        if (!raw) return fallback;
         const parsed = JSON.parse(raw);
         return {
-          version: 1,
+          version: 2,
           masters_completed: Array.isArray(parsed.masters_completed) ? parsed.masters_completed : [],
-          intro_seen: Boolean(parsed.intro_seen)
+          intro_seen: Boolean(parsed.intro_seen),
+          name: typeof parsed.name === "string" ? parsed.name : "",
+          unlocked_zones: Array.isArray(parsed.unlocked_zones) && parsed.unlocked_zones.length
+            ? parsed.unlocked_zones
+            : ["cafe"]
         };
       } catch {
-        return { version: 1, masters_completed: [], intro_seen: false };
+        return fallback;
       }
     }
 
     function saveProgress() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+    }
+
+    function unlockedCount() {
+      return state.progress.unlocked_zones?.length || 1;
+    }
+
+    function totalZoneCount() {
+      return state.worldZones?.locations?.length || 6;
+    }
+
+    function isZoneUnlocked(id) {
+      if (!state.progress.unlocked_zones) return id === "cafe";
+      return state.progress.unlocked_zones.includes(id);
+    }
+
+    function renderTownHud() {
+      if (!state.worldZones) return;
+      townTitleText.textContent = state.worldZones.town_name || "夜光拆書小鎮";
+      townSubtitleText.textContent = state.worldZones.town_subtitle || "";
+      const nm = (state.progress.name || "旅人").slice(0, 8);
+      badgeName.textContent = nm;
+      badgeLevel.textContent = `Lv.${unlockedCount()}`;
+      badgeProgress.textContent = `${unlockedCount()} / ${totalZoneCount()} 區域已開啟`;
+    }
+
+    function renderZoneCards() {
+      if (!state.worldZones) return;
+      zoneCardsEl.innerHTML = "";
+      const W = canvas.width;
+      const H = canvas.height;
+      state.worldZones.locations.forEach((zone) => {
+        const unlocked = isZoneUnlocked(zone.id);
+        const card = document.createElement("div");
+        card.className = `zone-card ${unlocked ? "unlocked" : "locked"}`;
+        card.style.left = `${(zone.x / W) * 100}%`;
+        card.style.top = `${((zone.y + zone.radius + 10) / H) * 100}%`;
+        const emoji = zone.emoji || "";
+        const en = zone.name_en || "";
+        const statusText = unlocked ? "✦ 已開啟 · OPEN" : "🔒 待解鎖 · LOCKED";
+        card.innerHTML =
+          `<span class="zone-name-zh">${emoji} ${zone.name}</span>` +
+          (en ? `<span class="zone-name-en">${en}</span>` : "") +
+          `<span class="zone-status">${statusText}</span>`;
+        card.addEventListener("click", (e) => {
+          e.stopPropagation();
+          handleZoneTap(zone);
+        });
+        zoneCardsEl.appendChild(card);
+      });
+      const island = state.worldZones.floating_island;
+      if (island) {
+        const isl = document.createElement("div");
+        isl.className = "floating-island";
+        isl.style.left = `${(island.x / W) * 100}%`;
+        isl.style.top = `${(island.y / H) * 100}%`;
+        const islandEn = island.name_en ? `<em>${island.name_en}</em>` : "";
+        isl.innerHTML = `<div class="island-bubble">${island.emoji || "✨"}<small>${island.name}${islandEn ? "<br>" + islandEn : ""}</small></div>`;
+        isl.title = island.subtitle || "敬請期待";
+        zoneCardsEl.appendChild(isl);
+      }
+    }
+
+    function showWorldHud(show) {
+      worldHud.classList.toggle("show", show);
+      worldTint.classList.toggle("show", show);
+      worldGlow.classList.toggle("show", show);
+      atmosphere.classList.toggle("show", show);
+    }
+
+    function seedStars(count = 18) {
+      if (starsLayer.childElementCount) return;
+      // 把星星放在上半部 (避開地圖中央區域以免太雜亂)
+      const positions = [
+        [8, 6], [16, 11], [24, 4], [32, 9], [41, 5], [49, 13],
+        [55, 4], [63, 9], [72, 6], [80, 14], [88, 5], [94, 11],
+        [12, 18], [27, 22], [44, 24], [58, 20], [76, 22], [90, 24]
+      ];
+      for (let i = 0; i < Math.min(count, positions.length); i++) {
+        const [x, y] = positions[i];
+        const s = document.createElement("div");
+        s.className = "star";
+        s.style.left = x + "%";
+        s.style.top = y + "%";
+        s.style.setProperty("--dur", (2 + Math.random() * 2.5).toFixed(2) + "s");
+        s.style.setProperty("--delay", (Math.random() * 3).toFixed(2) + "s");
+        s.style.transform = `scale(${(0.6 + Math.random() * 0.8).toFixed(2)})`;
+        starsLayer.appendChild(s);
+      }
+    }
+
+    function seedFireflies(count = 10) {
+      if (firefliesLayer.childElementCount) return;
+      const spots = [
+        [22, 65], [12, 70], [30, 55], [42, 75], [55, 60],
+        [68, 70], [50, 45], [38, 40], [80, 55], [25, 80]
+      ];
+      for (let i = 0; i < Math.min(count, spots.length); i++) {
+        const [x, y] = spots[i];
+        const f = document.createElement("div");
+        f.className = "firefly";
+        f.style.setProperty("--x", x + "%");
+        f.style.setProperty("--y", y + "%");
+        f.style.setProperty("--dur", (8 + Math.random() * 6).toFixed(2) + "s");
+        f.style.setProperty("--blink", (1.4 + Math.random() * 2).toFixed(2) + "s");
+        f.style.setProperty("--delay", (Math.random() * 6).toFixed(2) + "s");
+        f.style.setProperty("--blink-delay", (Math.random() * 2).toFixed(2) + "s");
+        firefliesLayer.appendChild(f);
+      }
+    }
+
+    function seedWindowLights() {
+      if (!state.worldZones) return;
+      windowLightsLayer.innerHTML = "";
+      const W = canvas.width;
+      const H = canvas.height;
+      // 每個建築相對建築中心點放 2-3 顆窗戶光（cluster 緊湊靠近建築）
+      const offsets = [
+        [-22, -28], [-2, -35], [18, -28],
+        [-14, -10], [12, -10]
+      ];
+      state.worldZones.locations.forEach((zone) => {
+        const unlocked = isZoneUnlocked(zone.id);
+        const klass = unlocked ? "warm" : "cold";
+        const n = unlocked ? 5 : 2;
+        for (let i = 0; i < n; i++) {
+          const [ox, oy] = offsets[i % offsets.length];
+          const w = document.createElement("div");
+          w.className = `win-light ${klass}`;
+          const px = ((zone.x + ox) / W) * 100;
+          const py = ((zone.y + oy) / H) * 100;
+          w.style.left = px + "%";
+          w.style.top = py + "%";
+          w.style.setProperty("--br", (2.5 + Math.random() * 2.5).toFixed(2) + "s");
+          w.style.setProperty("--bd", (Math.random() * 2).toFixed(2) + "s");
+          windowLightsLayer.appendChild(w);
+        }
+      });
+    }
+
+    function handleZoneTap(zone) {
+      if (isZoneUnlocked(zone.id) && zone.scene === "cafe") {
+        enterCafe();
+        return;
+      }
+      openComingSoon(zone);
+    }
+
+    function openComingSoon(zone) {
+      csEmoji.textContent = zone.emoji || "🔒";
+      csTitle.textContent = zone.name;
+      csLockTag.textContent = `Lv.${unlockedCount()} · 尚未解鎖`;
+      csText.textContent = zone.coming_soon_text || "這座建築還在沈睡。等小鎮再亮一些，它就會醒來。";
+      comingSoonModal.classList.add("show");
+    }
+
+    function closeComingSoon() {
+      comingSoonModal.classList.remove("show");
+    }
+
+    function applyNameAndStart(raw) {
+      const trimmed = (raw || "").trim();
+      if (!trimmed) {
+        nameError.textContent = "夜光只記得有名字的旅人喔。";
+        return false;
+      }
+      if (trimmed.length > 8) {
+        nameError.textContent = "名字限 8 字以內。";
+        return false;
+      }
+      nameError.textContent = "";
+      state.progress.name = trimmed;
+      saveProgress();
+      nameModal.classList.remove("show");
+      renderTownHud();
+      if (!state.progress.intro_seen) introModal.classList.add("show");
+      return true;
+    }
+
+    function maybeShowNameModal() {
+      if (!state.progress.name) {
+        nameInput.value = "";
+        nameError.textContent = "";
+        nameModal.classList.add("show");
+        setTimeout(() => nameInput.focus(), 50);
+        return true;
+      }
+      return false;
     }
 
     function completeMaster(id) {
@@ -1151,7 +2143,18 @@
       state.player.y = spawn.y;
       initNpcAi();
 
-      if (!state.progress.intro_seen) introModal.classList.add("show");
+      renderTownHud();
+      renderZoneCards();
+      seedStars();
+      seedFireflies();
+      seedWindowLights();
+      showWorldHud(state.scene === "world");
+      if (state.scene === "world") hint.style.display = "none";
+
+      const showedNameModal = maybeShowNameModal();
+      if (!showedNameModal && !state.progress.intro_seen) {
+        introModal.classList.add("show");
+      }
       requestAnimationFrame(loop);
     }
 
@@ -1272,6 +2275,8 @@
       state.collision = state.cafeCollision;
       backWorldBtn.hidden = false;
       backWorldBtn.textContent = "返回世界地圖";
+      showWorldHud(false);
+      hint.style.display = "";
       if (spawnAtDoor && prev === "atelier" && state.cafeEntities.doors) {
         const d = state.cafeEntities.doors.find((x) => x.id === "to_atelier");
         if (d && d.approach) {
@@ -1301,6 +2306,8 @@
       state.collision = state.atelierCollision;
       backWorldBtn.hidden = false;
       backWorldBtn.textContent = "← 回咖啡店";
+      showWorldHud(false);
+      hint.style.display = "";
       const spawn = state.atelierEntities.player_spawn;
       state.player.x = spawn.x;
       state.player.y = spawn.y;
@@ -1318,7 +2325,12 @@
     function enterWorld() {
       state.scene = "world";
       backWorldBtn.hidden = true;
-      hint.textContent = "點擊慢慢走咖啡館進入。";
+      showWorldHud(true);
+      renderTownHud();
+      renderZoneCards();
+      seedWindowLights();
+      // world scene 用歡迎卷軸代替 hint pill
+      hint.style.display = "none";
     }
 
     function countLandmarksInScene(scene) {
@@ -2400,16 +3412,34 @@
 
     function drawWorld() {
       drawImageCover(state.images.world);
-      const cafe = state.worldZones.locations[0];
+      const t = performance.now() / 1000;
       ctx.save();
-      ctx.strokeStyle = "rgba(255, 244, 221, 0.95)";
-      ctx.lineWidth = 4;
-      ctx.fillStyle = "rgba(242, 196, 109, 0.22)";
-      ctx.beginPath();
-      ctx.arc(cafe.x, cafe.y, cafe.radius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      drawLabel(cafe.name, cafe.x, cafe.y - 104, "#fff4dd", "#5d3922");
+      state.worldZones.locations.forEach((zone) => {
+        const unlocked = isZoneUnlocked(zone.id);
+        if (unlocked) {
+          const pulse = 1 + Math.sin(t * 1.8) * 0.04;
+          ctx.strokeStyle = "rgba(255, 230, 170, 0.95)";
+          ctx.lineWidth = 4;
+          ctx.fillStyle = "rgba(242, 196, 109, 0.22)";
+          ctx.beginPath();
+          ctx.arc(zone.x, zone.y, zone.radius * pulse, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.strokeStyle = "rgba(255, 230, 170, 0.35)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(zone.x, zone.y, zone.radius * pulse + 6, 0, Math.PI * 2);
+          ctx.stroke();
+        } else {
+          ctx.strokeStyle = "rgba(180, 180, 200, 0.32)";
+          ctx.lineWidth = 2;
+          ctx.fillStyle = "rgba(40, 35, 70, 0.18)";
+          ctx.beginPath();
+          ctx.arc(zone.x, zone.y, zone.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+      });
       ctx.restore();
     }
 
@@ -2714,8 +3744,12 @@
     function handleCanvasClick(event) {
       const point = toWorldPoint(event);
       if (state.scene === "world") {
-        const cafe = state.worldZones.locations[0];
-        if (dist(point, cafe) <= cafe.radius) enterCafe();
+        for (const zone of state.worldZones.locations) {
+          if (dist(point, zone) <= zone.radius) {
+            handleZoneTap(zone);
+            return;
+          }
+        }
         return;
       }
       const master = masterAt(point);
@@ -2833,8 +3867,29 @@
     resetBtn.addEventListener("click", () => {
       localStorage.removeItem(STORAGE_KEY);
       state.progress = loadProgress();
-      introModal.classList.add("show");
-      hint.textContent = state.scene === "world" ? "點擊慢慢走咖啡館進入。" : "進度已重置。";
+      renderTownHud();
+      renderZoneCards();
+      if (state.scene === "world") {
+        hint.style.display = "none";
+      } else {
+        hint.style.display = "";
+        hint.textContent = "進度已重置。";
+      }
+      const showedName = maybeShowNameModal();
+      if (!showedName) introModal.classList.add("show");
+    });
+
+    nameSubmit.addEventListener("click", () => applyNameAndStart(nameInput.value));
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        applyNameAndStart(nameInput.value);
+      }
+    });
+
+    csClose.addEventListener("click", closeComingSoon);
+    comingSoonModal.addEventListener("click", (e) => {
+      if (e.target === comingSoonModal) closeComingSoon();
     });
 
     let last = performance.now();
