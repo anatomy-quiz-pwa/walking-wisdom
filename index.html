@@ -1150,27 +1150,31 @@
 
     .zone-card.unlocked .zone-status { color: #b6e3bf; border-top-color: rgba(143, 200, 156, 0.32); }
 
-    /* 歡迎勇者卷軸 */
+    /* 歡迎勇者卷軸 — fixed 貼 viewport 左上（重置進度下方） */
     .welcome-scroll {
-      position: absolute;
-      top: 15%;
-      left: 2.4%;
-      max-width: 26%;
-      min-width: clamp(160px, 18cqw, 260px);
-      padding: clamp(10px, 1.3cqw, 18px) clamp(14px, 1.8cqw, 22px);
-      background: linear-gradient(180deg, rgba(48, 30, 18, 0.92) 0%, rgba(28, 18, 12, 0.94) 100%);
-      border: 1.5px solid rgba(242, 196, 109, 0.5);
+      position: fixed;
+      top: clamp(60px, 8vh, 88px);
+      left: 12px;
+      max-width: clamp(180px, 22vw, 280px);
+      padding: clamp(10px, 1.4vw, 18px) clamp(14px, 1.8vw, 22px);
+      background: linear-gradient(180deg, rgba(48, 30, 18, 0.94) 0%, rgba(20, 14, 10, 0.96) 100%);
+      border: 1.5px solid rgba(242, 196, 109, 0.55);
       border-radius: 8px;
       color: #f5e0b0;
       text-align: center;
       pointer-events: none;
       font-family: "Noto Serif TC", "Songti TC", "Noto Serif", serif;
       box-shadow:
-        0 12px 32px rgba(0, 0, 0, 0.7),
-        0 0 22px rgba(255, 200, 110, 0.18),
-        inset 0 1px 0 rgba(255, 230, 170, 0.18),
+        0 12px 32px rgba(0, 0, 0, 0.75),
+        0 0 22px rgba(255, 200, 110, 0.2),
+        inset 0 1px 0 rgba(255, 230, 170, 0.2),
         inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+      z-index: 9;
+      display: none;
+      backdrop-filter: blur(2px);
     }
+
+    .welcome-scroll.show { display: block; }
 
     .welcome-scroll::before {
       content: "";
@@ -1183,7 +1187,7 @@
 
     .welcome-deco {
       color: rgba(242, 196, 109, 0.75);
-      font-size: clamp(9px, 1.05cqw, 14px);
+      font-size: clamp(9px, 1.2vw, 14px);
       letter-spacing: 0.5em;
       line-height: 1;
       margin-bottom: 2px;
@@ -1195,10 +1199,10 @@
     }
 
     .welcome-title {
-      font-size: clamp(14px, 1.85cqw, 24px);
+      font-size: clamp(14px, 1.7vw, 22px);
       font-weight: 700;
       color: #f2c46d;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.14em;
       margin: 8px 0 10px;
       white-space: nowrap;
       text-shadow:
@@ -1207,7 +1211,7 @@
     }
 
     .welcome-body {
-      font-size: clamp(12px, 1.55cqw, 19px);
+      font-size: clamp(12px, 1.4vw, 18px);
       line-height: 1.65;
       color: rgba(248, 230, 185, 0.96);
       letter-spacing: 0.05em;
@@ -1656,28 +1660,28 @@
           </div>
         </div>
 
-        <aside class="welcome-scroll" id="welcomeScroll" aria-label="歡迎詞">
-          <div class="welcome-deco">✦ ✦ ✦</div>
-          <div class="welcome-title">致 夜光小鎮的勇者</div>
-          <div class="welcome-body">
-            <p>這座小鎮棲息著</p>
-            <p>影響人類歷史的學者靈魂，</p>
-            <p>他們把畢生淬鍊的知識，</p>
-            <p>藏在每一扇門後。</p>
-            <p class="welcome-gap">　</p>
-            <p>能走到這裡的人，</p>
-            <p>從不是一般人——</p>
-            <p>你不會空手而歸。</p>
-            <p class="welcome-gap">　</p>
-            <p class="welcome-emph">推開門，開始你的旅程吧。</p>
-          </div>
-          <div class="welcome-deco">✦ ✦ ✦</div>
-        </aside>
-
         <div class="zone-cards" id="zoneCards"></div>
       </div>
     </div>
   </div>
+
+  <aside class="welcome-scroll" id="welcomeScroll" aria-label="歡迎詞">
+    <div class="welcome-deco">✦ ✦ ✦</div>
+    <div class="welcome-title">致 夜光小鎮的勇者</div>
+    <div class="welcome-body">
+      <p>這座小鎮棲息著</p>
+      <p>影響人類歷史的學者靈魂，</p>
+      <p>他們把畢生淬鍊的知識，</p>
+      <p>藏在每一扇門後。</p>
+      <p class="welcome-gap">　</p>
+      <p>能走到這裡的人，</p>
+      <p>從不是一般人——</p>
+      <p>你不會空手而歸。</p>
+      <p class="welcome-gap">　</p>
+      <p class="welcome-emph">推開門，開始你的旅程吧。</p>
+    </div>
+    <div class="welcome-deco">✦ ✦ ✦</div>
+  </aside>
 
   <div class="hud">
     <div id="hint" class="pill">點擊建築物進入。</div>
@@ -1944,6 +1948,8 @@
       worldTint.classList.toggle("show", show);
       worldGlow.classList.toggle("show", show);
       atmosphere.classList.toggle("show", show);
+      const ws = document.getElementById("welcomeScroll");
+      if (ws) ws.classList.toggle("show", show);
     }
 
     function seedStars(count = 18) {
