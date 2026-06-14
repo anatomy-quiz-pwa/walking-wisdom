@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>慢慢走 Walking Wisdom</title>
+  <script defer src="https://umami-omega-tan.vercel.app/script.js" data-website-id="68e512bf-4456-46f8-86ea-6bf8cfc30892"></script>
   <style>
     :root {
       color-scheme: dark;
@@ -45,6 +46,50 @@
       background: #211813;
       touch-action: none;
     }
+
+    /* ===== 沉浸式行走場景（咖啡店 / 工作室）：滿版畫面 + 跟隨鏡頭 ===== */
+    body.immersive .game-frame {
+      width: 100vw;
+      height: 100dvh;
+    }
+    body.immersive canvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      box-shadow: none;
+    }
+
+    /* ===== 橫放提示：只在「行走場景 + 觸控裝置 + 直向」時出現 ===== */
+    .rotate-hint {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      text-align: center;
+      padding: 36px;
+      background: rgba(20, 14, 10, 0.95);
+      backdrop-filter: blur(6px);
+      color: var(--paper);
+    }
+    @media (orientation: portrait) and (pointer: coarse) {
+      body.immersive:not(.portrait-ok) .rotate-hint { display: flex; }
+    }
+    .rotate-hint .phone-spin {
+      font-size: 64px;
+      line-height: 1;
+      animation: rotateNudge 2.6s ease-in-out infinite;
+    }
+    @keyframes rotateNudge {
+      0%, 38% { transform: rotate(0deg); }
+      62%, 100% { transform: rotate(-90deg); }
+    }
+    .rotate-hint .rotate-title { font-size: 20px; font-weight: 700; letter-spacing: 0.04em; }
+    .rotate-hint .rotate-sub { font-size: 14px; opacity: 0.8; max-width: 300px; line-height: 1.75; }
+    .rotate-hint button { margin-top: 6px; padding: 10px 22px; font-size: 14px; }
 
     .hud {
       position: fixed;
@@ -1687,6 +1732,7 @@
     <div id="hint" class="pill">點擊建築物進入。</div>
     <div class="settings">
       <button id="backWorld" type="button" hidden>返回世界地圖</button>
+      <button id="muteBtn" type="button" aria-label="音樂開關" title="音樂開關">🔊 音樂</button>
       <button id="resetProgress" type="button">重置進度</button>
     </div>
   </div>
@@ -1698,6 +1744,13 @@
     <button class="down" data-dir="down" type="button">↓</button>
   </div>
   <button id="interactTouch" type="button">對話</button>
+
+  <div class="rotate-hint" id="rotateHint">
+    <div class="phone-spin">📱</div>
+    <div class="rotate-title">把手機橫放，畫面更大</div>
+    <div class="rotate-sub">這是一個會跟著你移動的小鎮。橫向螢幕能看得更清楚、走起來更舒服。</div>
+    <button id="rotateDismiss" type="button">仍要直向遊玩</button>
+  </div>
 
   <div id="introModal" class="modal-backdrop">
     <div class="modal">
@@ -1776,6 +1829,53 @@
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
+
+    // 場景的「設計空間」：所有實體座標、碰撞、背景圖都以這個尺寸為基準。
+    const DESIGN_W = 1024, DESIGN_H = 768;
+    // 行走場景鏡頭視野涵蓋的世界高度（design px）。越小越放大、越像傳統 RPG。
+    const FOLLOW_VIEW_H = 430;
+
+    function isImmersiveScene() {
+      return state.scene === "cafe" || state.scene === "atelier";
+    }
+
+    // 行走場景時把 canvas 解析度撐成整個視窗（滿版、不變形）；
+    // 世界地圖維持 1024x768 設計空間（區域卡片/窗光以 % 定位，不能動）。
+    function applyCanvasMode() {
+      if (isImmersiveScene()) {
+        document.body.classList.add("immersive");
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        const w = Math.max(1, Math.round(window.innerWidth * dpr));
+        const h = Math.max(1, Math.round(window.innerHeight * dpr));
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          ctx.imageSmoothingEnabled = false;
+        }
+      } else {
+        document.body.classList.remove("immersive");
+        if (canvas.width !== DESIGN_W || canvas.height !== DESIGN_H) {
+          canvas.width = DESIGN_W;
+          canvas.height = DESIGN_H;
+          ctx.imageSmoothingEnabled = false;
+        }
+      }
+    }
+
+    // 跟隨鏡頭：以玩家為中心放大，並夾在地圖邊界內（不露出地圖外的空白）。
+    function computeCamera() {
+      const cw = canvas.width, ch = canvas.height;
+      const coverScale = Math.max(cw / DESIGN_W, ch / DESIGN_H);
+      const scale = Math.max(ch / FOLLOW_VIEW_H, coverScale);
+      const viewW = cw / scale, viewH = ch / scale;
+      const camX = viewW >= DESIGN_W
+        ? DESIGN_W / 2
+        : Math.max(viewW / 2, Math.min(DESIGN_W - viewW / 2, state.player.x));
+      const camY = viewH >= DESIGN_H
+        ? DESIGN_H / 2
+        : Math.max(viewH / 2, Math.min(DESIGN_H - viewH / 2, state.player.y));
+      return { scale, tx: cw / 2 - camX * scale, ty: ch / 2 - camY * scale };
+    }
 
     const hint = document.getElementById("hint");
     const backWorldBtn = document.getElementById("backWorld");
@@ -1860,7 +1960,7 @@
     };
 
     function loadProgress() {
-      const fallback = { version: 2, masters_completed: [], intro_seen: false, name: "", unlocked_zones: ["cafe"] };
+      const fallback = { version: 2, masters_completed: [], intro_seen: false, name: "", unlocked_zones: ["cafe"], muted: false };
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return fallback;
@@ -1872,7 +1972,8 @@
           name: typeof parsed.name === "string" ? parsed.name : "",
           unlocked_zones: Array.isArray(parsed.unlocked_zones) && parsed.unlocked_zones.length
             ? parsed.unlocked_zones
-            : ["cafe"]
+            : ["cafe"],
+          muted: Boolean(parsed.muted)
         };
       } catch {
         return fallback;
@@ -1881,6 +1982,104 @@
 
     function saveProgress() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+    }
+
+    // ── 場景背景音樂 ───────────────────────────────────────────────
+    // 每個場景一首 loop，進場淡入、離場淡出。瀏覽器 autoplay 政策需要
+    // 第一次使用者互動才能播，所以先記 pendingKey，unlock() 後補播。
+    // 音樂：Kevin MacLeod (incompetech.com) CC-BY 4.0。
+    const AudioManager = (() => {
+      const TRACKS = {
+        world: "assets/audio/world.mp3",
+        cafe: "assets/audio/cafe.mp3",
+        atelier: "assets/audio/atelier.mp3"
+      };
+      const VOLUME = 0.4;        // BGM 音量上限（背景用，不搶戲）
+      const FADE_MS = 700;
+      const els = {};            // key -> HTMLAudioElement（lazy 建立，只下載走訪過的場景）
+      let currentKey = null;
+      let unlocked = false;
+      let pendingKey = null;
+      let fadeTimer = null;
+
+      function getEl(key) {
+        if (!TRACKS[key]) return null;
+        if (!els[key]) {
+          const a = new Audio();
+          a.src = TRACKS[key];
+          a.loop = true;
+          a.preload = "none";
+          a.volume = 0;
+          els[key] = a;
+        }
+        return els[key];
+      }
+
+      function clearFade() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
+
+      function fadeTo(key) {
+        clearFade();
+        const target = key ? getEl(key) : null;
+        const outgoing = currentKey && currentKey !== key && els[currentKey] ? els[currentKey] : null;
+        if (target) {
+          const p = target.play();
+          if (p && p.catch) p.catch(() => {});
+        }
+        const steps = 14, dt = FADE_MS / steps, startOut = outgoing ? outgoing.volume : 0;
+        let i = 0;
+        fadeTimer = setInterval(() => {
+          i++;
+          const t = i / steps;
+          if (target) target.volume = Math.min(VOLUME, VOLUME * t);
+          if (outgoing) outgoing.volume = Math.max(0, startOut * (1 - t));
+          if (i >= steps) {
+            clearFade();
+            if (outgoing) { outgoing.pause(); outgoing.currentTime = 0; }
+          }
+        }, dt);
+        currentKey = key;
+      }
+
+      function playScene(key) {
+        if (!TRACKS[key]) return;                              // 還沒做音樂的場景 → 略過
+        if (state.progress.muted) { currentKey = key; return; } // 靜音時只記意圖、不出聲
+        if (!unlocked) { pendingKey = key; currentKey = key; return; }
+        if (key === currentKey && els[key] && !els[key].paused) return;
+        fadeTo(key);
+      }
+
+      function unlock() {
+        if (unlocked) return;
+        unlocked = true;
+        const want = pendingKey || currentKey;
+        pendingKey = null;
+        if (want && !state.progress.muted) fadeTo(want);
+      }
+
+      function setMuted(m) {
+        state.progress.muted = m;
+        saveProgress();
+        if (m) {
+          clearFade();
+          Object.values(els).forEach((a) => a.pause());
+        } else if (unlocked && currentKey) {
+          fadeTo(currentKey);
+        }
+        updateMuteBtn();
+      }
+
+      return {
+        playScene,
+        unlock,
+        toggle: () => setMuted(!state.progress.muted),
+        isMuted: () => !!state.progress.muted
+      };
+    })();
+
+    function updateMuteBtn() {
+      const btn = document.getElementById("muteBtn");
+      if (!btn) return;
+      btn.textContent = AudioManager.isMuted() ? "🔇 音樂" : "🔊 音樂";
     }
 
     function unlockedCount() {
@@ -2162,15 +2361,26 @@
       if (!showedNameModal && !state.progress.intro_seen) {
         introModal.classList.add("show");
       }
+
+      // 背景音樂：先記住目前場景該播的曲子，等使用者第一次互動解鎖 autoplay 後補播。
+      updateMuteBtn();
+      AudioManager.playScene(state.scene);
+      const unlockAudio = () => AudioManager.unlock();
+      document.addEventListener("pointerdown", unlockAudio, { once: true });
+      document.addEventListener("keydown", unlockAudio, { once: true });
+
       requestAnimationFrame(loop);
     }
 
     function toWorldPoint(event) {
       const rect = canvas.getBoundingClientRect();
-      return {
-        x: ((event.clientX - rect.left) / rect.width) * canvas.width,
-        y: ((event.clientY - rect.top) / rect.height) * canvas.height
-      };
+      const px = ((event.clientX - rect.left) / rect.width) * canvas.width;
+      const py = ((event.clientY - rect.top) / rect.height) * canvas.height;
+      const cam = state.cam;
+      if (cam) {
+        return { x: (px - cam.tx) / cam.scale, y: (py - cam.ty) / cam.scale };
+      }
+      return { x: px, y: py };
     }
 
     function dist(a, b) {
@@ -2225,8 +2435,8 @@
 
     function findPath(start, target) {
       const tile = state.collision.tile_size || 32;
-      const cols = Math.ceil(canvas.width / tile);
-      const rows = Math.ceil(canvas.height / tile);
+      const cols = Math.ceil(DESIGN_W / tile);
+      const rows = Math.ceil(DESIGN_H / tile);
       const toCell = (p) => ({
         x: Math.max(0, Math.min(cols - 1, Math.floor(p.x / tile))),
         y: Math.max(0, Math.min(rows - 1, Math.floor(p.y / tile)))
@@ -2279,6 +2489,7 @@
     function enterCafe(spawnAtDoor) {
       const prev = state.scene;
       state.scene = "cafe";
+      AudioManager.playScene("cafe");
       state.collision = state.cafeCollision;
       backWorldBtn.hidden = false;
       backWorldBtn.textContent = "返回世界地圖";
@@ -2310,6 +2521,7 @@
         return;
       }
       state.scene = "atelier";
+      AudioManager.playScene("atelier");
       state.collision = state.atelierCollision;
       backWorldBtn.hidden = false;
       backWorldBtn.textContent = "← 回咖啡店";
@@ -2331,6 +2543,7 @@
 
     function enterWorld() {
       state.scene = "world";
+      AudioManager.playScene("world");
       backWorldBtn.hidden = true;
       showWorldHud(true);
       renderTownHud();
@@ -3414,7 +3627,11 @@
 
     function drawImageCover(img) {
       if (!img) return;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // 背景插畫在跟隨鏡頭下會被放大，開平滑避免馬賽克；畫完還原（角色像素圖維持銳利）。
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, DESIGN_W, DESIGN_H);
+      ctx.imageSmoothingEnabled = false;
     }
 
     function drawWorld() {
@@ -3508,8 +3725,8 @@
       const ents = state.atelierEntities;
       if (!ents) {
         ctx.fillStyle = "#1a120c";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        drawLabel("工作室載入中…", canvas.width / 2, canvas.height / 2);
+        ctx.fillRect(0, 0, DESIGN_W, DESIGN_H);
+        drawLabel("工作室載入中…", DESIGN_W / 2, DESIGN_H / 2);
         return;
       }
       // 1. real artwork background
@@ -3517,7 +3734,7 @@
         drawImageCover(state.images.atelier);
       } else {
         ctx.fillStyle = "#2a1c12";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, DESIGN_W, DESIGN_H);
       }
       // 2. footprint trail (in the brass-bordered walkway)
       drawFootprints();
@@ -3871,9 +4088,18 @@
       else enterWorld();
     });
 
+    const muteBtn = document.getElementById("muteBtn");
+    if (muteBtn) {
+      muteBtn.addEventListener("click", () => {
+        AudioManager.unlock();   // 點靜音鈕本身也算一次互動，解鎖 autoplay
+        AudioManager.toggle();
+      });
+    }
+
     resetBtn.addEventListener("click", () => {
       localStorage.removeItem(STORAGE_KEY);
       state.progress = loadProgress();
+      updateMuteBtn();
       renderTownHud();
       renderZoneCards();
       if (state.scene === "world") {
@@ -3899,22 +4125,35 @@
       if (e.target === comingSoonModal) closeComingSoon();
     });
 
+    const rotateDismiss = document.getElementById("rotateDismiss");
+    if (rotateDismiss) {
+      rotateDismiss.addEventListener("click", () => {
+        document.body.classList.add("portrait-ok");
+      });
+    }
+
     let last = performance.now();
     function loop(now) {
       const dt = Math.min(0.033, (now - last) / 1000);
       last = now;
       update(dt);
+      applyCanvasMode();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (!state.assetsReady) {
         ctx.fillStyle = "#211813";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         drawLabel("載入中...", canvas.width / 2, canvas.height / 2);
       } else if (state.scene === "world") {
+        state.cam = null;
         drawWorld();
-      } else if (state.scene === "atelier") {
-        drawAtelier();
       } else {
-        drawCafe();
+        const cam = computeCamera();
+        state.cam = cam;
+        ctx.setTransform(cam.scale, 0, 0, cam.scale, cam.tx, cam.ty);
+        if (state.scene === "atelier") drawAtelier();
+        else drawCafe();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
       }
       requestAnimationFrame(loop);
     }
